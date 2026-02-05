@@ -1,13 +1,15 @@
-import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Bars3Icon,
   SunIcon,
   MoonIcon,
   BellIcon,
   MagnifyingGlassIcon,
+  ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
 import { useUIStore } from '../../store/uiStore';
+import { useLowStockAlerts } from '../../hooks/useSupplies';
 import SearchPalette from './SearchPalette';
 
 const PAGE_TITLES: Record<string, string> = {
@@ -16,6 +18,7 @@ const PAGE_TITLES: Record<string, string> = {
   '/appointments': 'Appointments',
   '/treatments': 'Treatments',
   '/billing': 'Billing',
+  '/supplies': 'Supplies',
   '/analytics': 'Analytics',
   '/admin': 'Settings',
 };
@@ -23,7 +26,13 @@ const PAGE_TITLES: Record<string, string> = {
 export default function Header() {
   const { darkMode, toggleDarkMode, toggleSidebar } = useUIStore();
   const location = useLocation();
+  const navigate = useNavigate();
   const [searchOpen, setSearchOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const notificationRef = useRef<HTMLDivElement>(null);
+
+  const { data: lowStockAlerts } = useLowStockAlerts();
+  const alertCount = lowStockAlerts?.length || 0;
 
   // Ctrl+K shortcut
   useEffect(() => {
@@ -35,6 +44,17 @@ export default function Header() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Close notifications on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (notificationRef.current && !notificationRef.current.contains(e.target as Node)) {
+        setNotificationsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const basePath = '/' + (location.pathname.split('/')[1] || '');
@@ -73,10 +93,72 @@ export default function Header() {
         {/* Right side */}
         <div className="flex items-center gap-1">
           {/* Notification bell */}
-          <button className="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors">
-            <BellIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-            <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-accent-500" />
-          </button>
+          <div className="relative" ref={notificationRef}>
+            <button
+              onClick={() => setNotificationsOpen(!notificationsOpen)}
+              className="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors"
+            >
+              <BellIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+              {alertCount > 0 && (
+                <span className="absolute top-1 right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-bold text-white flex items-center justify-center">
+                  {alertCount > 9 ? '9+' : alertCount}
+                </span>
+              )}
+            </button>
+
+            {/* Notification dropdown */}
+            {notificationsOpen && (
+              <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-surface-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
+                <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Notifications</h3>
+                </div>
+                <div className="max-h-80 overflow-y-auto">
+                  {alertCount === 0 ? (
+                    <div className="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                      No notifications
+                    </div>
+                  ) : (
+                    <>
+                      <div className="px-4 py-2 bg-red-50 dark:bg-red-900/20 border-b border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center gap-2 text-sm font-medium text-red-600 dark:text-red-400">
+                          <ExclamationTriangleIcon className="h-4 w-4" />
+                          Low Stock Alerts ({alertCount})
+                        </div>
+                      </div>
+                      {lowStockAlerts?.slice(0, 5).map((supply) => (
+                        <button
+                          key={supply.id}
+                          onClick={() => {
+                            setNotificationsOpen(false);
+                            navigate('/supplies');
+                          }}
+                          className="w-full px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 text-left border-b border-gray-100 dark:border-gray-700 last:border-0"
+                        >
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">
+                            {supply.name}
+                          </div>
+                          <div className="text-xs text-red-600 dark:text-red-400">
+                            Stock: {supply.currentStock} / Min: {supply.minimumStock} {supply.unit}
+                          </div>
+                        </button>
+                      ))}
+                      {alertCount > 5 && (
+                        <button
+                          onClick={() => {
+                            setNotificationsOpen(false);
+                            navigate('/supplies');
+                          }}
+                          className="w-full px-4 py-2 text-center text-sm text-primary-600 dark:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                        >
+                          View all {alertCount} alerts
+                        </button>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Divider */}
           <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 mx-2" />

@@ -63,6 +63,18 @@ interface ElectronAPI {
     restore: (data: any) => Promise<IpcResult>;
     systemInfo: () => Promise<IpcResult>;
   };
+  supplies: {
+    list: (filters: any) => Promise<IpcResult>;
+    get: (id: string) => Promise<IpcResult>;
+    create: (data: any) => Promise<IpcResult>;
+    update: (id: string, data: any) => Promise<IpcResult>;
+    delete: (id: string) => Promise<IpcResult>;
+    recordUsage: (data: any) => Promise<IpcResult>;
+    recordRestock: (data: any) => Promise<IpcResult>;
+    adjustStock: (data: any) => Promise<IpcResult>;
+    dashboardStats: () => Promise<IpcResult>;
+    lowStockAlerts: () => Promise<IpcResult>;
+  };
   users: {
     getDentists: () => Promise<IpcResult>;
   };

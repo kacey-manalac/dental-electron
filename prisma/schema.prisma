@@ -65,6 +65,16 @@ enum PaymentMethod {
   BANK_TRANSFER
 }
 
+enum SupplyCategory {
+  DISPOSABLE
+  INSTRUMENT
+  MATERIAL
+  MEDICATION
+  OFFICE
+  PPE
+  OTHER
+}
+
 model User {
   id           String    @id @default(uuid())
   email        String    @unique
@@ -313,4 +323,40 @@ model PatientImage {
   uploader    User      @relation("UserUploads", fields: [uploadedBy], references: [id])
 
   @@map("patient_images")
+}
+
+model Supply {
+  id              String         @id @default(uuid())
+  name            String
+  category        SupplyCategory @default(OTHER)
+  sku             String?        @unique
+  description     String?
+  unit            String         @default("pcs")
+  currentStock    Int            @default(0)
+  minimumStock    Int            @default(10)
+  costPerUnit     Float          @default(0)
+  supplier        String?
+  location        String?
+  expiryDate      DateTime?
+  isActive        Boolean        @default(true)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  transactions    StockTransaction[]
+
+  @@map("supplies")
+}
+
+model StockTransaction {
+  id          String   @id @default(uuid())
+  supplyId    String
+  type        String   // "IN", "OUT", "ADJUSTMENT"
+  quantity    Int
+  notes       String?
+  reference   String?
+  createdAt   DateTime @default(now())
+
+  supply      Supply   @relation(fields: [supplyId], references: [id], onDelete: Cascade)
+
+  @@map("stock_transactions")
 }

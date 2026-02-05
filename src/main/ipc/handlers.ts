@@ -11,6 +11,7 @@ import * as images from '../server/controllers/images';
 import * as reports from '../server/controllers/reports';
 import * as analytics from '../server/controllers/analytics';
 import * as admin from '../server/controllers/admin';
+import * as supplies from '../server/controllers/supplies';
 
 type IpcResult<T = any> = { success: true; data: T } | { success: false; error: string };
 
@@ -103,6 +104,18 @@ export function registerAllHandlers() {
   ipcMain.handle('admin:backup', wrapHandler(admin.createBackup));
   ipcMain.handle('admin:restore', wrapHandler(admin.restoreBackup));
   ipcMain.handle('admin:systemInfo', wrapHandler(admin.getSystemInfo));
+
+  // Supplies
+  ipcMain.handle('supplies:list', wrapHandler(supplies.getSupplies));
+  ipcMain.handle('supplies:get', wrapHandler(supplies.getSupply));
+  ipcMain.handle('supplies:create', wrapHandler(supplies.createSupply));
+  ipcMain.handle('supplies:update', wrapHandler(supplies.updateSupply));
+  ipcMain.handle('supplies:delete', wrapHandler(supplies.deleteSupply));
+  ipcMain.handle('supplies:recordUsage', wrapHandler(supplies.recordUsage));
+  ipcMain.handle('supplies:recordRestock', wrapHandler(supplies.recordRestock));
+  ipcMain.handle('supplies:adjustStock', wrapHandler(supplies.adjustStock));
+  ipcMain.handle('supplies:dashboardStats', wrapHandler(supplies.getSupplyDashboardStats));
+  ipcMain.handle('supplies:lowStockAlerts', wrapHandler(supplies.getLowStockAlerts));
 
   // Dentists (for appointment/treatment forms)
   ipcMain.handle('users:getDentists', wrapHandler(async () => {

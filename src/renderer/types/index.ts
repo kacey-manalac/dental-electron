@@ -10,6 +10,8 @@ export type InvoiceStatus = 'DRAFT' | 'PENDING' | 'PAID' | 'PARTIALLY_PAID' | 'O
 
 export type PaymentMethod = 'CASH' | 'CREDIT_CARD' | 'DEBIT_CARD' | 'INSURANCE' | 'BANK_TRANSFER';
 
+export type SupplyCategory = 'DISPOSABLE' | 'INSTRUMENT' | 'MATERIAL' | 'MEDICATION' | 'OFFICE' | 'PPE' | 'OTHER';
+
 export type ToothSurface = 'M' | 'O' | 'D' | 'B' | 'L';
 
 export interface User {
@@ -362,4 +364,42 @@ export interface BackupData {
     counts: Record<string, number>;
     note: string;
   };
+}
+
+export interface Supply {
+  id: string;
+  name: string;
+  category: SupplyCategory;
+  sku?: string;
+  description?: string;
+  unit: string;
+  currentStock: number;
+  minimumStock: number;
+  costPerUnit: number;
+  supplier?: string;
+  location?: string;
+  expiryDate?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  transactions?: StockTransaction[];
+  _count?: { transactions: number };
+}
+
+export interface StockTransaction {
+  id: string;
+  supplyId: string;
+  type: 'IN' | 'OUT' | 'ADJUSTMENT';
+  quantity: number;
+  notes?: string;
+  reference?: string;
+  createdAt: string;
+  supply?: { id: string; name: string };
+}
+
+export interface SupplyDashboardStats {
+  totalItems: number;
+  lowStockCount: number;
+  totalValue: number;
+  byCategory: { category: SupplyCategory; count: number }[];
 }

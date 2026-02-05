@@ -77,6 +77,20 @@ contextBridge.exposeInMainWorld('electronAPI', {
     systemInfo: () => ipcRenderer.invoke('admin:systemInfo'),
   },
 
+  // Supplies
+  supplies: {
+    list: (filters: any) => ipcRenderer.invoke('supplies:list', filters),
+    get: (id: string) => ipcRenderer.invoke('supplies:get', id),
+    create: (data: any) => ipcRenderer.invoke('supplies:create', data),
+    update: (id: string, data: any) => ipcRenderer.invoke('supplies:update', id, data),
+    delete: (id: string) => ipcRenderer.invoke('supplies:delete', id),
+    recordUsage: (data: any) => ipcRenderer.invoke('supplies:recordUsage', data),
+    recordRestock: (data: any) => ipcRenderer.invoke('supplies:recordRestock', data),
+    adjustStock: (data: any) => ipcRenderer.invoke('supplies:adjustStock', data),
+    dashboardStats: () => ipcRenderer.invoke('supplies:dashboardStats'),
+    lowStockAlerts: () => ipcRenderer.invoke('supplies:lowStockAlerts'),
+  },
+
   // Users (for fetching dentists)
   users: {
     getDentists: () => ipcRenderer.invoke('users:getDentists'),

@@ -1,6 +1,7 @@
-import { app, BrowserWindow, protocol, net } from 'electron';
+import { app, BrowserWindow, protocol, net, dialog } from 'electron';
 import path from 'path';
 import fs from 'fs';
+import { autoUpdater } from 'electron-updater';
 import { initDatabase } from './server/app';
 import { registerAllHandlers } from './ipc/handlers';
 
@@ -63,6 +64,9 @@ app.whenReady().then(async () => {
     registerAllHandlers();
 
     await createWindow();
+
+    // Setup auto-updater after window is created
+    setupAutoUpdater();
   } catch (error) {
     console.error('Failed to start application:', error);
     app.quit();
@@ -78,3 +82,62 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+// Auto-updater configuration
+function setupAutoUpdater() {
+  // Don't check for updates in development
+  if (process.env.VITE_DEV_SERVER_URL) {
+    return;
+  }
+
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = true;
+
+  autoUpdater.on('checking-for-update', () => {
+    console.log('Checking for updates...');
+  });
+
+  autoUpdater.on('update-available', (info) => {
+    console.log('Update available:', info.version);
+    dialog.showMessageBox({
+      type: 'info',
+      title: 'Update Available',
+      message: `A new version (${info.version}) is available and will be downloaded in the background.`,
+      buttons: ['OK'],
+    });
+  });
+
+  autoUpdater.on('update-not-available', () => {
+    console.log('No updates available');
+  });
+
+  autoUpdater.on('download-progress', (progress) => {
+    console.log(`Download progress: ${progress.percent.toFixed(1)}%`);
+  });
+
+  autoUpdater.on('update-downloaded', (info) => {
+    console.log('Update downloaded:', info.version);
+    dialog.showMessageBox({
+      type: 'info',
+      title: 'Update Ready',
+      message: `Version ${info.version} has been downloaded. The app will restart to install the update.`,
+      buttons: ['Restart Now', 'Later'],
+    }).then((result) => {
+      if (result.response === 0) {
+        autoUpdater.quitAndInstall();
+      }
+    });
+  });
+
+  autoUpdater.on('error', (error) => {
+    console.error('Auto-updater error:', error);
+  });
+
+  // Check for updates after app is ready
+  autoUpdater.checkForUpdatesAndNotify();
+
+  // Check for updates every 4 hours
+  setInterval(() => {
+    autoUpdater.checkForUpdatesAndNotify();
+  }, 4 * 60 * 60 * 1000);
+}

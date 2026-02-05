@@ -13,7 +13,10 @@
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
     "seed": "tsx prisma/seed.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dist": "npm run build && electron-builder",
+    "dist:win": "npm run build && electron-builder --win",
+    "release": "npm run build && electron-builder --win --publish always"
   },
   "keywords": [],
   "author": "",
@@ -24,7 +27,10 @@
     "@heroicons/react": "^2.2.0",
     "@prisma/client": "^6.8.0",
     "@tanstack/react-query": "^5.74.0",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^3.0.3",
     "date-fns": "^4.1.0",
+    "electron-updater": "^6.7.3",
     "pdfkit": "^0.16.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -51,6 +57,7 @@
     "autoprefixer": "^10.4.21",
     "concurrently": "^9.1.0",
     "electron": "^35.0.0",
+    "electron-builder": "^26.7.0",
     "electronmon": "^2.0.4",
     "postcss": "^8.5.0",
     "prisma": "^6.8.0",
@@ -60,5 +67,51 @@
     "typescript": "^5.9.3",
     "vite": "^6.3.0",
     "wait-on": "^8.0.0"
+  },
+  "build": {
+    "appId": "com.dentalclinic.app",
+    "productName": "DentalCare Pro",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "node_modules/**/*",
+      "prisma/**/*",
+      "!node_modules/.prisma/client/libquery_engine-*",
+      "node_modules/.prisma/client/libquery_engine-windows.dll.node",
+      "node_modules/.prisma/client/query_engine-windows.dll.node"
+    ],
+    "extraResources": [
+      {
+        "from": "prisma/dev.db",
+        "to": "prisma/dev.db"
+      },
+      {
+        "from": "prisma/empty.db",
+        "to": "prisma/empty.db"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "kacey-manalac",
+      "repo": "dental-electron",
+      "releaseType": "release"
+    }
   }
 }

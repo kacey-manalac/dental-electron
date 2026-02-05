@@ -6,6 +6,7 @@ import PatientDetailPage from './pages/PatientDetailPage';
 import AppointmentsPage from './pages/AppointmentsPage';
 import TreatmentsPage from './pages/TreatmentsPage';
 import BillingPage from './pages/BillingPage';
+import SuppliesPage from './pages/SuppliesPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import AdminPage from './pages/AdminPage';
 
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="appointments" element={<AppointmentsPage />} />
         <Route path="treatments" element={<TreatmentsPage />} />
         <Route path="billing" element={<BillingPage />} />
+        <Route path="supplies" element={<SuppliesPage />} />
         <Route path="analytics" element={<AnalyticsPage />} />
         <Route path="admin" element={<AdminPage />} />
       </Route>

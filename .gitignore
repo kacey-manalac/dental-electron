@@ -13,6 +13,16 @@ prisma/dev.db-journal
 
 # Electron
 out/
+release/
+
+# Build artifacts
+build/
+*.tsbuildinfo
+NUL
+
+# Prisma temp
+prisma/dev.db.bak
+prisma/prisma/
 
 # IDE
 .vscode/

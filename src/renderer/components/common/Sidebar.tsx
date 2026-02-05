@@ -6,6 +6,7 @@ import {
   CalendarIcon,
   ClipboardDocumentListIcon,
   CurrencyDollarIcon,
+  ArchiveBoxIcon,
   ChartBarIcon,
   Cog6ToothIcon,
   ChevronLeftIcon,
@@ -19,6 +20,7 @@ const navigation = [
   { name: 'Appointments', href: '/appointments', icon: CalendarIcon },
   { name: 'Treatments', href: '/treatments', icon: ClipboardDocumentListIcon },
   { name: 'Billing', href: '/billing', icon: CurrencyDollarIcon },
+  { name: 'Supplies', href: '/supplies', icon: ArchiveBoxIcon },
   { name: 'Analytics', href: '/analytics', icon: ChartBarIcon },
 ];
 

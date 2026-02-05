@@ -1,4 +1,4 @@
-import { PrismaClient, ToothCondition, AppointmentStatus, TreatmentStatus, InvoiceStatus, PaymentMethod } from '@prisma/client';
+import { PrismaClient, ToothCondition, AppointmentStatus, TreatmentStatus, InvoiceStatus, PaymentMethod, SupplyCategory } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -494,6 +494,218 @@ async function main() {
   }
 
   console.log(`Created ${invoicesData.length} invoices`);
+
+  // Create supplies
+  const suppliesData = [
+    // Disposables
+    {
+      name: 'Disposable Gloves (Nitrile)',
+      category: 'DISPOSABLE' as SupplyCategory,
+      sku: 'GLV-NIT-M',
+      description: 'Medium size nitrile examination gloves, powder-free',
+      unit: 'box',
+      currentStock: 25,
+      minimumStock: 10,
+      costPerUnit: 12.99,
+      supplier: 'MedSupply Co.',
+      location: 'Storage Room A',
+    },
+    {
+      name: 'Face Masks (Level 3)',
+      category: 'DISPOSABLE' as SupplyCategory,
+      sku: 'MSK-L3-50',
+      description: 'ASTM Level 3 surgical masks, box of 50',
+      unit: 'box',
+      currentStock: 15,
+      minimumStock: 8,
+      costPerUnit: 24.99,
+      supplier: 'MedSupply Co.',
+      location: 'Storage Room A',
+    },
+    {
+      name: 'Cotton Rolls',
+      category: 'DISPOSABLE' as SupplyCategory,
+      sku: 'COT-ROL-2000',
+      description: 'Non-sterile cotton rolls, pack of 2000',
+      unit: 'pack',
+      currentStock: 5,
+      minimumStock: 3,
+      costPerUnit: 18.50,
+      supplier: 'DentalDirect',
+      location: 'Operatory 1',
+    },
+    {
+      name: 'Saliva Ejectors',
+      category: 'DISPOSABLE' as SupplyCategory,
+      sku: 'SAL-EJ-100',
+      description: 'Disposable saliva ejectors, pack of 100',
+      unit: 'pack',
+      currentStock: 8,
+      minimumStock: 5,
+      costPerUnit: 8.99,
+      supplier: 'DentalDirect',
+      location: 'Operatory 1',
+    },
+    // Materials
+    {
+      name: 'Composite Resin A2',
+      category: 'MATERIAL' as SupplyCategory,
+      sku: 'CMP-A2-4G',
+      description: 'Universal composite resin, shade A2, 4g syringe',
+      unit: 'syringe',
+      currentStock: 12,
+      minimumStock: 6,
+      costPerUnit: 45.00,
+      supplier: '3M Dental',
+      location: 'Material Cabinet',
+    },
+    {
+      name: 'Dental Cement (Glass Ionomer)',
+      category: 'MATERIAL' as SupplyCategory,
+      sku: 'CEM-GI-KIT',
+      description: 'Glass ionomer luting cement kit',
+      unit: 'kit',
+      currentStock: 3,
+      minimumStock: 2,
+      costPerUnit: 89.00,
+      supplier: 'GC America',
+      location: 'Material Cabinet',
+    },
+    {
+      name: 'Impression Material (Alginate)',
+      category: 'MATERIAL' as SupplyCategory,
+      sku: 'IMP-ALG-1LB',
+      description: 'Fast-set alginate impression material, 1lb canister',
+      unit: 'canister',
+      currentStock: 4,
+      minimumStock: 2,
+      costPerUnit: 32.00,
+      supplier: 'Dentsply Sirona',
+      location: 'Lab Area',
+    },
+    // Medications
+    {
+      name: 'Lidocaine 2% w/Epinephrine',
+      category: 'MEDICATION' as SupplyCategory,
+      sku: 'LID-2-EPI-50',
+      description: 'Local anesthetic cartridges, box of 50',
+      unit: 'box',
+      currentStock: 6,
+      minimumStock: 4,
+      costPerUnit: 65.00,
+      supplier: 'Patterson Dental',
+      location: 'Medication Cabinet',
+      expiryDate: new Date(today.getFullYear() + 1, 6, 15),
+    },
+    {
+      name: 'Topical Anesthetic Gel',
+      category: 'MEDICATION' as SupplyCategory,
+      sku: 'TOP-GEL-30',
+      description: 'Benzocaine 20% topical gel, 30g tube',
+      unit: 'tube',
+      currentStock: 8,
+      minimumStock: 4,
+      costPerUnit: 15.00,
+      supplier: 'Patterson Dental',
+      location: 'Medication Cabinet',
+      expiryDate: new Date(today.getFullYear() + 2, 3, 1),
+    },
+    // PPE
+    {
+      name: 'Safety Glasses',
+      category: 'PPE' as SupplyCategory,
+      sku: 'PPE-GLASS-10',
+      description: 'Protective eyewear, pack of 10',
+      unit: 'pack',
+      currentStock: 3,
+      minimumStock: 2,
+      costPerUnit: 29.99,
+      supplier: 'MedSupply Co.',
+      location: 'Storage Room A',
+    },
+    {
+      name: 'Face Shields',
+      category: 'PPE' as SupplyCategory,
+      sku: 'PPE-SHIELD-25',
+      description: 'Disposable face shields, pack of 25',
+      unit: 'pack',
+      currentStock: 2,
+      minimumStock: 3,
+      costPerUnit: 34.99,
+      supplier: 'MedSupply Co.',
+      location: 'Storage Room A',
+    },
+    // Instruments
+    {
+      name: 'Dental Mirror #5',
+      category: 'INSTRUMENT' as SupplyCategory,
+      sku: 'INS-MIR-5',
+      description: 'Front surface dental mirror, size 5',
+      unit: 'pcs',
+      currentStock: 20,
+      minimumStock: 10,
+      costPerUnit: 8.50,
+      supplier: 'Hu-Friedy',
+      location: 'Instrument Storage',
+    },
+    {
+      name: 'Explorer #23',
+      category: 'INSTRUMENT' as SupplyCategory,
+      sku: 'INS-EXP-23',
+      description: 'Shepherd hook explorer',
+      unit: 'pcs',
+      currentStock: 15,
+      minimumStock: 8,
+      costPerUnit: 12.00,
+      supplier: 'Hu-Friedy',
+      location: 'Instrument Storage',
+    },
+    // Office
+    {
+      name: 'Patient Bibs',
+      category: 'OFFICE' as SupplyCategory,
+      sku: 'BIB-500',
+      description: 'Disposable patient bibs, pack of 500',
+      unit: 'pack',
+      currentStock: 2,
+      minimumStock: 2,
+      costPerUnit: 45.00,
+      supplier: 'DentalDirect',
+      location: 'Storage Room B',
+    },
+    {
+      name: 'Headrest Covers',
+      category: 'OFFICE' as SupplyCategory,
+      sku: 'HRC-500',
+      description: 'Disposable headrest covers, pack of 500',
+      unit: 'pack',
+      currentStock: 1,
+      minimumStock: 2,
+      costPerUnit: 28.00,
+      supplier: 'DentalDirect',
+      location: 'Storage Room B',
+    },
+  ];
+
+  for (const supplyData of suppliesData) {
+    const supply = await prisma.supply.create({
+      data: supplyData,
+    });
+
+    // Create initial stock transaction
+    if (supplyData.currentStock > 0) {
+      await prisma.stockTransaction.create({
+        data: {
+          supplyId: supply.id,
+          type: 'IN',
+          quantity: supplyData.currentStock,
+          notes: 'Initial inventory',
+        },
+      });
+    }
+  }
+
+  console.log(`Created ${suppliesData.length} supplies`);
 
   console.log('Seeding completed!');
 }
