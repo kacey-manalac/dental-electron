@@ -236,6 +236,11 @@ export default class DentalChartEngine {
   // ── Main SVG Chart ──────────────────────────────────────────────────────
 
   private renderChart(): void {
+    const chartWrap = this.buildChart();
+    this.container.appendChild(chartWrap);
+  }
+
+  private buildChart(): HTMLDivElement {
     const chartWrap = document.createElement('div');
     chartWrap.className = 'dc-chart-wrap';
 
@@ -251,7 +256,7 @@ export default class DentalChartEngine {
     // Background
     const bg = this.svgEl('rect', {
       x: 0, y: 0, width: totalW, height: totalH,
-      fill: '#09090b', rx: 12
+      fill: '#fafafa', rx: 12
     });
     svg.appendChild(bg);
 
@@ -260,7 +265,7 @@ export default class DentalChartEngine {
     svg.appendChild(this.svgEl('line', {
       x1: midX, y1: this.chartPadding,
       x2: midX, y2: totalH - this.chartPadding,
-      stroke: '#3F3F46', 'stroke-width': 1, 'stroke-dasharray': '4,4'
+      stroke: '#D4D4D8', 'stroke-width': 1, 'stroke-dasharray': '4,4'
     }));
 
     // Center horizontal separator
@@ -268,15 +273,15 @@ export default class DentalChartEngine {
     svg.appendChild(this.svgEl('line', {
       x1: this.chartPadding, y1: centerY,
       x2: totalW - this.chartPadding, y2: centerY,
-      stroke: '#3F3F46', 'stroke-width': 2
+      stroke: '#D4D4D8', 'stroke-width': 2
     }));
 
     // Arch labels
     svg.appendChild(this.svgText('UPPER ARCH (Maxillary)', totalW / 2, this.chartPadding - 6, {
-      'text-anchor': 'middle', fill: '#71717A', 'font-size': 11, 'font-weight': 600, 'letter-spacing': '1px'
+      'text-anchor': 'middle', fill: '#A1A1AA', 'font-size': 11, 'font-weight': 600, 'letter-spacing': '1px'
     }));
     svg.appendChild(this.svgText('LOWER ARCH (Mandibular)', totalW / 2, totalH - this.chartPadding + 14, {
-      'text-anchor': 'middle', fill: '#71717A', 'font-size': 11, 'font-weight': 600, 'letter-spacing': '1px'
+      'text-anchor': 'middle', fill: '#A1A1AA', 'font-size': 11, 'font-weight': 600, 'letter-spacing': '1px'
     }));
 
     // Render Upper Teeth
@@ -287,7 +292,7 @@ export default class DentalChartEngine {
 
       // FDI number
       svg.appendChild(this.svgText(String(num), x + this.toothSize / 2, baseY + 10, {
-        'text-anchor': 'middle', fill: '#A1A1AA', 'font-size': 11, 'font-weight': 500,
+        'text-anchor': 'middle', fill: '#52525B', 'font-size': 11, 'font-weight': 500,
         'font-family': "'Consolas','Monaco',monospace"
       }));
 
@@ -315,21 +320,21 @@ export default class DentalChartEngine {
 
       // FDI number
       svg.appendChild(this.svgText(String(num), x + this.toothSize / 2, diagY + this.toothSize + 16, {
-        'text-anchor': 'middle', fill: '#A1A1AA', 'font-size': 11, 'font-weight': 500,
+        'text-anchor': 'middle', fill: '#52525B', 'font-size': 11, 'font-weight': 500,
         'font-family': "'Consolas','Monaco',monospace"
       }));
     });
 
     // Right/Left labels
     svg.appendChild(this.svgText('R', this.chartPadding - 16, centerY + 4, {
-      'text-anchor': 'middle', fill: '#52525B', 'font-size': 13, 'font-weight': 700
+      'text-anchor': 'middle', fill: '#A1A1AA', 'font-size': 13, 'font-weight': 700
     }));
     svg.appendChild(this.svgText('L', totalW - this.chartPadding + 16, centerY + 4, {
-      'text-anchor': 'middle', fill: '#52525B', 'font-size': 13, 'font-weight': 700
+      'text-anchor': 'middle', fill: '#A1A1AA', 'font-size': 13, 'font-weight': 700
     }));
 
     chartWrap.appendChild(svg);
-    this.container.appendChild(chartWrap);
+    return chartWrap;
   }
 
   // ── Surface Diagram (5-surface odontogram) ─────────────────────────────
@@ -374,13 +379,13 @@ export default class DentalChartEngine {
       const condDef = this.conditions[cond] || this.conditions.healthy;
       let fillColor = condDef.color;
       let opacity = 1;
-      let strokeColor = '#52525B';
+      let strokeColor = '#A1A1AA';
       let strokeW = 1;
 
       if (isMissing) {
-        fillColor = '#27272A';
+        fillColor = '#E4E4E7';
         opacity = 0.4;
-        strokeColor = '#3F3F46';
+        strokeColor = '#D4D4D8';
       }
 
       if (tooth.wholeCondition === 'crown') {
@@ -404,7 +409,7 @@ export default class DentalChartEngine {
 
       path.addEventListener('mouseenter', () => {
         if (isMissing) return;
-        path.setAttribute('stroke', '#A1A1AA');
+        path.setAttribute('stroke', '#71717A');
         path.setAttribute('stroke-width', '2');
       });
       path.addEventListener('mouseleave', () => {
@@ -433,7 +438,7 @@ export default class DentalChartEngine {
         this.surfaceLabels[surf.name] || surf.name[0].toUpperCase(),
         lp.cx, lp.cy + 3,
         {
-          'text-anchor': 'middle', fill: isMissing ? '#3F3F46' : '#18181B',
+          'text-anchor': 'middle', fill: isMissing ? '#D4D4D8' : '#3F3F46',
           'font-size': 8, 'font-weight': 600, 'pointer-events': 'none',
           'font-family': "'Segoe UI',sans-serif"
         }
@@ -501,8 +506,8 @@ export default class DentalChartEngine {
     let opacity = 1;
 
     if (isMissing) {
-      crownFill = '#27272A'; rootFill = '#27272A';
-      crownStroke = '#3F3F46'; opacity = 0.3;
+      crownFill = '#E4E4E7'; rootFill = '#E4E4E7';
+      crownStroke = '#D4D4D8'; opacity = 0.3;
     } else if (tooth.wholeCondition === 'crown') {
       crownFill = '#C4B5FD'; crownStroke = '#A78BFA';
     } else if (tooth.wholeCondition === 'implant') {
@@ -711,7 +716,7 @@ export default class DentalChartEngine {
             <div class="dc-whole-status">
               ${wholeCond ?
                 `<span class="dc-cond-dot-sm" style="background:${wholeCond.color}"></span> ${wholeCond.label}` :
-                '<span style="color:#71717A">Normal (no whole-tooth condition)</span>'}
+                '<span style="color:#A1A1AA">Normal (no whole-tooth condition)</span>'}
               ${wholeCond ? `<button class="dc-btn-clear" id="dc-clear-whole" title="Clear whole tooth condition">&#10005;</button>` : ''}
             </div>
           </div>
@@ -900,15 +905,20 @@ export default class DentalChartEngine {
   }
 
   private refreshChart(): void {
-    const chartWrap = this.container.querySelector('.dc-chart-wrap');
-    const detailPanel = this.container.querySelector('#dc-detail-panel');
-    const historyPanel = this.container.querySelector('#dc-history-panel');
+    const oldChartWrap = this.container.querySelector('.dc-chart-wrap');
+    const bottomGrid = this.container.querySelector('#dc-bottom-grid');
 
-    if (chartWrap) chartWrap.remove();
-    if (detailPanel) detailPanel.remove();
-    if (historyPanel) historyPanel.remove();
+    // Remove old chart wrap
+    if (oldChartWrap) oldChartWrap.remove();
 
-    this.renderChart();
+    // Re-render chart and insert BEFORE bottom grid to preserve order
+    const chartWrap = this.buildChart();
+    if (bottomGrid) {
+      this.container.insertBefore(chartWrap, bottomGrid);
+    } else {
+      this.container.appendChild(chartWrap);
+    }
+
     this.renderDetailPanel();
     this.renderHistoryPanel();
   }

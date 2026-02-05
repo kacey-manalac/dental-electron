@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
   Bars3Icon,
@@ -7,6 +8,7 @@ import {
   MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
 import { useUIStore } from '../../store/uiStore';
+import SearchPalette from './SearchPalette';
 
 const PAGE_TITLES: Record<string, string> = {
   '/': 'Dashboard',
@@ -21,6 +23,19 @@ const PAGE_TITLES: Record<string, string> = {
 export default function Header() {
   const { darkMode, toggleDarkMode, toggleSidebar } = useUIStore();
   const location = useLocation();
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  // Ctrl+K shortcut
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const basePath = '/' + (location.pathname.split('/')[1] || '');
   const pageTitle = PAGE_TITLES[basePath] || 'DentalCare Pro';
@@ -41,20 +56,18 @@ export default function Header() {
           </h1>
         </div>
 
-        {/* Center: search bar placeholder */}
+        {/* Center: search bar trigger */}
         <div className="hidden md:flex items-center max-w-md flex-1 mx-8">
-          <div className="relative w-full">
+          <button
+            onClick={() => setSearchOpen(true)}
+            className="relative w-full flex items-center pl-9 pr-16 py-2 rounded-lg bg-gray-100 dark:bg-surface-800 border border-transparent hover:border-gray-300 dark:hover:border-gray-600 text-sm text-gray-400 dark:text-gray-500 transition-all text-left"
+          >
             <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search patients, appointments..."
-              className="w-full pl-9 pr-16 py-2 rounded-lg bg-gray-100 dark:bg-surface-800 border border-transparent focus:border-primary-500/30 focus:bg-white dark:focus:bg-surface-800 text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all"
-              readOnly
-            />
+            Search patients, appointments...
             <kbd className="absolute right-3 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-[10px] font-medium text-gray-400 dark:text-gray-500 border border-gray-300 dark:border-gray-600">
               Ctrl K
             </kbd>
-          </div>
+          </button>
         </div>
 
         {/* Right side */}
@@ -94,6 +107,8 @@ export default function Header() {
           </button>
         </div>
       </div>
+
+      <SearchPalette isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   );
 }

@@ -4,13 +4,14 @@ import {
   CalendarIcon,
   ClipboardDocumentListIcon,
   CurrencyDollarIcon,
-  ArrowTrendingUpIcon,
-  ArrowTrendingDownIcon,
   ChevronRightIcon,
   PlusIcon,
 } from '@heroicons/react/24/outline';
+import { useQuery } from '@tanstack/react-query';
 import { usePatients } from '../hooks/usePatients';
 import { useAppointments } from '../hooks/useAppointments';
+import { getTreatments } from '../services/treatments';
+import { getInvoices } from '../services/billing';
 import Card from '../components/common/Card';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import { format } from 'date-fns';
@@ -27,34 +28,55 @@ const statCardStyles = [
     gradient: 'from-sky-500 to-sky-400',
     iconBg: 'bg-sky-500/10 dark:bg-sky-500/20',
     iconColor: 'text-sky-500',
-    trendColor: 'text-sky-600 dark:text-sky-400',
   },
   {
     gradient: 'from-emerald-500 to-emerald-400',
     iconBg: 'bg-emerald-500/10 dark:bg-emerald-500/20',
     iconColor: 'text-emerald-500',
-    trendColor: 'text-emerald-600 dark:text-emerald-400',
   },
   {
     gradient: 'from-amber-500 to-amber-400',
     iconBg: 'bg-amber-500/10 dark:bg-amber-500/20',
     iconColor: 'text-amber-500',
-    trendColor: 'text-amber-600 dark:text-amber-400',
   },
   {
     gradient: 'from-violet-500 to-violet-400',
     iconBg: 'bg-violet-500/10 dark:bg-violet-500/20',
     iconColor: 'text-violet-500',
-    trendColor: 'text-violet-600 dark:text-violet-400',
   },
 ];
 
 export default function DashboardPage() {
   const { data: patientsData, isLoading: loadingPatients } = usePatients({ limit: 5 });
-  const { data: appointmentsData, isLoading: loadingAppointments } = useAppointments({
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const { data: appointmentsData, isLoading: loadingAppointments, isError: errorAppointments } = useAppointments({
     limit: 5,
-    startDate: new Date().toISOString(),
+    startDate: today.toISOString(),
   });
+
+  const { data: pendingTreatments } = useQuery({
+    queryKey: ['treatments', 'pending-count'],
+    queryFn: () => getTreatments({ status: 'PLANNED' as any, limit: 1 }),
+  });
+
+  const { data: inProgressTreatments } = useQuery({
+    queryKey: ['treatments', 'inprogress-count'],
+    queryFn: () => getTreatments({ status: 'IN_PROGRESS' as any, limit: 1 }),
+  });
+
+  const { data: pendingInvoices } = useQuery({
+    queryKey: ['invoices', 'pending-count'],
+    queryFn: () => getInvoices({ status: 'PENDING' as any, limit: 1 }),
+  });
+
+  const { data: overdueInvoices } = useQuery({
+    queryKey: ['invoices', 'overdue-count'],
+    queryFn: () => getInvoices({ status: 'OVERDUE' as any, limit: 1 }),
+  });
+
+  const treatmentCount = (pendingTreatments?.pagination.total || 0) + (inProgressTreatments?.pagination.total || 0);
+  const invoiceCount = (pendingInvoices?.pagination.total || 0) + (overdueInvoices?.pagination.total || 0);
 
   const stats = [
     {
@@ -62,8 +84,6 @@ export default function DashboardPage() {
       value: patientsData?.pagination.total || 0,
       icon: UserGroupIcon,
       href: '/patients',
-      trend: '+12%',
-      trendUp: true,
     },
     {
       name: "Today's Appointments",
@@ -72,24 +92,18 @@ export default function DashboardPage() {
       ).length || 0,
       icon: CalendarIcon,
       href: '/appointments',
-      trend: '+5%',
-      trendUp: true,
     },
     {
       name: 'Pending Treatments',
-      value: '-',
+      value: treatmentCount,
       icon: ClipboardDocumentListIcon,
       href: '/treatments',
-      trend: '-',
-      trendUp: true,
     },
     {
       name: 'Pending Invoices',
-      value: '-',
+      value: invoiceCount,
       icon: CurrencyDollarIcon,
       href: '/billing',
-      trend: '-',
-      trendUp: false,
     },
   ];
 
@@ -141,16 +155,6 @@ export default function DashboardPage() {
                   <div className={`p-2.5 rounded-xl ${style.iconBg}`}>
                     <stat.icon className={`h-5 w-5 ${style.iconColor}`} />
                   </div>
-                  {stat.trend !== '-' && (
-                    <span className={`inline-flex items-center gap-0.5 text-xs font-medium ${style.trendColor}`}>
-                      {stat.trendUp ? (
-                        <ArrowTrendingUpIcon className="h-3.5 w-3.5" />
-                      ) : (
-                        <ArrowTrendingDownIcon className="h-3.5 w-3.5" />
-                      )}
-                      {stat.trend}
-                    </span>
-                  )}
                 </div>
                 <div className="mt-4">
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -210,6 +214,10 @@ export default function DashboardPage() {
         <Card title="Upcoming Appointments" action={<Link to="/appointments" className="text-sm font-medium text-primary-500 hover:text-primary-400 transition-colors">View all</Link>}>
           {loadingAppointments ? (
             <LoadingSpinner />
+          ) : errorAppointments ? (
+            <p className="py-8 text-sm text-gray-500 dark:text-gray-400 text-center">
+              No upcoming appointments
+            </p>
           ) : (
             <div className="divide-y divide-gray-100 dark:divide-gray-700/30">
               {appointmentsData?.data.map((appointment) => (
@@ -238,7 +246,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
               ))}
-              {appointmentsData?.data.length === 0 && (
+              {(!appointmentsData?.data || appointmentsData.data.length === 0) && (
                 <p className="py-8 text-sm text-gray-500 dark:text-gray-400 text-center">
                   No upcoming appointments
                 </p>

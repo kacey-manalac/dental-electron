@@ -41,8 +41,14 @@ async function createWindow() {
     mainWindow?.show();
   });
 
-  const rendererPath = path.join(__dirname, '../renderer/index.html');
-  mainWindow.loadFile(rendererPath);
+  const devServerUrl = process.env.VITE_DEV_SERVER_URL;
+  if (devServerUrl) {
+    mainWindow.loadURL(devServerUrl);
+    mainWindow.webContents.openDevTools();
+  } else {
+    const rendererPath = path.join(__dirname, '../renderer/index.html');
+    mainWindow.loadFile(rendererPath);
+  }
 
   mainWindow.on('closed', () => {
     mainWindow = null;

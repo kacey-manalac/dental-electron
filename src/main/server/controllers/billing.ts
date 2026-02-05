@@ -40,9 +40,9 @@ export async function getInvoices(filters: {
 
   if (search) {
     where.OR = [
-      { invoiceNumber: { contains: search, mode: 'insensitive' } },
-      { patient: { firstName: { contains: search, mode: 'insensitive' } } },
-      { patient: { lastName: { contains: search, mode: 'insensitive' } } },
+      { invoiceNumber: { contains: search } },
+      { patient: { firstName: { contains: search } } },
+      { patient: { lastName: { contains: search } } },
     ];
   }
 

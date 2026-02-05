@@ -310,6 +310,12 @@ export default function PatientDetailPage() {
                 </dd>
               </div>
               <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Alcohol Consumption</dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-white">
+                  {patient.medicalHistory.alcoholConsumption || 'Not specified'}
+                </dd>
+              </div>
+              <div>
                 <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Blood Type</dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-white">
                   {patient.medicalHistory.bloodType || 'Not specified'}

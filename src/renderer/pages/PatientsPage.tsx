@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { usePatients, useCreatePatient } from '../hooks/usePatients';
 import { format } from 'date-fns';
@@ -15,6 +15,7 @@ export default function PatientsPage() {
   const [page, setPage] = useState(1);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
+  const navigate = useNavigate();
   const { data, isLoading } = usePatients({ page, limit: 10, search });
   const createPatient = useCreatePatient();
 
@@ -92,7 +93,11 @@ export default function PatientsPage() {
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                   {data?.data.map((patient) => (
-                    <tr key={patient.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                    <tr
+                      key={patient.id}
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer"
+                      onClick={() => navigate(`/patients/${patient.id}`)}
+                    >
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="h-10 w-10 flex-shrink-0">

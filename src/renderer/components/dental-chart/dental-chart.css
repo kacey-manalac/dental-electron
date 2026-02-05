@@ -1,17 +1,17 @@
 /* ============================================================
-   Dental Chart Engine — Dark Theme Styles
+   Dental Chart Engine — Light Theme Styles
    Professional imperative-render dental chart UI
-   Color palette: zinc-based dark with indigo accents
+   Color palette: zinc-based light with indigo accents
    ============================================================ */
 
 /* ---- Root Container ---- */
 
 .dc-root {
-  background: #18181b;
-  color: #fafafa;
+  background: #ffffff;
+  color: #18181b;
   font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   border-radius: 12px;
-  border: 1px solid #27272a;
+  border: 1px solid #e4e4e7;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -27,8 +27,8 @@
   align-items: center;
   gap: 12px;
   padding: 10px 16px;
-  background: #18181b;
-  border-bottom: 1px solid #27272a;
+  background: #f4f4f5;
+  border-bottom: 1px solid #e4e4e7;
   flex-wrap: wrap;
   min-height: 48px;
 }
@@ -39,7 +39,7 @@
   display: flex;
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid #3f3f46;
+  border: 1px solid #d4d4d8;
   flex-shrink: 0;
 }
 
@@ -48,7 +48,7 @@
   font-size: 13px;
   font-weight: 500;
   background: transparent;
-  color: #a1a1aa;
+  color: #71717a;
   border: none;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
@@ -57,8 +57,8 @@
 }
 
 .dc-mode-btn:hover {
-  background: #27272a;
-  color: #fafafa;
+  background: #e4e4e7;
+  color: #18181b;
 }
 
 .dc-mode-btn.active {
@@ -71,7 +71,7 @@
 .dc-toolbar-sep {
   width: 1px;
   height: 28px;
-  background: #3f3f46;
+  background: #d4d4d8;
   flex-shrink: 0;
 }
 
@@ -91,9 +91,9 @@
   padding: 5px 12px;
   font-size: 12px;
   font-weight: 500;
-  color: #a1a1aa;
-  background: transparent;
-  border: 1px solid #3f3f46;
+  color: #52525b;
+  background: #ffffff;
+  border: 1px solid #d4d4d8;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -102,14 +102,14 @@
 }
 
 .dc-cond-btn:hover {
-  background: #27272a;
-  color: #fafafa;
-  border-color: #52525b;
+  background: #f4f4f5;
+  color: #18181b;
+  border-color: #a1a1aa;
 }
 
 .dc-cond-btn.active {
-  background: #27272a;
-  color: #fafafa;
+  background: #eef2ff;
+  color: #18181b;
   border-color: #818cf8;
   box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.25);
 }
@@ -126,13 +126,13 @@
    ============================================================ */
 
 .dc-chart-wrap {
-  background: #09090b;
+  background: #fafafa;
   overflow-x: auto;
   overflow-y: hidden;
-  border-bottom: 1px solid #27272a;
+  border-bottom: 1px solid #e4e4e7;
   padding: 16px 8px;
   scrollbar-width: thin;
-  scrollbar-color: #3f3f46 #09090b;
+  scrollbar-color: #d4d4d8 #fafafa;
 }
 
 .dc-chart-wrap::-webkit-scrollbar {
@@ -140,16 +140,16 @@
 }
 
 .dc-chart-wrap::-webkit-scrollbar-track {
-  background: #09090b;
+  background: #fafafa;
 }
 
 .dc-chart-wrap::-webkit-scrollbar-thumb {
-  background: #3f3f46;
+  background: #d4d4d8;
   border-radius: 4px;
 }
 
 .dc-chart-wrap::-webkit-scrollbar-thumb:hover {
-  background: #52525b;
+  background: #a1a1aa;
 }
 
 .dc-chart-svg {
@@ -166,7 +166,7 @@
 }
 
 .dc-tooth-group:hover {
-  filter: brightness(1.15);
+  filter: brightness(0.95);
 }
 
 .dc-tooth-group.selected {
@@ -203,8 +203,8 @@
    ============================================================ */
 
 .dc-detail-panel {
-  border-right: 1px solid #27272a;
-  background: #18181b;
+  border-right: 1px solid #e4e4e7;
+  background: #ffffff;
   display: flex;
   flex-direction: column;
   max-height: 420px;
@@ -228,7 +228,7 @@
   font-size: 48px;
   line-height: 1;
   opacity: 0.25;
-  color: #71717a;
+  color: #a1a1aa;
   user-select: none;
 }
 
@@ -246,7 +246,7 @@
   align-items: center;
   gap: 14px;
   padding: 14px 16px;
-  border-bottom: 1px solid #27272a;
+  border-bottom: 1px solid #e4e4e7;
   flex-shrink: 0;
 }
 
@@ -269,7 +269,7 @@
   margin: 0 0 2px;
   font-size: 15px;
   font-weight: 600;
-  color: #fafafa;
+  color: #18181b;
   line-height: 1.3;
 }
 
@@ -287,7 +287,7 @@
   overflow-y: auto;
   padding: 12px 16px 16px;
   scrollbar-width: thin;
-  scrollbar-color: #3f3f46 #18181b;
+  scrollbar-color: #d4d4d8 #ffffff;
 }
 
 .dc-detail-body::-webkit-scrollbar {
@@ -295,11 +295,11 @@
 }
 
 .dc-detail-body::-webkit-scrollbar-track {
-  background: #18181b;
+  background: #ffffff;
 }
 
 .dc-detail-body::-webkit-scrollbar-thumb {
-  background: #3f3f46;
+  background: #d4d4d8;
   border-radius: 3px;
 }
 
@@ -313,7 +313,7 @@
   color: #71717a;
   margin: 14px 0 8px;
   padding-bottom: 6px;
-  border-bottom: 1px solid #27272a;
+  border-bottom: 1px solid #e4e4e7;
 }
 
 .dc-detail-section h5:first-child {
@@ -327,10 +327,10 @@
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  background: #27272a;
+  background: #f4f4f5;
   border-radius: 8px;
   font-size: 13px;
-  color: #fafafa;
+  color: #18181b;
   min-height: 36px;
 }
 
@@ -354,16 +354,16 @@
 }
 
 .dc-surf-row:hover {
-  background: #27272a;
+  background: #f4f4f5;
 }
 
 .dc-surf-row.active {
-  background: #27272a;
-  outline: 1px solid #3f3f46;
+  background: #eef2ff;
+  outline: 1px solid #c7d2fe;
 }
 
 .dc-surf-label {
-  color: #fafafa;
+  color: #18181b;
   font-weight: 500;
 }
 
@@ -372,7 +372,7 @@
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  color: #a1a1aa;
+  color: #52525b;
 }
 
 .dc-cond-dot-sm {
@@ -396,10 +396,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #3f3f46;
+  border: 1px solid #d4d4d8;
   border-radius: 6px;
-  background: transparent;
-  color: #a1a1aa;
+  background: #ffffff;
+  color: #52525b;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -407,9 +407,9 @@
 }
 
 .dc-mob-btn:hover {
-  background: #27272a;
-  color: #fafafa;
-  border-color: #52525b;
+  background: #f4f4f5;
+  color: #18181b;
+  border-color: #a1a1aa;
 }
 
 .dc-mob-btn.active {
@@ -424,10 +424,10 @@
   width: 100%;
   min-height: 64px;
   padding: 10px 12px;
-  border: 1px solid #3f3f46;
+  border: 1px solid #d4d4d8;
   border-radius: 8px;
-  background: #09090b;
-  color: #fafafa;
+  background: #ffffff;
+  color: #18181b;
   font-size: 13px;
   font-family: inherit;
   line-height: 1.5;
@@ -437,7 +437,7 @@
 }
 
 .dc-tooth-note::placeholder {
-  color: #52525b;
+  color: #a1a1aa;
 }
 
 .dc-tooth-note:focus {
@@ -451,7 +451,7 @@
    ============================================================ */
 
 .dc-history-panel {
-  background: #18181b;
+  background: #ffffff;
   display: flex;
   flex-direction: column;
   max-height: 420px;
@@ -463,14 +463,14 @@
   align-items: center;
   justify-content: space-between;
   padding: 14px 16px;
-  border-bottom: 1px solid #27272a;
+  border-bottom: 1px solid #e4e4e7;
   flex-shrink: 0;
 }
 
 .dc-history-header h5 {
   font-size: 13px;
   font-weight: 600;
-  color: #fafafa;
+  color: #18181b;
   margin: 0;
 }
 
@@ -482,8 +482,8 @@
   height: 22px;
   padding: 0 7px;
   border-radius: 11px;
-  background: #27272a;
-  color: #a1a1aa;
+  background: #e4e4e7;
+  color: #52525b;
   font-size: 11px;
   font-weight: 600;
 }
@@ -495,7 +495,7 @@
   overflow-y: auto;
   padding: 8px 12px;
   scrollbar-width: thin;
-  scrollbar-color: #3f3f46 #18181b;
+  scrollbar-color: #d4d4d8 #ffffff;
 }
 
 .dc-history-list::-webkit-scrollbar {
@@ -503,11 +503,11 @@
 }
 
 .dc-history-list::-webkit-scrollbar-track {
-  background: #18181b;
+  background: #ffffff;
 }
 
 .dc-history-list::-webkit-scrollbar-thumb {
-  background: #3f3f46;
+  background: #d4d4d8;
   border-radius: 3px;
 }
 
@@ -521,11 +521,11 @@
 }
 
 .dc-history-entry:hover {
-  background: #27272a;
+  background: #f4f4f5;
 }
 
 .dc-history-entry + .dc-history-entry {
-  border-top: 1px solid #27272a;
+  border-top: 1px solid #e4e4e7;
 }
 
 .dc-history-tooth {
@@ -536,24 +536,24 @@
   height: 26px;
   padding: 0 6px;
   border-radius: 6px;
-  background: #27272a;
-  color: #818cf8;
+  background: #eef2ff;
+  color: #4f46e5;
   font-size: 12px;
   font-weight: 700;
   flex-shrink: 0;
-  border: 1px solid #3f3f46;
+  border: 1px solid #c7d2fe;
 }
 
 .dc-history-action {
   flex: 1;
   font-size: 13px;
-  color: #fafafa;
+  color: #18181b;
   line-height: 1.4;
 }
 
 .dc-history-time {
   font-size: 11px;
-  color: #71717a;
+  color: #a1a1aa;
   white-space: nowrap;
   flex-shrink: 0;
   margin-top: 1px;
@@ -568,7 +568,7 @@
   height: 100%;
   min-height: 120px;
   font-size: 13px;
-  color: #71717a;
+  color: #a1a1aa;
   text-align: center;
   padding: 24px 16px;
 }
@@ -600,15 +600,15 @@
 }
 
 .dc-btn-outline {
-  background: transparent;
-  color: #a1a1aa;
-  border-color: #3f3f46;
+  background: #ffffff;
+  color: #52525b;
+  border-color: #d4d4d8;
 }
 
 .dc-btn-outline:hover {
-  background: #27272a;
-  color: #fafafa;
-  border-color: #52525b;
+  background: #f4f4f5;
+  color: #18181b;
+  border-color: #a1a1aa;
 }
 
 .dc-btn-save {
@@ -643,7 +643,7 @@
   border: none;
   border-radius: 4px;
   background: transparent;
-  color: #71717a;
+  color: #a1a1aa;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.12s ease;
@@ -652,8 +652,8 @@
 }
 
 .dc-btn-clear:hover {
-  background: #3f3f46;
-  color: #fafafa;
+  background: #e4e4e7;
+  color: #18181b;
 }
 
 /* ============================================================
@@ -673,8 +673,8 @@
   font-size: 13px;
   font-weight: 500;
   color: #fff;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4),
-              0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15),
+              0 2px 8px rgba(0, 0, 0, 0.1);
   animation: dc-notif-in 0.25s ease-out;
   pointer-events: auto;
 }
@@ -726,6 +726,6 @@
 
   .dc-detail-panel {
     border-right: none;
-    border-bottom: 1px solid #27272a;
+    border-bottom: 1px solid #e4e4e7;
   }
 }

@@ -200,8 +200,8 @@ export default function DentalChart({ patientId }: DentalChartProps) {
 
   return (
     <div className="space-y-6">
-      {data.summary && <DentalOverview summary={data.summary} />}
       <div ref={containerRef} className="dc-root" />
+      {data.summary && <DentalOverview summary={data.summary} />}
     </div>
   );
 }

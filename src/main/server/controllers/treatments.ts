@@ -31,10 +31,10 @@ export async function getTreatments(filters: {
 
   if (search) {
     where.OR = [
-      { procedureName: { contains: search, mode: 'insensitive' } },
-      { procedureCode: { contains: search, mode: 'insensitive' } },
-      { patient: { firstName: { contains: search, mode: 'insensitive' } } },
-      { patient: { lastName: { contains: search, mode: 'insensitive' } } },
+      { procedureName: { contains: search } },
+      { procedureCode: { contains: search } },
+      { patient: { firstName: { contains: search } } },
+      { patient: { lastName: { contains: search } } },
     ];
   }
 

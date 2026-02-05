@@ -34,9 +34,9 @@ export async function getAppointments(filters: {
 
   if (search) {
     where.OR = [
-      { title: { contains: search, mode: 'insensitive' } },
-      { patient: { firstName: { contains: search, mode: 'insensitive' } } },
-      { patient: { lastName: { contains: search, mode: 'insensitive' } } },
+      { title: { contains: search } },
+      { patient: { firstName: { contains: search } } },
+      { patient: { lastName: { contains: search } } },
     ];
   }
 
