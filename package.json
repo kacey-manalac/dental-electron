@@ -1,6 +1,6 @@
 {
   "name": "dental-electron",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Dental Clinic Management - Electron Desktop App",
   "main": "dist/main/index.js",
   "scripts": {
