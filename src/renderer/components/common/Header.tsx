@@ -1,0 +1,99 @@
+import { useLocation } from 'react-router-dom';
+import {
+  Bars3Icon,
+  SunIcon,
+  MoonIcon,
+  BellIcon,
+  MagnifyingGlassIcon,
+} from '@heroicons/react/24/outline';
+import { useUIStore } from '../../store/uiStore';
+
+const PAGE_TITLES: Record<string, string> = {
+  '/': 'Dashboard',
+  '/patients': 'Patients',
+  '/appointments': 'Appointments',
+  '/treatments': 'Treatments',
+  '/billing': 'Billing',
+  '/analytics': 'Analytics',
+  '/admin': 'Settings',
+};
+
+export default function Header() {
+  const { darkMode, toggleDarkMode, toggleSidebar } = useUIStore();
+  const location = useLocation();
+
+  const basePath = '/' + (location.pathname.split('/')[1] || '');
+  const pageTitle = PAGE_TITLES[basePath] || 'DentalCare Pro';
+
+  return (
+    <header className="sticky top-0 z-30 bg-white/80 dark:bg-surface-900/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50">
+      <div className="flex items-center justify-between h-16 px-4 lg:px-6">
+        {/* Left: mobile menu + page title */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={toggleSidebar}
+            className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors"
+          >
+            <Bars3Icon className="w-5 h-5 text-gray-500" />
+          </button>
+          <h1 className="text-lg font-semibold text-gray-900 dark:text-white hidden sm:block">
+            {pageTitle}
+          </h1>
+        </div>
+
+        {/* Center: search bar placeholder */}
+        <div className="hidden md:flex items-center max-w-md flex-1 mx-8">
+          <div className="relative w-full">
+            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search patients, appointments..."
+              className="w-full pl-9 pr-16 py-2 rounded-lg bg-gray-100 dark:bg-surface-800 border border-transparent focus:border-primary-500/30 focus:bg-white dark:focus:bg-surface-800 text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all"
+              readOnly
+            />
+            <kbd className="absolute right-3 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-[10px] font-medium text-gray-400 dark:text-gray-500 border border-gray-300 dark:border-gray-600">
+              Ctrl K
+            </kbd>
+          </div>
+        </div>
+
+        {/* Right side */}
+        <div className="flex items-center gap-1">
+          {/* Notification bell */}
+          <button className="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors">
+            <BellIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+            <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-accent-500" />
+          </button>
+
+          {/* Divider */}
+          <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 mx-2" />
+
+          {/* Dark mode toggle */}
+          <button
+            onClick={toggleDarkMode}
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors"
+          >
+            {darkMode ? (
+              <SunIcon className="w-5 h-5 text-amber-400" />
+            ) : (
+              <MoonIcon className="w-5 h-5 text-gray-500" />
+            )}
+          </button>
+
+          {/* Divider */}
+          <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 mx-2" />
+
+          {/* Profile avatar pill */}
+          <button className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
+              <span className="text-xs font-bold text-white">DC</span>
+            </div>
+            <span className="hidden sm:block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Clinic
+            </span>
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+}

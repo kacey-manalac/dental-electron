@@ -1,0 +1,515 @@
+import { useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { format } from 'date-fns';
+import {
+  ArrowLeftIcon,
+  PencilIcon,
+  PhoneIcon,
+  EnvelopeIcon,
+  MapPinIcon,
+  DocumentArrowDownIcon,
+} from '@heroicons/react/24/outline';
+import { usePatient, useUpdatePatient, useUpdateMedicalHistory } from '../hooks/usePatients';
+import { usePatientImages } from '../hooks/useImages';
+import Button from '../components/common/Button';
+import Card from '../components/common/Card';
+import Badge from '../components/common/Badge';
+import Modal from '../components/common/Modal';
+import LoadingSpinner from '../components/common/LoadingSpinner';
+import PatientForm from '../components/patients/PatientForm';
+import DentalChart from '../components/dental-chart/DentalChart';
+import ImageUpload from '../components/images/ImageUpload';
+import ImageGallery from '../components/images/ImageGallery';
+import { downloadDentalRecordPDF, downloadTreatmentSummaryPDF } from '../services/reports';
+
+export default function PatientDetailPage() {
+  const { id } = useParams<{ id: string }>();
+  const { data: patient, isLoading, error } = usePatient(id!);
+  const updatePatient = useUpdatePatient();
+  const updateMedicalHistory = useUpdateMedicalHistory();
+
+  const [activeTab, setActiveTab] = useState<'overview' | 'dental-chart' | 'history' | 'images'>('overview');
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showMedicalHistoryModal, setShowMedicalHistoryModal] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const { data: imagesData, isLoading: imagesLoading } = usePatientImages(id!, { limit: 50 });
+
+  if (isLoading) {
+    return <LoadingSpinner className="py-12" />;
+  }
+
+  if (error || !patient) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-red-500">Failed to load patient</p>
+        <Link to="/patients" className="text-primary-600 hover:underline mt-2 inline-block">
+          Back to patients
+        </Link>
+      </div>
+    );
+  }
+
+  const handleUpdatePatient = async (data: any) => {
+    await updatePatient.mutateAsync({ id: patient.id, data });
+    setShowEditModal(false);
+  };
+
+  const handleUpdateMedicalHistory = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    await updateMedicalHistory.mutateAsync({
+      patientId: patient.id,
+      data: {
+        allergies: formData.get('allergies') as string || undefined,
+        medications: formData.get('medications') as string || undefined,
+        medicalConditions: formData.get('medicalConditions') as string || undefined,
+        previousSurgeries: formData.get('previousSurgeries') as string || undefined,
+        smokingStatus: formData.get('smokingStatus') as string || undefined,
+        alcoholConsumption: formData.get('alcoholConsumption') as string || undefined,
+        bloodType: formData.get('bloodType') as string || undefined,
+        notes: formData.get('notes') as string || undefined,
+      },
+    });
+    setShowMedicalHistoryModal(false);
+  };
+
+  const tabs = [
+    { id: 'overview', label: 'Overview' },
+    { id: 'dental-chart', label: 'Dental Chart' },
+    { id: 'history', label: 'Medical History' },
+    { id: 'images', label: 'Images' },
+  ];
+
+  const handleDownloadDentalRecord = async () => {
+    setIsDownloading(true);
+    try {
+      await downloadDentalRecordPDF(patient.id);
+    } catch (error) {
+      console.error('Failed to download dental record:', error);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-4">
+          <Link
+            to="/patients"
+            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+          >
+            <ArrowLeftIcon className="h-5 w-5 text-gray-500" />
+          </Link>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              {patient.firstName} {patient.lastName}
+            </h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Patient since {format(new Date(patient.createdAt), 'MMMM yyyy')}
+            </p>
+          </div>
+        </div>
+        <div className="flex space-x-2">
+          <Button variant="secondary" onClick={handleDownloadDentalRecord} loading={isDownloading}>
+            <DocumentArrowDownIcon className="h-4 w-4 mr-2" />
+            Export PDF
+          </Button>
+          <Button onClick={() => setShowEditModal(true)}>
+            <PencilIcon className="h-4 w-4 mr-2" />
+            Edit
+          </Button>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="border-b border-gray-200 dark:border-gray-700">
+        <nav className="-mb-px flex space-x-8">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === tab.id
+                  ? 'border-primary-500 text-primary-600 dark:text-primary-400'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </nav>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'overview' && (
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          {/* Contact Info */}
+          <Card title="Contact Information">
+            <div className="space-y-4">
+              <div className="flex items-center">
+                <PhoneIcon className="h-5 w-5 text-gray-400 mr-3" />
+                <span className="text-gray-900 dark:text-white">{patient.phone}</span>
+              </div>
+              {patient.email && (
+                <div className="flex items-center">
+                  <EnvelopeIcon className="h-5 w-5 text-gray-400 mr-3" />
+                  <span className="text-gray-900 dark:text-white">{patient.email}</span>
+                </div>
+              )}
+              {patient.address && (
+                <div className="flex items-start">
+                  <MapPinIcon className="h-5 w-5 text-gray-400 mr-3 mt-0.5" />
+                  <span className="text-gray-900 dark:text-white">{patient.address}</span>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
+                Personal Details
+              </h4>
+              <dl className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <dt className="text-gray-500 dark:text-gray-400">Date of Birth</dt>
+                  <dd className="text-gray-900 dark:text-white">
+                    {format(new Date(patient.dateOfBirth), 'MMM d, yyyy')}
+                  </dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt className="text-gray-500 dark:text-gray-400">Gender</dt>
+                  <dd className="text-gray-900 dark:text-white">{patient.gender || 'Not specified'}</dd>
+                </div>
+              </dl>
+            </div>
+
+            {(patient.emergencyContact || patient.emergencyPhone) && (
+              <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
+                  Emergency Contact
+                </h4>
+                <p className="text-gray-900 dark:text-white">{patient.emergencyContact}</p>
+                <p className="text-gray-500 dark:text-gray-400">{patient.emergencyPhone}</p>
+              </div>
+            )}
+
+            {(patient.insuranceProvider || patient.insuranceNumber) && (
+              <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
+                  Insurance
+                </h4>
+                <p className="text-gray-900 dark:text-white">{patient.insuranceProvider}</p>
+                <p className="text-gray-500 dark:text-gray-400">#{patient.insuranceNumber}</p>
+              </div>
+            )}
+          </Card>
+
+          {/* Recent Appointments */}
+          <Card title="Recent Appointments" className="lg:col-span-2">
+            {patient.appointments && patient.appointments.length > 0 ? (
+              <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                {patient.appointments.map((appointment) => (
+                  <div key={appointment.id} className="py-3 flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                        {appointment.title}
+                      </p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        with Dr. {appointment.dentist?.firstName} {appointment.dentist?.lastName}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm text-gray-900 dark:text-white">
+                        {format(new Date(appointment.startTime), 'MMM d, yyyy')}
+                      </p>
+                      <Badge
+                        variant={
+                          appointment.status === 'COMPLETED' ? 'green' :
+                          appointment.status === 'CANCELLED' ? 'red' :
+                          appointment.status === 'SCHEDULED' ? 'blue' : 'yellow'
+                        }
+                      >
+                        {appointment.status.toLowerCase().replace('_', ' ')}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500 dark:text-gray-400 text-center py-4">
+                No appointments yet
+              </p>
+            )}
+          </Card>
+        </div>
+      )}
+
+      {activeTab === 'dental-chart' && <DentalChart patientId={patient.id} />}
+
+      {activeTab === 'images' && (
+        <Card
+          title="Patient Images"
+          action={
+            <Button onClick={() => setShowUploadModal(true)}>
+              Upload Images
+            </Button>
+          }
+        >
+          <ImageGallery
+            images={imagesData?.data || []}
+            isLoading={imagesLoading}
+            patientId={patient.id}
+          />
+        </Card>
+      )}
+
+      {activeTab === 'history' && (
+        <Card
+          title="Medical History"
+          action={
+            <Button variant="secondary" size="sm" onClick={() => setShowMedicalHistoryModal(true)}>
+              <PencilIcon className="h-4 w-4 mr-1" />
+              Edit
+            </Button>
+          }
+        >
+          {patient.medicalHistory ? (
+            <dl className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Allergies</dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-white">
+                  {patient.medicalHistory.allergies || 'None reported'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Current Medications</dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-white">
+                  {patient.medicalHistory.medications || 'None reported'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Medical Conditions</dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-white">
+                  {patient.medicalHistory.medicalConditions || 'None reported'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Previous Surgeries</dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-white">
+                  {patient.medicalHistory.previousSurgeries || 'None reported'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Smoking Status</dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-white">
+                  {patient.medicalHistory.smokingStatus || 'Not specified'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Blood Type</dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-white">
+                  {patient.medicalHistory.bloodType || 'Not specified'}
+                </dd>
+              </div>
+              <div className="sm:col-span-2">
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Notes</dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-white">
+                  {patient.medicalHistory.notes || 'No additional notes'}
+                </dd>
+              </div>
+            </dl>
+          ) : (
+            <p className="text-gray-500 dark:text-gray-400 text-center py-4">
+              No medical history recorded
+            </p>
+          )}
+        </Card>
+      )}
+
+      {/* Edit Patient Modal */}
+      <Modal
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        title="Edit Patient"
+        size="lg"
+      >
+        <PatientForm
+          initialData={{
+            firstName: patient.firstName,
+            lastName: patient.lastName,
+            email: patient.email || '',
+            phone: patient.phone,
+            dateOfBirth: format(new Date(patient.dateOfBirth), 'yyyy-MM-dd'),
+            gender: patient.gender || '',
+            address: patient.address || '',
+            emergencyContact: patient.emergencyContact || '',
+            emergencyPhone: patient.emergencyPhone || '',
+            insuranceProvider: patient.insuranceProvider || '',
+            insuranceNumber: patient.insuranceNumber || '',
+            notes: patient.notes || '',
+          }}
+          onSubmit={handleUpdatePatient}
+          onCancel={() => setShowEditModal(false)}
+          isLoading={updatePatient.isPending}
+        />
+      </Modal>
+
+      {/* Edit Medical History Modal */}
+      <Modal
+        isOpen={showMedicalHistoryModal}
+        onClose={() => setShowMedicalHistoryModal(false)}
+        title="Edit Medical History"
+        size="lg"
+      >
+        <form onSubmit={handleUpdateMedicalHistory} className="space-y-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Allergies
+              </label>
+              <textarea
+                name="allergies"
+                rows={2}
+                defaultValue={patient.medicalHistory?.allergies || ''}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
+                placeholder="List any known allergies"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Current Medications
+              </label>
+              <textarea
+                name="medications"
+                rows={2}
+                defaultValue={patient.medicalHistory?.medications || ''}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
+                placeholder="List current medications"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Medical Conditions
+              </label>
+              <textarea
+                name="medicalConditions"
+                rows={2}
+                defaultValue={patient.medicalHistory?.medicalConditions || ''}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
+                placeholder="List any medical conditions"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Previous Surgeries
+              </label>
+              <textarea
+                name="previousSurgeries"
+                rows={2}
+                defaultValue={patient.medicalHistory?.previousSurgeries || ''}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
+                placeholder="List previous surgeries"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Smoking Status
+              </label>
+              <select
+                name="smokingStatus"
+                defaultValue={patient.medicalHistory?.smokingStatus || ''}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
+              >
+                <option value="">Not specified</option>
+                <option value="Never">Never</option>
+                <option value="Former smoker">Former smoker</option>
+                <option value="Current smoker">Current smoker</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Alcohol Consumption
+              </label>
+              <select
+                name="alcoholConsumption"
+                defaultValue={patient.medicalHistory?.alcoholConsumption || ''}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
+              >
+                <option value="">Not specified</option>
+                <option value="None">None</option>
+                <option value="Occasional">Occasional</option>
+                <option value="Moderate">Moderate</option>
+                <option value="Heavy">Heavy</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Blood Type
+              </label>
+              <select
+                name="bloodType"
+                defaultValue={patient.medicalHistory?.bloodType || ''}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
+              >
+                <option value="">Not specified</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Additional Notes
+            </label>
+            <textarea
+              name="notes"
+              rows={3}
+              defaultValue={patient.medicalHistory?.notes || ''}
+              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
+              placeholder="Any additional medical notes"
+            />
+          </div>
+
+          <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <Button type="button" variant="secondary" onClick={() => setShowMedicalHistoryModal(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" loading={updateMedicalHistory.isPending}>
+              Save Changes
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Upload Images Modal */}
+      <Modal
+        isOpen={showUploadModal}
+        onClose={() => setShowUploadModal(false)}
+        title="Upload Images"
+        size="lg"
+      >
+        <ImageUpload
+          patientId={patient.id}
+          onSuccess={() => setShowUploadModal(false)}
+        />
+      </Modal>
+    </div>
+  );
+}
