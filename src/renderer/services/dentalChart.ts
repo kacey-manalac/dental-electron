@@ -3,6 +3,7 @@ import { DentalChartData, Tooth, ToothCondition, ToothSurface } from '../types';
 
 interface UpdateToothData {
   currentCondition: ToothCondition;
+  mobility?: number;
   notes?: string;
 }
 

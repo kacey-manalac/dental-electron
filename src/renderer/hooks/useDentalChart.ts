@@ -22,7 +22,7 @@ export function useUpdateTooth() {
     }: {
       patientId: string;
       toothNumber: number;
-      data: { currentCondition: ToothCondition; notes?: string };
+      data: { currentCondition: ToothCondition; mobility?: number; notes?: string };
     }) => dentalChartService.updateTooth(patientId, toothNumber, data),
     onSuccess: (_, { patientId }) => {
       queryClient.invalidateQueries({ queryKey: ['dentalChart', patientId] });

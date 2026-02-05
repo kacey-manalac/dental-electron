@@ -1,6 +1,6 @@
 export type UserRole = 'ADMIN' | 'DENTIST' | 'ASSISTANT';
 
-export type ToothCondition = 'HEALTHY' | 'CAVITY' | 'FILLED' | 'CROWN' | 'MISSING' | 'IMPLANT' | 'ROOT_CANAL';
+export type ToothCondition = 'HEALTHY' | 'CAVITY' | 'FILLED' | 'CROWN' | 'MISSING' | 'IMPLANT' | 'ROOT_CANAL' | 'COMPOSITE' | 'AMALGAM' | 'GOLD' | 'CERAMIC' | 'SEALANT' | 'VENEER' | 'PONTIC' | 'FRACTURE' | 'IMPACTED';
 
 export type AppointmentStatus = 'SCHEDULED' | 'CONFIRMED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED' | 'NO_SHOW';
 
@@ -69,6 +69,7 @@ export interface Tooth {
   fdiNumber?: string;
   isAdult: boolean;
   currentCondition: ToothCondition;
+  mobility: number;
   notes?: string;
   surfaces: ToothSurfaceData[];
   conditions: ToothConditionHistory[];
@@ -107,6 +108,15 @@ export interface DentalChartData {
     missing: number;
     implants: number;
     rootCanals: number;
+    composites: number;
+    amalgams: number;
+    golds: number;
+    ceramics: number;
+    sealants: number;
+    veneers: number;
+    pontics: number;
+    fractures: number;
+    impacted: number;
   };
 }
 

@@ -1,24 +1,78 @@
 import { ToothCondition, NotationType } from '../types';
 
 export const CONDITION_COLORS: Record<ToothCondition, string> = {
-  HEALTHY: '#ffffff',
-  CAVITY: '#ef4444',
-  FILLED: '#3b82f6',
-  CROWN: '#f59e0b',
-  MISSING: '#9ca3af',
-  IMPLANT: '#8b5cf6',
-  ROOT_CANAL: '#f97316',
+  HEALTHY: '#D4D4D8',
+  CAVITY: '#EF4444',
+  FILLED: '#60A5FA',
+  CROWN: '#A78BFA',
+  MISSING: '#52525B',
+  IMPLANT: '#2DD4BF',
+  ROOT_CANAL: '#FB923C',
+  COMPOSITE: '#60A5FA',
+  AMALGAM: '#9CA3AF',
+  GOLD: '#FBBF24',
+  CERAMIC: '#E2E8F0',
+  SEALANT: '#34D399',
+  VENEER: '#22D3EE',
+  PONTIC: '#818CF8',
+  FRACTURE: '#DC2626',
+  IMPACTED: '#78716C',
 };
 
 export const CONDITION_LABELS: Record<ToothCondition, string> = {
   HEALTHY: 'Healthy',
-  CAVITY: 'Cavity',
+  CAVITY: 'Caries',
   FILLED: 'Filled',
   CROWN: 'Crown',
   MISSING: 'Missing',
   IMPLANT: 'Implant',
   ROOT_CANAL: 'Root Canal',
+  COMPOSITE: 'Composite',
+  AMALGAM: 'Amalgam',
+  GOLD: 'Gold Filling',
+  CERAMIC: 'Ceramic',
+  SEALANT: 'Sealant',
+  VENEER: 'Veneer',
+  PONTIC: 'Pontic',
+  FRACTURE: 'Fracture',
+  IMPACTED: 'Impacted',
 };
+
+// Mapping between chart engine condition keys and DB condition enums
+export const CHART_TO_DB: Record<string, ToothCondition> = {
+  healthy: 'HEALTHY',
+  caries: 'CAVITY',
+  composite: 'COMPOSITE',
+  amalgam: 'AMALGAM',
+  gold: 'GOLD',
+  ceramic: 'CERAMIC',
+  sealant: 'SEALANT',
+  rct: 'ROOT_CANAL',
+  crown: 'CROWN',
+  veneer: 'VENEER',
+  missing: 'MISSING',
+  implant: 'IMPLANT',
+  pontic: 'PONTIC',
+  fracture: 'FRACTURE',
+  impacted: 'IMPACTED',
+};
+
+export const DB_TO_CHART: Record<string, string> = Object.fromEntries(
+  Object.entries(CHART_TO_DB).map(([chart, db]) => [db, chart])
+);
+
+export const SURFACE_TO_DB: Record<string, string> = {
+  mesial: 'M', distal: 'D', buccal: 'B', lingual: 'L', occlusal: 'O'
+};
+
+export const DB_TO_SURFACE: Record<string, string> = {
+  M: 'mesial', D: 'distal', B: 'buccal', L: 'lingual', O: 'occlusal'
+};
+
+// Conditions that are "whole tooth" conditions (not per-surface)
+export const WHOLE_TOOTH_CONDITIONS: ToothCondition[] = [
+  'CROWN', 'VENEER', 'MISSING', 'IMPLANT', 'PONTIC', 'FRACTURE', 'IMPACTED'
+];
 
 export const FDI_NUMBERS: Record<number, string> = {
   1: '18', 2: '17', 3: '16', 4: '15', 5: '14', 6: '13', 7: '12', 8: '11',

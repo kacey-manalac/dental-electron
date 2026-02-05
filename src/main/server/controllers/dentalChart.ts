@@ -3,20 +3,23 @@ import { ToothCondition } from '@prisma/client';
 import { prisma } from '../utils/prisma';
 import { UNIVERSAL_TO_FDI } from '../types';
 
+const TOOTH_CONDITIONS = ['HEALTHY', 'CAVITY', 'FILLED', 'CROWN', 'MISSING', 'IMPLANT', 'ROOT_CANAL', 'COMPOSITE', 'AMALGAM', 'GOLD', 'CERAMIC', 'SEALANT', 'VENEER', 'PONTIC', 'FRACTURE', 'IMPACTED'] as const;
+
 const updateToothSchema = z.object({
-  currentCondition: z.enum(['HEALTHY', 'CAVITY', 'FILLED', 'CROWN', 'MISSING', 'IMPLANT', 'ROOT_CANAL']),
+  currentCondition: z.enum(TOOTH_CONDITIONS),
+  mobility: z.number().int().min(0).max(3).optional(),
   notes: z.string().optional().nullable(),
 });
 
 const addConditionSchema = z.object({
-  condition: z.enum(['HEALTHY', 'CAVITY', 'FILLED', 'CROWN', 'MISSING', 'IMPLANT', 'ROOT_CANAL']),
+  condition: z.enum(TOOTH_CONDITIONS),
   notes: z.string().optional().nullable(),
 });
 
 const updateSurfacesSchema = z.object({
   surfaces: z.array(z.object({
     surface: z.enum(['M', 'O', 'D', 'B', 'L']),
-    condition: z.enum(['HEALTHY', 'CAVITY', 'FILLED', 'CROWN', 'MISSING', 'IMPLANT', 'ROOT_CANAL']),
+    condition: z.enum(TOOTH_CONDITIONS),
     notes: z.string().optional().nullable(),
   })),
 });
@@ -76,6 +79,15 @@ export async function getDentalChart(patientId: string) {
     missing: teeth.filter(t => t.currentCondition === 'MISSING').length,
     implants: teeth.filter(t => t.currentCondition === 'IMPLANT').length,
     rootCanals: teeth.filter(t => t.currentCondition === 'ROOT_CANAL').length,
+    composites: teeth.filter(t => t.currentCondition === 'COMPOSITE').length,
+    amalgams: teeth.filter(t => t.currentCondition === 'AMALGAM').length,
+    golds: teeth.filter(t => t.currentCondition === 'GOLD').length,
+    ceramics: teeth.filter(t => t.currentCondition === 'CERAMIC').length,
+    sealants: teeth.filter(t => t.currentCondition === 'SEALANT').length,
+    veneers: teeth.filter(t => t.currentCondition === 'VENEER').length,
+    pontics: teeth.filter(t => t.currentCondition === 'PONTIC').length,
+    fractures: teeth.filter(t => t.currentCondition === 'FRACTURE').length,
+    impacted: teeth.filter(t => t.currentCondition === 'IMPACTED').length,
   };
 
   return { patient, teeth, summary };
@@ -106,6 +118,7 @@ export async function updateTooth(patientId: string, toothNumber: number, data: 
         fdiNumber: UNIVERSAL_TO_FDI[toothNumber],
         isAdult: true,
         currentCondition: parsed.currentCondition as ToothCondition,
+        mobility: parsed.mobility ?? 0,
         notes: parsed.notes,
       },
     });
@@ -114,6 +127,7 @@ export async function updateTooth(patientId: string, toothNumber: number, data: 
       where: { id: tooth.id },
       data: {
         currentCondition: parsed.currentCondition as ToothCondition,
+        ...(parsed.mobility !== undefined ? { mobility: parsed.mobility } : {}),
         notes: parsed.notes,
       },
     });

@@ -1,0 +1,731 @@
+/* ============================================================
+   Dental Chart Engine — Dark Theme Styles
+   Professional imperative-render dental chart UI
+   Color palette: zinc-based dark with indigo accents
+   ============================================================ */
+
+/* ---- Root Container ---- */
+
+.dc-root {
+  background: #18181b;
+  color: #fafafa;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  border-radius: 12px;
+  border: 1px solid #27272a;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ============================================================
+   1. Toolbar
+   ============================================================ */
+
+.dc-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: #18181b;
+  border-bottom: 1px solid #27272a;
+  flex-wrap: wrap;
+  min-height: 48px;
+}
+
+/* Mode Toggle (Surface / Whole Tooth) */
+
+.dc-mode-toggle {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #3f3f46;
+  flex-shrink: 0;
+}
+
+.dc-mode-btn {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  background: transparent;
+  color: #a1a1aa;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.dc-mode-btn:hover {
+  background: #27272a;
+  color: #fafafa;
+}
+
+.dc-mode-btn.active {
+  background: #6366f1;
+  color: #fff;
+}
+
+/* Separator */
+
+.dc-toolbar-sep {
+  width: 1px;
+  height: 28px;
+  background: #3f3f46;
+  flex-shrink: 0;
+}
+
+/* Condition Buttons */
+
+.dc-condition-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.dc-cond-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #a1a1aa;
+  background: transparent;
+  border: 1px solid #3f3f46;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.dc-cond-btn:hover {
+  background: #27272a;
+  color: #fafafa;
+  border-color: #52525b;
+}
+
+.dc-cond-btn.active {
+  background: #27272a;
+  color: #fafafa;
+  border-color: #818cf8;
+  box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.25);
+}
+
+.dc-cond-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   2. Chart SVG Area
+   ============================================================ */
+
+.dc-chart-wrap {
+  background: #09090b;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-bottom: 1px solid #27272a;
+  padding: 16px 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #3f3f46 #09090b;
+}
+
+.dc-chart-wrap::-webkit-scrollbar {
+  height: 8px;
+}
+
+.dc-chart-wrap::-webkit-scrollbar-track {
+  background: #09090b;
+}
+
+.dc-chart-wrap::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 4px;
+}
+
+.dc-chart-wrap::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
+}
+
+.dc-chart-svg {
+  display: block;
+  margin: 0 auto;
+  min-width: 700px;
+}
+
+/* Tooth Groups */
+
+.dc-tooth-group {
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.dc-tooth-group:hover {
+  filter: brightness(1.15);
+}
+
+.dc-tooth-group.selected {
+  filter: drop-shadow(0 0 6px rgba(129, 140, 248, 0.6))
+          drop-shadow(0 0 12px rgba(99, 102, 241, 0.3));
+}
+
+/* Surfaces */
+
+.dc-surface {
+  cursor: pointer;
+  transition: opacity 0.12s ease, stroke 0.12s ease;
+}
+
+.dc-surface:hover {
+  opacity: 0.85;
+  stroke: #818cf8;
+  stroke-width: 1.5;
+}
+
+/* ============================================================
+   3. Bottom Grid (Detail + History)
+   ============================================================ */
+
+.dc-bottom-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 0;
+  min-height: 300px;
+}
+
+/* ============================================================
+   4. Detail Panel
+   ============================================================ */
+
+.dc-detail-panel {
+  border-right: 1px solid #27272a;
+  background: #18181b;
+  display: flex;
+  flex-direction: column;
+  max-height: 420px;
+  overflow: hidden;
+}
+
+/* Empty State */
+
+.dc-detail-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 200px;
+  gap: 12px;
+  padding: 32px 16px;
+}
+
+.dc-detail-empty-icon {
+  font-size: 48px;
+  line-height: 1;
+  opacity: 0.25;
+  color: #71717a;
+  user-select: none;
+}
+
+.dc-detail-hint {
+  font-size: 13px;
+  color: #71717a;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* Detail Header */
+
+.dc-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #27272a;
+  flex-shrink: 0;
+}
+
+.dc-detail-tooth-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: #6366f1;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  flex-shrink: 0;
+  letter-spacing: -0.5px;
+}
+
+.dc-detail-tooth-info h4 {
+  margin: 0 0 2px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fafafa;
+  line-height: 1.3;
+}
+
+.dc-detail-quad {
+  font-size: 12px;
+  color: #71717a;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Detail Body */
+
+.dc-detail-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 16px 16px;
+  scrollbar-width: thin;
+  scrollbar-color: #3f3f46 #18181b;
+}
+
+.dc-detail-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dc-detail-body::-webkit-scrollbar-track {
+  background: #18181b;
+}
+
+.dc-detail-body::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 3px;
+}
+
+/* Section Headers */
+
+.dc-detail-section h5 {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #71717a;
+  margin: 14px 0 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #27272a;
+}
+
+.dc-detail-section h5:first-child {
+  margin-top: 0;
+}
+
+/* Whole Tooth Status */
+
+.dc-whole-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #27272a;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #fafafa;
+  min-height: 36px;
+}
+
+/* Surface List */
+
+.dc-surf-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dc-surf-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.12s ease;
+  font-size: 13px;
+}
+
+.dc-surf-row:hover {
+  background: #27272a;
+}
+
+.dc-surf-row.active {
+  background: #27272a;
+  outline: 1px solid #3f3f46;
+}
+
+.dc-surf-label {
+  color: #fafafa;
+  font-weight: 500;
+}
+
+.dc-surf-cond {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #a1a1aa;
+}
+
+.dc-cond-dot-sm {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Mobility */
+
+.dc-mobility {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dc-mob-btn {
+  width: 36px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #3f3f46;
+  border-radius: 6px;
+  background: transparent;
+  color: #a1a1aa;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.dc-mob-btn:hover {
+  background: #27272a;
+  color: #fafafa;
+  border-color: #52525b;
+}
+
+.dc-mob-btn.active {
+  background: #6366f1;
+  color: #fff;
+  border-color: #6366f1;
+}
+
+/* Tooth Note */
+
+.dc-tooth-note {
+  width: 100%;
+  min-height: 64px;
+  padding: 10px 12px;
+  border: 1px solid #3f3f46;
+  border-radius: 8px;
+  background: #09090b;
+  color: #fafafa;
+  font-size: 13px;
+  font-family: inherit;
+  line-height: 1.5;
+  resize: vertical;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+}
+
+.dc-tooth-note::placeholder {
+  color: #52525b;
+}
+
+.dc-tooth-note:focus {
+  outline: none;
+  border-color: #818cf8;
+  box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.15);
+}
+
+/* ============================================================
+   5. History Panel
+   ============================================================ */
+
+.dc-history-panel {
+  background: #18181b;
+  display: flex;
+  flex-direction: column;
+  max-height: 420px;
+  overflow: hidden;
+}
+
+.dc-history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #27272a;
+  flex-shrink: 0;
+}
+
+.dc-history-header h5 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fafafa;
+  margin: 0;
+}
+
+.dc-history-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 11px;
+  background: #27272a;
+  color: #a1a1aa;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* History List */
+
+.dc-history-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 12px;
+  scrollbar-width: thin;
+  scrollbar-color: #3f3f46 #18181b;
+}
+
+.dc-history-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dc-history-list::-webkit-scrollbar-track {
+  background: #18181b;
+}
+
+.dc-history-list::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 3px;
+}
+
+.dc-history-entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 8px;
+  border-radius: 6px;
+  transition: background 0.12s ease;
+}
+
+.dc-history-entry:hover {
+  background: #27272a;
+}
+
+.dc-history-entry + .dc-history-entry {
+  border-top: 1px solid #27272a;
+}
+
+.dc-history-tooth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 26px;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: #27272a;
+  color: #818cf8;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  border: 1px solid #3f3f46;
+}
+
+.dc-history-action {
+  flex: 1;
+  font-size: 13px;
+  color: #fafafa;
+  line-height: 1.4;
+}
+
+.dc-history-time {
+  font-size: 11px;
+  color: #71717a;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* History Empty */
+
+.dc-history-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 120px;
+  font-size: 13px;
+  color: #71717a;
+  text-align: center;
+  padding: 24px 16px;
+}
+
+/* ============================================================
+   6. Buttons
+   ============================================================ */
+
+.dc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  line-height: 1.4;
+  user-select: none;
+}
+
+.dc-btn:active {
+  transform: scale(0.97);
+}
+
+.dc-btn-outline {
+  background: transparent;
+  color: #a1a1aa;
+  border-color: #3f3f46;
+}
+
+.dc-btn-outline:hover {
+  background: #27272a;
+  color: #fafafa;
+  border-color: #52525b;
+}
+
+.dc-btn-save {
+  background: #6366f1;
+  color: #fff;
+  border-color: #6366f1;
+}
+
+.dc-btn-save:hover {
+  background: #818cf8;
+  border-color: #818cf8;
+}
+
+.dc-btn-save:active {
+  background: #4f46e5;
+  border-color: #4f46e5;
+}
+
+.dc-btn-sm {
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+.dc-btn-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: #71717a;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.dc-btn-clear:hover {
+  background: #3f3f46;
+  color: #fafafa;
+}
+
+/* ============================================================
+   7. Notifications
+   ============================================================ */
+
+.dc-notification {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4),
+              0 2px 8px rgba(0, 0, 0, 0.3);
+  animation: dc-notif-in 0.25s ease-out;
+  pointer-events: auto;
+}
+
+.dc-notif-success {
+  background: #16a34a;
+  border: 1px solid #22c55e;
+}
+
+.dc-notif-error {
+  background: #dc2626;
+  border: 1px solid #ef4444;
+}
+
+@keyframes dc-notif-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   Utility & Responsive
+   ============================================================ */
+
+/* Smooth transitions on interactive elements globally within chart */
+.dc-root *,
+.dc-root *::before,
+.dc-root *::after {
+  box-sizing: border-box;
+}
+
+/* Focus-visible for accessibility */
+.dc-root button:focus-visible,
+.dc-root textarea:focus-visible {
+  outline: 2px solid #818cf8;
+  outline-offset: 2px;
+}
+
+/* Responsive: stack bottom grid on narrow containers */
+@media (max-width: 768px) {
+  .dc-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dc-detail-panel {
+    border-right: none;
+    border-bottom: 1px solid #27272a;
+  }
+}

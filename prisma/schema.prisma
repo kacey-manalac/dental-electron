@@ -21,6 +21,15 @@ enum ToothCondition {
   MISSING
   IMPLANT
   ROOT_CANAL
+  COMPOSITE
+  AMALGAM
+  GOLD
+  CERAMIC
+  SEALANT
+  VENEER
+  PONTIC
+  FRACTURE
+  IMPACTED
 }
 
 enum AppointmentStatus {
@@ -131,6 +140,7 @@ model Tooth {
   fdiNumber       String?
   isAdult         Boolean        @default(true)
   currentCondition ToothCondition @default(HEALTHY)
+  mobility        Int            @default(0)
   notes           String?
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
