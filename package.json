@@ -82,6 +82,10 @@
       "node_modules/.prisma/client/libquery_engine-windows.dll.node",
       "node_modules/.prisma/client/query_engine-windows.dll.node"
     ],
+    "asarUnpack": [
+      "node_modules/.prisma/**/*",
+      "node_modules/@prisma/client/**/*"
+    ],
     "extraResources": [
       {
         "from": "prisma/dev.db",
