@@ -72,6 +72,7 @@ interface ElectronAPI {
   shell: {
     openPath: (filePath: string) => Promise<string>;
   };
+  getFilePath: (file: File) => string;
 }
 
 declare global {

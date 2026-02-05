@@ -140,7 +140,7 @@ export async function createPatient(data: unknown) {
 
   await prisma.auditLog.create({
     data: {
-      userId: 'local',
+      userId: null,
       action: 'CREATE',
       entityType: 'patient',
       entityId: patient.id,
@@ -169,7 +169,7 @@ export async function updatePatient(id: string, data: unknown) {
 
   await prisma.auditLog.create({
     data: {
-      userId: 'local',
+      userId: null,
       action: 'UPDATE',
       entityType: 'patient',
       entityId: patient.id,
@@ -194,7 +194,7 @@ export async function deletePatient(id: string) {
 
   await prisma.auditLog.create({
     data: {
-      userId: 'local',
+      userId: null,
       action: 'DELETE',
       entityType: 'patient',
       entityId: id,

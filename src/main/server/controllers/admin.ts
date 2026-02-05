@@ -96,7 +96,7 @@ export async function createBackup() {
 
   await prisma.auditLog.create({
     data: {
-      userId: 'local',
+      userId: null,
       action: 'BACKUP',
       entityType: 'system',
       newValues: { timestamp: backup.exportedAt, counts: backup.metadata.counts },
@@ -218,7 +218,7 @@ export async function restoreBackup(backup: any) {
 
   await prisma.auditLog.create({
     data: {
-      userId: 'local',
+      userId: null,
       action: 'RESTORE',
       entityType: 'system',
       newValues: {

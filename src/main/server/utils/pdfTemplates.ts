@@ -38,13 +38,16 @@ export function addHeader(doc: PDFKit.PDFDocument, title: string): void {
 }
 
 export function addFooter(doc: PDFKit.PDFDocument, pageNumber: number): void {
-  const bottom = doc.page.height - 50;
+  // Temporarily remove bottom margin to prevent PDFKit from adding a new page
+  const savedBottomMargin = doc.page.margins.bottom;
+  doc.page.margins.bottom = 0;
   doc.fontSize(8).font('Helvetica').text(
     `Generated on ${new Date().toLocaleString()} | Page ${pageNumber}`,
     50,
-    bottom,
-    { align: 'center', width: 495 }
+    doc.page.height - 30,
+    { align: 'center', width: 495, lineBreak: false }
   );
+  doc.page.margins.bottom = savedBottomMargin;
 }
 
 export function addSection(doc: PDFKit.PDFDocument, title: string): void {

@@ -21,6 +21,12 @@ export async function uploadImages(
     throw new Error('Patient not found');
   }
 
+  // Get first user for uploadedBy (single-user desktop app)
+  const user = await prisma.user.findFirst({ select: { id: true } });
+  if (!user) {
+    throw new Error('No user found in database');
+  }
+
   if (toothId) {
     const tooth = await prisma.tooth.findFirst({
       where: { id: toothId, patientId },
@@ -62,7 +68,7 @@ export async function uploadImages(
         size: stats.size,
         category,
         description,
-        uploadedBy: 'local',
+        uploadedBy: user.id,
       },
       include: {
         uploader: {
@@ -76,7 +82,7 @@ export async function uploadImages(
 
   await prisma.auditLog.create({
     data: {
-      userId: 'local',
+      userId: null,
       action: 'UPLOAD',
       entityType: 'patient_image',
       entityId: patientId,
@@ -142,7 +148,7 @@ export async function deleteImage(imageId: string) {
 
   await prisma.auditLog.create({
     data: {
-      userId: 'local',
+      userId: null,
       action: 'DELETE',
       entityType: 'patient_image',
       entityId: imageId,

@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge, ipcRenderer, webUtils } from 'electron';
 
 contextBridge.exposeInMainWorld('electronAPI', {
   // Patients
@@ -91,4 +91,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   shell: {
     openPath: (filePath: string) => ipcRenderer.invoke('shell:openPath', filePath),
   },
+
+  // Utils
+  getFilePath: (file: File) => webUtils.getPathForFile(file),
 });

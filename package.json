@@ -38,7 +38,9 @@
     "zustand": "^5.0.0"
   },
   "electronmon": {
-    "patterns": ["dist/main/**/*.js"]
+    "patterns": [
+      "dist/main/**/*.js"
+    ]
   },
   "devDependencies": {
     "@types/pdfkit": "^0.13.8",
@@ -52,6 +54,7 @@
     "electronmon": "^2.0.4",
     "postcss": "^8.5.0",
     "prisma": "^6.8.0",
+    "sharp": "^0.34.5",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.19.0",
     "typescript": "^5.9.3",

@@ -26,8 +26,8 @@ export async function uploadImages(
   patientId: string,
   data: UploadImageData
 ): Promise<PatientImage[]> {
-  // Extract file paths from File objects (Electron provides .path on File objects)
-  const filePaths = data.images.map((file: any) => file.path);
+  // Extract absolute file paths using Electron's webUtils API
+  const filePaths = data.images.map((file: File) => window.electronAPI.getFilePath(file));
   return unwrap(await window.electronAPI.images.upload(patientId, filePaths, {
     category: data.category,
     description: data.description,

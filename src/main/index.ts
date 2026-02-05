@@ -33,6 +33,7 @@ async function createWindow() {
       contextIsolation: true,
       nodeIntegration: false,
     },
+    icon: path.join(__dirname, '..', 'renderer', 'icon.png'),
     title: 'Dental Clinic Management System',
     show: false,
   });
