@@ -1,0 +1,363 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/main/generated/client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  DENTIST
+  ASSISTANT
+}
+
+enum ToothCondition {
+  HEALTHY
+  CAVITY
+  FILLED
+  CROWN
+  MISSING
+  IMPLANT
+  ROOT_CANAL
+  COMPOSITE
+  AMALGAM
+  GOLD
+  CERAMIC
+  SEALANT
+  VENEER
+  PONTIC
+  FRACTURE
+  IMPACTED
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum TreatmentStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  PENDING
+  PAID
+  PARTIALLY_PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum PaymentMethod {
+  CASH
+  CREDIT_CARD
+  DEBIT_CARD
+  INSURANCE
+  BANK_TRANSFER
+}
+
+enum SupplyCategory {
+  DISPOSABLE
+  INSTRUMENT
+  MATERIAL
+  MEDICATION
+  OFFICE
+  PPE
+  OTHER
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  role      UserRole @default(ASSISTANT)
+  phone     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  appointments   Appointment[]  @relation("DentistAppointments")
+  treatments     Treatment[]    @relation("DentistTreatments")
+  auditLogs      AuditLog[]
+  uploadedImages PatientImage[] @relation("UserUploads")
+
+  @@map("users")
+}
+
+model Patient {
+  id                String   @id @default(uuid())
+  firstName         String
+  lastName          String
+  email             String?  @unique
+  phone             String
+  dateOfBirth       DateTime
+  gender            String?
+  address           String?
+  emergencyContact  String?
+  emergencyPhone    String?
+  insuranceProvider String?
+  insuranceNumber   String?
+  notes             String?
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  medicalHistory MedicalHistory?
+  teeth          Tooth[]
+  appointments   Appointment[]
+  treatments     Treatment[]
+  invoices       Invoice[]
+  images         PatientImage[]
+
+  @@map("patients")
+}
+
+model MedicalHistory {
+  id                 String    @id @default(uuid())
+  patientId          String    @unique
+  allergies          String?
+  medications        String?
+  medicalConditions  String?
+  previousSurgeries  String?
+  smokingStatus      String?
+  alcoholConsumption String?
+  bloodType          String?
+  lastDentalVisit    DateTime?
+  notes              String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@map("medical_histories")
+}
+
+model Tooth {
+  id               String         @id @default(uuid())
+  patientId        String
+  toothNumber      Int
+  fdiNumber        String?
+  isAdult          Boolean        @default(true)
+  currentCondition ToothCondition @default(HEALTHY)
+  mobility         Int            @default(0)
+  notes            String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  patient    Patient                 @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  conditions ToothConditionHistory[]
+  surfaces   ToothSurface[]
+  images     PatientImage[]
+
+  @@unique([patientId, toothNumber])
+  @@map("teeth")
+}
+
+model ToothConditionHistory {
+  id         String         @id @default(uuid())
+  toothId    String
+  condition  ToothCondition
+  notes      String?
+  recordedAt DateTime       @default(now())
+  recordedBy String?
+
+  tooth Tooth @relation(fields: [toothId], references: [id], onDelete: Cascade)
+
+  @@map("tooth_condition_histories")
+}
+
+model ToothSurface {
+  id        String         @id @default(uuid())
+  toothId   String
+  surface   String
+  condition ToothCondition @default(HEALTHY)
+  notes     String?
+  updatedAt DateTime       @updatedAt
+
+  tooth Tooth @relation(fields: [toothId], references: [id], onDelete: Cascade)
+
+  @@unique([toothId, surface])
+  @@map("tooth_surfaces")
+}
+
+model Appointment {
+  id          String            @id @default(uuid())
+  patientId   String
+  dentistId   String
+  title       String
+  description String?
+  startTime   DateTime
+  endTime     DateTime
+  status      AppointmentStatus @default(SCHEDULED)
+  notes       String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  patient    Patient     @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  dentist    User        @relation("DentistAppointments", fields: [dentistId], references: [id])
+  treatments Treatment[]
+
+  @@map("appointments")
+}
+
+model Treatment {
+  id            String          @id @default(uuid())
+  patientId     String
+  dentistId     String
+  appointmentId String?
+  toothNumber   Int?
+  procedureCode String?
+  procedureName String
+  description   String?
+  status        TreatmentStatus @default(PLANNED)
+  cost          Float
+  notes         String?
+  performedAt   DateTime?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  patient      Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  dentist      User          @relation("DentistTreatments", fields: [dentistId], references: [id])
+  appointment  Appointment?  @relation(fields: [appointmentId], references: [id])
+  invoiceItems InvoiceItem[]
+
+  @@map("treatments")
+}
+
+model Invoice {
+  id            String        @id @default(uuid())
+  patientId     String
+  invoiceNumber String        @unique
+  subtotal      Float
+  tax           Float         @default(0)
+  discount      Float         @default(0)
+  total         Float
+  status        InvoiceStatus @default(DRAFT)
+  dueDate       DateTime?
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  patient  Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  items    InvoiceItem[]
+  payments Payment[]
+
+  @@map("invoices")
+}
+
+model InvoiceItem {
+  id          String   @id @default(uuid())
+  invoiceId   String
+  treatmentId String?
+  description String
+  quantity    Int      @default(1)
+  unitPrice   Float
+  total       Float
+  createdAt   DateTime @default(now())
+
+  invoice   Invoice    @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  treatment Treatment? @relation(fields: [treatmentId], references: [id])
+
+  @@map("invoice_items")
+}
+
+model Payment {
+  id        String        @id @default(uuid())
+  invoiceId String
+  amount    Float
+  method    PaymentMethod
+  reference String?
+  notes     String?
+  paidAt    DateTime      @default(now())
+  createdAt DateTime      @default(now())
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  action     String
+  entityType String
+  entityId   String?
+  oldValues  Json?
+  newValues  Json?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("audit_logs")
+}
+
+model PatientImage {
+  id          String   @id @default(uuid())
+  patientId   String
+  toothId     String?
+  filename    String
+  storedName  String
+  mimeType    String
+  size        Int
+  category    String   @default("general")
+  description String?
+  uploadedBy  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  patient  Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  tooth    Tooth?  @relation(fields: [toothId], references: [id])
+  uploader User    @relation("UserUploads", fields: [uploadedBy], references: [id])
+
+  @@map("patient_images")
+}
+
+model Supply {
+  id           String         @id @default(uuid())
+  name         String
+  category     SupplyCategory @default(OTHER)
+  sku          String?        @unique
+  description  String?
+  unit         String         @default("pcs")
+  currentStock Int            @default(0)
+  minimumStock Int            @default(10)
+  costPerUnit  Float          @default(0)
+  supplier     String?
+  location     String?
+  expiryDate   DateTime?
+  isActive     Boolean        @default(true)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  transactions StockTransaction[]
+
+  @@map("supplies")
+}
+
+model StockTransaction {
+  id        String   @id @default(uuid())
+  supplyId  String
+  type      String // "IN", "OUT", "ADJUSTMENT"
+  quantity  Int
+  notes     String?
+  reference String?
+  createdAt DateTime @default(now())
+
+  supply Supply @relation(fields: [supplyId], references: [id], onDelete: Cascade)
+
+  @@map("stock_transactions")
+}

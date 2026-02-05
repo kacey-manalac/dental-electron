@@ -1,10 +1,10 @@
 {
   "name": "dental-electron",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Dental Clinic Management - Electron Desktop App",
   "main": "dist/main/index.js",
   "scripts": {
-    "build": "tsc -p tsconfig.json && vite build",
+    "build": "tsc -p tsconfig.json && xcopy /E /I /Y src\\main\\generated dist\\main\\generated && vite build",
     "start": "npm run build && electron .",
     "dev:main": "tsc -p tsconfig.json --watch --preserveWatchOutput",
     "dev:renderer": "vite dev",
@@ -78,13 +78,11 @@
       "dist/**/*",
       "node_modules/**/*",
       "prisma/**/*",
-      "!node_modules/.prisma/client/libquery_engine-*",
-      "node_modules/.prisma/client/libquery_engine-windows.dll.node",
-      "node_modules/.prisma/client/query_engine-windows.dll.node"
+      "!node_modules/.prisma/**/*",
+      "!node_modules/@prisma/**/*"
     ],
     "asarUnpack": [
-      "node_modules/.prisma/**/*",
-      "node_modules/@prisma/client/**/*"
+      "dist/main/generated/**/*"
     ],
     "extraResources": [
       {

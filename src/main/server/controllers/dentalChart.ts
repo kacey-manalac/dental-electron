@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ToothCondition } from '@prisma/client';
+import { ToothCondition } from '../../generated/client';
 import { prisma } from '../utils/prisma';
 import { UNIVERSAL_TO_FDI } from '../types';
 

@@ -1,6 +1,6 @@
 import { ipcMain, dialog, shell, BrowserWindow } from 'electron';
 import { ZodError } from 'zod';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '../generated/client';
 
 import * as patients from '../server/controllers/patients';
 import * as appointments from '../server/controllers/appointments';

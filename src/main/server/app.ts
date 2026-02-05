@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import { app as electronApp, dialog } from 'electron';
+import { PrismaClient } from '../generated/client';
 
 export async function initDatabase(): Promise<void> {
   const dbPath = path.join(electronApp.getPath('userData'), 'dental-clinic.db');
@@ -78,7 +79,6 @@ async function createEmptyDatabase(dbPath: string): Promise<void> {
   console.log('Creating new empty database at:', dbPath);
 
   // Create empty SQLite database by writing the header
-  const { PrismaClient } = require('@prisma/client');
   const prisma = new PrismaClient({
     datasources: { db: { url: `file:${dbPath}` } },
   });
