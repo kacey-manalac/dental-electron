@@ -421,6 +421,14 @@ export default function BillingPage() {
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {selectedInvoice.patient?.firstName} {selectedInvoice.patient?.lastName}
                 </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Created: {format(new Date(selectedInvoice.createdAt), 'MMM d, yyyy')}
+                  {selectedInvoice.dueDate && (
+                    <span className="ml-3">
+                      Due: {format(new Date(selectedInvoice.dueDate), 'MMM d, yyyy')}
+                    </span>
+                  )}
+                </p>
               </div>
               <Badge variant={STATUS_COLORS[selectedInvoice.status]} size="md">
                 {selectedInvoice.status.replace('_', ' ')}
