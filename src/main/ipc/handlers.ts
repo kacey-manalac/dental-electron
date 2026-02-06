@@ -104,6 +104,7 @@ export function registerAllHandlers() {
   // Admin
   ipcMain.handle('admin:backup', wrapHandler(admin.createBackup));
   ipcMain.handle('admin:restore', wrapHandler(admin.restoreBackup));
+  ipcMain.handle('admin:previewBackup', wrapHandler(admin.previewBackup));
   ipcMain.handle('admin:systemInfo', wrapHandler(admin.getSystemInfo));
 
   // Supplies

@@ -73,7 +73,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Admin
   admin: {
     backup: () => ipcRenderer.invoke('admin:backup'),
-    restore: (data: any) => ipcRenderer.invoke('admin:restore', data),
+    restore: (filePath: string) => ipcRenderer.invoke('admin:restore', filePath),
+    previewBackup: (filePath: string) => ipcRenderer.invoke('admin:previewBackup', filePath),
     systemInfo: () => ipcRenderer.invoke('admin:systemInfo'),
   },
 

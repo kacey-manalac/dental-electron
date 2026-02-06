@@ -20,20 +20,21 @@ import {
   getSystemInfo,
   downloadBackup,
   restoreBackup,
-  parseBackupFile,
+  previewBackupFile,
   getClinicSettings,
   updateClinicSettings,
   updateClinicLogo,
   removeClinicLogo,
   ClinicSettings,
 } from '../services/admin';
-import { BackupData } from '../types';
+import { BackupPreviewInfo } from '../types';
 
 export default function AdminPage() {
   const [isDownloading, setIsDownloading] = useState(false);
   const [showRestoreModal, setShowRestoreModal] = useState(false);
   const [backupFile, setBackupFile] = useState<File | null>(null);
-  const [parsedBackup, setParsedBackup] = useState<BackupData | null>(null);
+  const [backupFilePath, setBackupFilePath] = useState<string | null>(null);
+  const [backupPreview, setBackupPreview] = useState<BackupPreviewInfo | null>(null);
   const [isRestoring, setIsRestoring] = useState(false);
   const [parseError, setParseError] = useState<string | null>(null);
 
@@ -118,7 +119,7 @@ export default function AdminPage() {
       toast.success('Backup downloaded successfully');
       refetch();
     } catch (error: any) {
-      toast.error(error.response?.data?.error || 'Failed to download backup');
+      toast.error(error.message || 'Failed to download backup');
     } finally {
       setIsDownloading(false);
     }
@@ -130,29 +131,34 @@ export default function AdminPage() {
 
     setBackupFile(file);
     setParseError(null);
-    setParsedBackup(null);
+    setBackupPreview(null);
+    setBackupFilePath(null);
 
     try {
-      const parsed = await parseBackupFile(file);
-      setParsedBackup(parsed);
+      const nativePath = window.electronAPI.getFilePath(file);
+      setBackupFilePath(nativePath);
+      const preview = await previewBackupFile(nativePath);
+      setBackupPreview(preview);
     } catch (error: any) {
       setParseError(error.message);
     }
   }, []);
 
   const handleRestore = async () => {
-    if (!parsedBackup) return;
+    if (!backupFilePath) return;
 
     setIsRestoring(true);
     try {
-      const result = await restoreBackup(parsedBackup);
+      const result = await restoreBackup(backupFilePath);
       toast.success(result.message);
       setShowRestoreModal(false);
       setBackupFile(null);
-      setParsedBackup(null);
+      setBackupFilePath(null);
+      setBackupPreview(null);
+      queryClient.invalidateQueries({ queryKey: ['clinic-settings'] });
       refetch();
     } catch (error: any) {
-      toast.error(error.response?.data?.error || 'Failed to restore backup');
+      toast.error(error.message || 'Failed to restore backup');
     } finally {
       setIsRestoring(false);
     }
@@ -161,7 +167,8 @@ export default function AdminPage() {
   const closeRestoreModal = () => {
     setShowRestoreModal(false);
     setBackupFile(null);
-    setParsedBackup(null);
+    setBackupFilePath(null);
+    setBackupPreview(null);
     setParseError(null);
   };
 
@@ -350,8 +357,8 @@ export default function AdminPage() {
       <Card title="Backup & Restore">
         <div className="space-y-4">
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Create a backup of your database or restore from a previous backup. Backups include all
-            patient records, appointments, treatments, invoices, and related data.
+            Create a full backup of your database, patient images, and clinic settings as a ZIP
+            archive, or restore from a previous backup.
           </p>
 
           <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
@@ -379,8 +386,9 @@ export default function AdminPage() {
                 </h4>
                 <ul className="mt-1 text-sm text-yellow-700 dark:text-yellow-400 list-disc list-inside">
                   <li>Backups do not include user passwords for security reasons</li>
-                  <li>Image files are not included in the backup (metadata only)</li>
+                  <li>ZIP backups include all patient images and clinic settings</li>
                   <li>Restoring will replace all existing data except user accounts</li>
+                  <li>Old JSON backups can still be restored (database only)</li>
                 </ul>
               </div>
             </div>
@@ -398,7 +406,7 @@ export default function AdminPage() {
                 <h4 className="text-sm font-medium text-red-800 dark:text-red-300">Warning</h4>
                 <p className="mt-1 text-sm text-red-700 dark:text-red-400">
                   Restoring from a backup will permanently delete all current data (except user
-                  accounts). This action cannot be undone.
+                  accounts). ZIP backups will also overwrite existing images and clinic settings. This action cannot be undone.
                 </p>
               </div>
             </div>
@@ -411,7 +419,7 @@ export default function AdminPage() {
             </label>
             <input
               type="file"
-              accept=".json"
+              accept=".zip,.json"
               onChange={handleFileSelect}
               className="block w-full text-sm text-gray-500 dark:text-gray-400
                 file:mr-4 file:py-2 file:px-4
@@ -431,18 +439,28 @@ export default function AdminPage() {
           )}
 
           {/* Backup Info */}
-          {parsedBackup && (
+          {backupPreview && (
             <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
               <h4 className="font-medium text-gray-900 dark:text-white mb-2">Backup Information</h4>
               <dl className="grid grid-cols-2 gap-2 text-sm">
                 <dt className="text-gray-500 dark:text-gray-400">Version:</dt>
-                <dd className="text-gray-900 dark:text-white">{parsedBackup.version}</dd>
+                <dd className="text-gray-900 dark:text-white">{backupPreview.version}</dd>
                 <dt className="text-gray-500 dark:text-gray-400">Exported:</dt>
                 <dd className="text-gray-900 dark:text-white">
-                  {formatDate(parsedBackup.exportedAt)}
+                  {formatDate(backupPreview.exportedAt)}
+                </dd>
+                {backupPreview.hasImages && (
+                  <>
+                    <dt className="text-gray-500 dark:text-gray-400">Image files:</dt>
+                    <dd className="text-gray-900 dark:text-white">{backupPreview.imageCount}</dd>
+                  </>
+                )}
+                <dt className="text-gray-500 dark:text-gray-400">Clinic settings:</dt>
+                <dd className="text-gray-900 dark:text-white">
+                  {backupPreview.hasClinicSettings ? 'Included' : 'Not included'}
                 </dd>
                 <dt className="text-gray-500 dark:text-gray-400 col-span-2 mt-2">Records:</dt>
-                {Object.entries(parsedBackup.metadata.counts).map(([key, count]) => (
+                {Object.entries(backupPreview.metadata.counts).map(([key, count]) => (
                   <div key={key} className="contents">
                     <dt className="text-gray-500 dark:text-gray-400 pl-4">{key}:</dt>
                     <dd className="text-gray-900 dark:text-white">{count}</dd>
@@ -460,7 +478,7 @@ export default function AdminPage() {
             <Button
               variant="danger"
               onClick={handleRestore}
-              disabled={!parsedBackup}
+              disabled={!backupPreview || !backupFilePath}
               loading={isRestoring}
             >
               Restore Backup

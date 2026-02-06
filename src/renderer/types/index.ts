@@ -366,6 +366,18 @@ export interface BackupData {
   };
 }
 
+export interface BackupPreviewInfo {
+  version: string;
+  exportedAt: string;
+  metadata: {
+    counts: Record<string, number>;
+    note: string;
+  };
+  hasImages: boolean;
+  imageCount: number;
+  hasClinicSettings: boolean;
+}
+
 export interface Supply {
   id: string;
   name: string;
