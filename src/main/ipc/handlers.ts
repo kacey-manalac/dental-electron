@@ -12,6 +12,7 @@ import * as reports from '../server/controllers/reports';
 import * as analytics from '../server/controllers/analytics';
 import * as admin from '../server/controllers/admin';
 import * as supplies from '../server/controllers/supplies';
+import * as clinicSettings from '../server/controllers/clinicSettings';
 
 type IpcResult<T = any> = { success: true; data: T } | { success: false; error: string };
 
@@ -116,6 +117,12 @@ export function registerAllHandlers() {
   ipcMain.handle('supplies:adjustStock', wrapHandler(supplies.adjustStock));
   ipcMain.handle('supplies:dashboardStats', wrapHandler(supplies.getSupplyDashboardStats));
   ipcMain.handle('supplies:lowStockAlerts', wrapHandler(supplies.getLowStockAlerts));
+
+  // Clinic Settings
+  ipcMain.handle('clinicSettings:get', wrapHandler(clinicSettings.getClinicSettings));
+  ipcMain.handle('clinicSettings:update', wrapHandler(clinicSettings.updateClinicSettings));
+  ipcMain.handle('clinicSettings:updateLogo', wrapHandler(clinicSettings.updateClinicLogo));
+  ipcMain.handle('clinicSettings:removeLogo', wrapHandler(clinicSettings.removeClinicLogo));
 
   // Dentists (for appointment/treatment forms)
   ipcMain.handle('users:getDentists', wrapHandler(async () => {

@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useState, useCallback, useRef, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
 import {
   CloudArrowDownIcon,
@@ -7,12 +7,26 @@ import {
   ServerIcon,
   ShieldCheckIcon,
   ExclamationTriangleIcon,
+  BuildingOffice2Icon,
+  PhotoIcon,
+  TrashIcon,
 } from '@heroicons/react/24/outline';
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
+import Input from '../components/common/Input';
 import Modal from '../components/common/Modal';
 import LoadingSpinner from '../components/common/LoadingSpinner';
-import { getSystemInfo, downloadBackup, restoreBackup, parseBackupFile } from '../services/admin';
+import {
+  getSystemInfo,
+  downloadBackup,
+  restoreBackup,
+  parseBackupFile,
+  getClinicSettings,
+  updateClinicSettings,
+  updateClinicLogo,
+  removeClinicLogo,
+  ClinicSettings,
+} from '../services/admin';
 import { BackupData } from '../types';
 
 export default function AdminPage() {
@@ -22,6 +36,75 @@ export default function AdminPage() {
   const [parsedBackup, setParsedBackup] = useState<BackupData | null>(null);
   const [isRestoring, setIsRestoring] = useState(false);
   const [parseError, setParseError] = useState<string | null>(null);
+
+  const queryClient = useQueryClient();
+  const logoInputRef = useRef<HTMLInputElement>(null);
+
+  // Clinic settings
+  const { data: clinicData, isLoading: clinicLoading } = useQuery({
+    queryKey: ['clinic-settings'],
+    queryFn: getClinicSettings,
+  });
+
+  const [clinicForm, setClinicForm] = useState<Omit<ClinicSettings, 'logoFilename'>>({
+    name: '',
+    address: '',
+    phone: '',
+    email: '',
+  });
+
+  useEffect(() => {
+    if (clinicData) {
+      setClinicForm({
+        name: clinicData.name,
+        address: clinicData.address,
+        phone: clinicData.phone,
+        email: clinicData.email,
+      });
+    }
+  }, [clinicData]);
+
+  const saveSettingsMutation = useMutation({
+    mutationFn: updateClinicSettings,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['clinic-settings'] });
+      toast.success('Clinic information saved');
+    },
+    onError: (err: any) => {
+      toast.error(err.message || 'Failed to save clinic information');
+    },
+  });
+
+  const uploadLogoMutation = useMutation({
+    mutationFn: updateClinicLogo,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['clinic-settings'] });
+      toast.success('Logo updated');
+    },
+    onError: (err: any) => {
+      toast.error(err.message || 'Failed to upload logo');
+    },
+  });
+
+  const removeLogoMutation = useMutation({
+    mutationFn: removeClinicLogo,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['clinic-settings'] });
+      toast.success('Logo removed');
+    },
+    onError: (err: any) => {
+      toast.error(err.message || 'Failed to remove logo');
+    },
+  });
+
+  const handleLogoSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const filePath = window.electronAPI.getFilePath(file);
+    uploadLogoMutation.mutate(filePath);
+    // Reset input so same file can be re-selected
+    e.target.value = '';
+  }, [uploadLogoMutation]);
 
   const { data: systemInfo, isLoading: infoLoading, refetch } = useQuery({
     queryKey: ['system-info'],
@@ -102,6 +185,112 @@ export default function AdminPage() {
           System administration and database management
         </p>
       </div>
+
+      {/* Clinic Information */}
+      <Card title="Clinic Information">
+        {clinicLoading ? (
+          <div className="flex justify-center py-8">
+            <LoadingSpinner size="lg" />
+          </div>
+        ) : (
+          <div className="space-y-6">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Update your clinic details below. These will appear on PDF invoices and reports.
+            </p>
+
+            {/* Logo Section */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Clinic Logo
+              </label>
+              <div className="flex items-center gap-4">
+                {clinicData?.logoFilename ? (
+                  <div className="relative">
+                    <img
+                      src={`local-image://${clinicData.logoFilename}`}
+                      alt="Clinic logo"
+                      className="w-20 h-20 object-contain rounded-lg border border-gray-200 dark:border-gray-600 bg-white"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeLogoMutation.mutate()}
+                      disabled={removeLogoMutation.isPending}
+                      className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 shadow-sm"
+                      title="Remove logo"
+                    >
+                      <TrashIcon className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="w-20 h-20 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center">
+                    <PhotoIcon className="w-8 h-8 text-gray-400" />
+                  </div>
+                )}
+                <div>
+                  <input
+                    ref={logoInputRef}
+                    type="file"
+                    accept="image/png,image/jpeg,image/gif,image/webp,image/bmp"
+                    onChange={handleLogoSelect}
+                    className="hidden"
+                  />
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => logoInputRef.current?.click()}
+                    loading={uploadLogoMutation.isPending}
+                  >
+                    <PhotoIcon className="w-4 h-4 mr-1.5" />
+                    {clinicData?.logoFilename ? 'Change Logo' : 'Upload Logo'}
+                  </Button>
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    PNG, JPG, GIF, or WEBP. Will appear on PDF headers.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Form Fields */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                label="Clinic Name"
+                value={clinicForm.name}
+                onChange={(e) => setClinicForm((f) => ({ ...f, name: e.target.value }))}
+                placeholder="Your Clinic Name"
+              />
+              <Input
+                label="Email"
+                type="email"
+                value={clinicForm.email}
+                onChange={(e) => setClinicForm((f) => ({ ...f, email: e.target.value }))}
+                placeholder="contact@clinic.com"
+              />
+              <Input
+                label="Phone"
+                value={clinicForm.phone}
+                onChange={(e) => setClinicForm((f) => ({ ...f, phone: e.target.value }))}
+                placeholder="(555) 123-4567"
+              />
+              <Input
+                label="Address"
+                value={clinicForm.address}
+                onChange={(e) => setClinicForm((f) => ({ ...f, address: e.target.value }))}
+                placeholder="123 Main St, City, State 12345"
+              />
+            </div>
+
+            <div className="flex justify-end">
+              <Button
+                onClick={() => saveSettingsMutation.mutate(clinicForm)}
+                loading={saveSettingsMutation.isPending}
+              >
+                <BuildingOffice2Icon className="w-5 h-5 mr-2" />
+                Save Clinic Information
+              </Button>
+            </div>
+          </div>
+        )}
+      </Card>
 
       {/* System Info */}
       <Card title="System Information">

@@ -75,6 +75,12 @@ interface ElectronAPI {
     dashboardStats: () => Promise<IpcResult>;
     lowStockAlerts: () => Promise<IpcResult>;
   };
+  clinicSettings: {
+    get: () => Promise<IpcResult>;
+    update: (data: any) => Promise<IpcResult>;
+    updateLogo: (filePath: string) => Promise<IpcResult>;
+    removeLogo: () => Promise<IpcResult>;
+  };
   users: {
     getDentists: () => Promise<IpcResult>;
   };

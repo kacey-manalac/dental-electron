@@ -12,6 +12,7 @@ import {
   formatCurrency,
   getConditionLabel,
 } from '../utils/pdfTemplates';
+import { getClinicSettings } from './clinicSettings';
 
 function collectPDFToBuffer(doc: PDFKit.PDFDocument): Promise<Buffer> {
   return new Promise((resolve, reject) => {
@@ -44,10 +45,11 @@ export async function generateDentalRecordPDF(patientId: string) {
     throw new Error('Patient not found');
   }
 
+  const clinicInfo = await getClinicSettings();
   const doc = createPDFDocument();
   const bufferPromise = collectPDFToBuffer(doc);
 
-  addHeader(doc, 'DENTAL RECORD');
+  addHeader(doc, 'DENTAL RECORD', clinicInfo);
 
   addSection(doc, 'Patient Information');
   addLabelValue(doc, 'Name', `${patient.firstName} ${patient.lastName}`);
@@ -148,10 +150,11 @@ export async function generateInvoicePDF(invoiceId: string) {
     throw new Error('Invoice not found');
   }
 
+  const clinicInfo = await getClinicSettings();
   const doc = createPDFDocument();
   const bufferPromise = collectPDFToBuffer(doc);
 
-  addHeader(doc, 'INVOICE');
+  addHeader(doc, 'INVOICE', clinicInfo);
 
   doc.fontSize(10).font('Helvetica');
   doc.text(`Invoice Number: ${invoice.invoiceNumber}`, { align: 'right' });
@@ -278,10 +281,11 @@ export async function generateTreatmentSummaryPDF(patientId: string, options: { 
     },
   });
 
+  const clinicInfo = await getClinicSettings();
   const doc = createPDFDocument();
   const bufferPromise = collectPDFToBuffer(doc);
 
-  addHeader(doc, 'TREATMENT SUMMARY');
+  addHeader(doc, 'TREATMENT SUMMARY', clinicInfo);
 
   addSection(doc, 'Patient Information');
   addLabelValue(doc, 'Name', `${patient.firstName} ${patient.lastName}`);

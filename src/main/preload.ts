@@ -91,6 +91,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
     lowStockAlerts: () => ipcRenderer.invoke('supplies:lowStockAlerts'),
   },
 
+  // Clinic Settings
+  clinicSettings: {
+    get: () => ipcRenderer.invoke('clinicSettings:get'),
+    update: (data: any) => ipcRenderer.invoke('clinicSettings:update', data),
+    updateLogo: (filePath: string) => ipcRenderer.invoke('clinicSettings:updateLogo', filePath),
+    removeLogo: () => ipcRenderer.invoke('clinicSettings:removeLogo'),
+  },
+
   // Users (for fetching dentists)
   users: {
     getDentists: () => ipcRenderer.invoke('users:getDentists'),

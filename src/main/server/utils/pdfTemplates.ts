@@ -1,18 +1,15 @@
 import PDFDocument from 'pdfkit';
+import path from 'path';
+import fs from 'fs';
+import { app } from 'electron';
 
-interface ClinicInfo {
+export interface ClinicInfo {
   name: string;
   address: string;
   phone: string;
   email: string;
+  logoFilename?: string;
 }
-
-const CLINIC_INFO: ClinicInfo = {
-  name: 'Dental Care Clinic',
-  address: '123 Medical Center Drive, Healthcare City, HC 12345',
-  phone: '(555) 123-4567',
-  email: 'info@dentalcareclinic.com',
-};
 
 export function createPDFDocument(): PDFKit.PDFDocument {
   return new PDFDocument({
@@ -21,11 +18,26 @@ export function createPDFDocument(): PDFKit.PDFDocument {
   });
 }
 
-export function addHeader(doc: PDFKit.PDFDocument, title: string): void {
+export function addHeader(doc: PDFKit.PDFDocument, title: string, clinicInfo: ClinicInfo): void {
+  // Logo (if exists)
+  if (clinicInfo.logoFilename) {
+    const logoPath = path.join(app.getPath('userData'), 'uploads', clinicInfo.logoFilename);
+    if (fs.existsSync(logoPath)) {
+      const pageWidth = doc.page.width - doc.page.margins.left - doc.page.margins.right;
+      doc.image(logoPath, doc.page.margins.left + (pageWidth - 80) / 2, doc.y, {
+        width: 80,
+        height: 80,
+        fit: [80, 80],
+        align: 'center',
+      });
+      doc.y += 85;
+    }
+  }
+
   // Clinic name
-  doc.fontSize(20).font('Helvetica-Bold').text(CLINIC_INFO.name, { align: 'center' });
-  doc.fontSize(10).font('Helvetica').text(CLINIC_INFO.address, { align: 'center' });
-  doc.text(`Phone: ${CLINIC_INFO.phone} | Email: ${CLINIC_INFO.email}`, { align: 'center' });
+  doc.fontSize(20).font('Helvetica-Bold').text(clinicInfo.name, { align: 'center' });
+  doc.fontSize(10).font('Helvetica').text(clinicInfo.address, { align: 'center' });
+  doc.text(`Phone: ${clinicInfo.phone} | Email: ${clinicInfo.email}`, { align: 'center' });
 
   // Separator line
   doc.moveDown();
