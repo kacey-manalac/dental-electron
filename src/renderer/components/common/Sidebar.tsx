@@ -147,7 +147,7 @@ export default function Sidebar() {
             {sidebarOpen && (
               <div className="flex items-center justify-between flex-1">
                 <span className="text-xs text-gray-500">System Online</span>
-                <span className="text-[10px] text-gray-600">v1.0.0</span>
+                <span className="text-[10px] text-gray-600">v{__APP_VERSION__}</span>
               </div>
             )}
           </div>
