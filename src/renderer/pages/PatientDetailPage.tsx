@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Navigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import {
   ArrowLeftIcon,
@@ -8,9 +8,13 @@ import {
   EnvelopeIcon,
   MapPinIcon,
   DocumentArrowDownIcon,
+  ClockIcon,
 } from '@heroicons/react/24/outline';
 import { usePatient, useUpdatePatient, useUpdateMedicalHistory } from '../hooks/usePatients';
 import { usePatientImages } from '../hooks/useImages';
+import { useQuery } from '@tanstack/react-query';
+import * as appointmentService from '../services/appointments';
+import { AppointmentStatus } from '../types';
 import Button from '../components/common/Button';
 import Card from '../components/common/Card';
 import Badge from '../components/common/Badge';
@@ -24,9 +28,6 @@ import { downloadDentalRecordPDF, downloadTreatmentSummaryPDF } from '../service
 
 export default function PatientDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const { data: patient, isLoading, error } = usePatient(id!);
-  const updatePatient = useUpdatePatient();
-  const updateMedicalHistory = useUpdateMedicalHistory();
 
   const [activeTab, setActiveTab] = useState<'overview' | 'dental-chart' | 'history' | 'images'>('overview');
   const [showEditModal, setShowEditModal] = useState(false);
@@ -34,7 +35,37 @@ export default function PatientDetailPage() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
-  const { data: imagesData, isLoading: imagesLoading } = usePatientImages(id!, { limit: 50 });
+  const { data: patient, isLoading, error } = usePatient(id ?? '');
+  const updatePatient = useUpdatePatient();
+  const updateMedicalHistory = useUpdateMedicalHistory();
+  const { data: imagesData, isLoading: imagesLoading } = usePatientImages(id ?? '', { limit: 50 });
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const { data: upcomingAppointments, isLoading: loadingAppointments } = useQuery({
+    queryKey: ['appointments', 'patient-upcoming', id],
+    queryFn: () => appointmentService.getAppointments({
+      patientId: id!,
+      startDate: today.toISOString(),
+      limit: 20,
+      sortOrder: 'asc',
+    }),
+    enabled: !!id,
+  });
+
+  const STATUS_COLORS: Record<AppointmentStatus, 'blue' | 'green' | 'yellow' | 'red' | 'gray' | 'purple'> = {
+    SCHEDULED: 'blue',
+    CONFIRMED: 'green',
+    IN_PROGRESS: 'yellow',
+    COMPLETED: 'green',
+    CANCELLED: 'red',
+    NO_SHOW: 'gray',
+  };
+
+  if (!id) {
+    return <Navigate to="/patients" replace />;
+  }
 
   if (isLoading) {
     return <LoadingSpinner className="py-12" />;
@@ -208,40 +239,40 @@ export default function PatientDetailPage() {
             )}
           </Card>
 
-          {/* Recent Appointments */}
-          <Card title="Recent Appointments" className="lg:col-span-2">
-            {patient.appointments && patient.appointments.length > 0 ? (
-              <div className="divide-y divide-gray-200 dark:divide-gray-700">
-                {patient.appointments.map((appointment) => (
-                  <div key={appointment.id} className="py-3 flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
-                        {appointment.title}
-                      </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        with Dr. {appointment.dentist?.firstName} {appointment.dentist?.lastName}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm text-gray-900 dark:text-white">
-                        {format(new Date(appointment.startTime), 'MMM d, yyyy')}
-                      </p>
-                      <Badge
-                        variant={
-                          appointment.status === 'COMPLETED' ? 'green' :
-                          appointment.status === 'CANCELLED' ? 'red' :
-                          appointment.status === 'SCHEDULED' ? 'blue' : 'yellow'
-                        }
-                      >
-                        {appointment.status.toLowerCase().replace('_', ' ')}
-                      </Badge>
+          {/* Upcoming Appointments */}
+          <Card title="Upcoming Appointments" className="lg:col-span-2">
+            {loadingAppointments ? (
+              <LoadingSpinner className="py-4" />
+            ) : upcomingAppointments?.data && upcomingAppointments.data.length > 0 ? (
+              <div className="divide-y divide-gray-100 dark:divide-gray-700/30">
+                {upcomingAppointments.data.map((apt) => (
+                  <div key={apt.id} className="flex items-start gap-3 py-3">
+                    <div className="w-1 self-stretch rounded-full bg-gradient-to-b from-primary-500 to-primary-400 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                          {apt.title}
+                        </p>
+                        <Badge variant={STATUS_COLORS[apt.status]}>
+                          {apt.status.replace('_', ' ')}
+                        </Badge>
+                      </div>
+                      <div className="flex items-center gap-1.5 mt-1 text-xs text-gray-500 dark:text-gray-400">
+                        <ClockIcon className="h-3.5 w-3.5" />
+                        {format(new Date(apt.startTime), 'MMM d, yyyy')} &middot; {format(new Date(apt.startTime), 'h:mm a')} - {format(new Date(apt.endTime), 'h:mm a')}
+                      </div>
+                      {apt.dentist && (
+                        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                          with Dr. {apt.dentist.firstName} {apt.dentist.lastName}
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
               <p className="text-gray-500 dark:text-gray-400 text-center py-4">
-                No appointments yet
+                No upcoming appointments
               </p>
             )}
           </Card>

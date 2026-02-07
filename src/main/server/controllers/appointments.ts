@@ -48,7 +48,7 @@ export async function getAppointments(filters: {
       orderBy: { [sortBy === 'createdAt' ? 'startTime' : sortBy]: sortOrder },
       include: {
         patient: {
-          select: { id: true, firstName: true, lastName: true, phone: true },
+          select: { id: true, firstName: true, lastName: true, phone: true, email: true },
         },
         dentist: {
           select: { id: true, firstName: true, lastName: true },

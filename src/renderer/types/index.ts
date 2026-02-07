@@ -138,6 +138,7 @@ export interface Appointment {
     firstName: string;
     lastName: string;
     phone: string;
+    email?: string;
   };
   dentist?: {
     id: string;

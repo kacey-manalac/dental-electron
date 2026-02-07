@@ -348,6 +348,7 @@ interface ElectronAPI {
   };
   shell: {
     openPath: (filePath: string) => Promise<string>;
+    openExternal: (url: string) => Promise<void>;
   };
   getFilePath: (file: File) => string;
 }

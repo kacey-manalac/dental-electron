@@ -148,4 +148,8 @@ export function registerAllHandlers() {
   ipcMain.handle('shell:openPath', async (_event, filePath: string) => {
     return shell.openPath(filePath);
   });
+
+  ipcMain.handle('shell:openExternal', async (_event, url: string) => {
+    await shell.openExternal(url);
+  });
 }

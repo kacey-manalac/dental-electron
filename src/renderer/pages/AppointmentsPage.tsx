@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isSameMonth, addMonths, subMonths } from 'date-fns';
-import { PlusIcon, ChevronLeftIcon, ChevronRightIcon, ClockIcon, CalendarDaysIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, ChevronLeftIcon, ChevronRightIcon, ClockIcon, CalendarDaysIcon, TrashIcon, BellAlertIcon, EnvelopeIcon, ClipboardDocumentIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { useAppointments, useCreateAppointment, useUpdateAppointment, useDeleteAppointment } from '../hooks/useAppointments';
 import { usePatients } from '../hooks/usePatients';
 import { Appointment, AppointmentStatus } from '../types';
@@ -51,6 +51,8 @@ export default function AppointmentsPage() {
   const updateAppointment = useUpdateAppointment();
   const deleteAppointment = useDeleteAppointment();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showReminder, setShowReminder] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const days = eachDayOfInterval({ start: startDate, end: endDate });
 
@@ -116,10 +118,37 @@ export default function AppointmentsPage() {
     setShowDeleteConfirm(false);
   };
 
+  const getReminderText = (apt: Appointment) => {
+    const date = format(new Date(apt.startTime), 'EEEE, MMMM d, yyyy');
+    const time = `${format(new Date(apt.startTime), 'h:mm a')} - ${format(new Date(apt.endTime), 'h:mm a')}`;
+    const patientName = apt.patient ? `${apt.patient.firstName} ${apt.patient.lastName}` : '';
+    return `Dear ${patientName},\n\nThis is a reminder for your upcoming dental appointment:\n\nAppointment: ${apt.title}\nDate: ${date}\nTime: ${time}\n\nPlease arrive 10 minutes early. If you need to reschedule, please contact us as soon as possible.\n\nThank you!`;
+  };
+
+  const handleCopyReminder = async () => {
+    if (!selectedAppointment) return;
+    await navigator.clipboard.writeText(getReminderText(selectedAppointment));
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleEmailReminder = async () => {
+    if (!selectedAppointment) return;
+    const text = getReminderText(selectedAppointment);
+    const subject = `Reminder: ${selectedAppointment.title} on ${format(new Date(selectedAppointment.startTime), 'MMM d, yyyy')}`;
+    const email = selectedAppointment.patient?.email || '';
+    const mailto = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
+    await window.electronAPI.shell.openExternal(mailto);
+  };
+
+  const isUpcoming = (apt: Appointment) => new Date(apt.startTime) >= new Date();
+
   const closeAppointmentModal = () => {
     setSelectedAppointment(null);
     setIsEditing(false);
     setShowDeleteConfirm(false);
+    setShowReminder(false);
+    setCopied(false);
   };
 
   const weekCount = Math.ceil((startDate.getDay() + days.length) / 7);
@@ -268,13 +297,17 @@ export default function AppointmentsPage() {
                             e.stopPropagation();
                             setSelectedAppointment(apt);
                           }}
+                          title={`${format(new Date(apt.startTime), 'h:mm a')} - ${format(new Date(apt.endTime), 'h:mm a')}\n${apt.patient ? `${apt.patient.firstName} ${apt.patient.lastName}` : ''}\n${apt.title}${apt.description ? `\n${apt.description}` : ''}`}
                           className="w-full text-left text-xs p-1 rounded bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 truncate hover:bg-primary-200 dark:hover:bg-primary-900/50"
                         >
                           {format(new Date(apt.startTime), 'h:mm a')} - {apt.patient && `${apt.patient.firstName} ${apt.patient.lastName} · `}{apt.title}
                         </button>
                       ))}
                       {dayAppointments.length > 2 && (
-                        <div className="text-xs text-gray-500">
+                        <div
+                          className="text-xs text-gray-500"
+                          title={dayAppointments.slice(2).map((a) => `${format(new Date(a.startTime), 'h:mm a')} - ${a.patient ? `${a.patient.firstName} ${a.patient.lastName} · ` : ''}${a.title}`).join('\n')}
+                        >
                           +{dayAppointments.length - 2} more
                         </div>
                       )}
@@ -393,6 +426,36 @@ export default function AppointmentsPage() {
                 )}
               </div>
             </div>
+
+            {isUpcoming(selectedAppointment) && (
+              <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                {!showReminder ? (
+                  <Button variant="secondary" size="sm" onClick={() => setShowReminder(true)}>
+                    <BellAlertIcon className="h-4 w-4 mr-1.5" />
+                    Send Reminder
+                  </Button>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="rounded-lg bg-gray-50 dark:bg-gray-800 p-3 text-xs text-gray-700 dark:text-gray-300 whitespace-pre-line max-h-40 overflow-y-auto">
+                      {getReminderText(selectedAppointment)}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button variant="secondary" size="sm" onClick={handleCopyReminder}>
+                        {copied ? <CheckIcon className="h-4 w-4 mr-1.5 text-green-500" /> : <ClipboardDocumentIcon className="h-4 w-4 mr-1.5" />}
+                        {copied ? 'Copied!' : 'Copy Text'}
+                      </Button>
+                      <Button variant="secondary" size="sm" onClick={handleEmailReminder}>
+                        <EnvelopeIcon className="h-4 w-4 mr-1.5" />
+                        Send Email
+                      </Button>
+                      <Button variant="ghost" size="sm" onClick={() => setShowReminder(false)}>
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
               {!showDeleteConfirm ? (
