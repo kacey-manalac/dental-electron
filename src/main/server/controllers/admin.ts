@@ -28,6 +28,11 @@ async function buildBackupData() {
     payments,
     patientImages,
     auditLogs,
+    supplies,
+    stockTransactions,
+    procedureCatalog,
+    recallSchedules,
+    procedureSupplies,
   ] = await Promise.all([
     prisma.user.findMany({
       select: {
@@ -69,10 +74,15 @@ async function buildBackupData() {
       },
     }),
     prisma.auditLog.findMany({ take: 1000, orderBy: { createdAt: 'desc' } }),
+    prisma.supply.findMany(),
+    prisma.stockTransaction.findMany(),
+    prisma.procedureCatalog.findMany(),
+    prisma.recallSchedule.findMany(),
+    prisma.procedureSupply.findMany(),
   ]);
 
   return {
-    version: '2.0.0',
+    version: '3.0.0',
     exportedAt: new Date().toISOString(),
     exportedBy: 'local',
     data: {
@@ -89,6 +99,11 @@ async function buildBackupData() {
       payments,
       patientImages,
       auditLogs,
+      supplies,
+      stockTransactions,
+      procedureCatalog,
+      recallSchedules,
+      procedureSupplies,
     },
     metadata: {
       counts: {
@@ -100,6 +115,9 @@ async function buildBackupData() {
         invoices: invoices.length,
         payments: payments.length,
         images: patientImages.length,
+        supplies: supplies.length,
+        procedureCatalog: procedureCatalog.length,
+        recallSchedules: recallSchedules.length,
       },
       note: 'Full backup including database records, patient images, and clinic settings.',
     },
@@ -161,6 +179,10 @@ export async function createBackup() {
 
 async function restoreDbData(data: any, exportedAt: string) {
   const result = await prisma.$transaction(async (tx) => {
+    // Delete in reverse dependency order
+    await tx.procedureSupply.deleteMany();
+    await tx.stockTransaction.deleteMany();
+    await tx.recallSchedule.deleteMany();
     await tx.payment.deleteMany();
     await tx.invoiceItem.deleteMany();
     await tx.invoice.deleteMany();
@@ -172,6 +194,8 @@ async function restoreDbData(data: any, exportedAt: string) {
     await tx.medicalHistory.deleteMany();
     await tx.patientImage.deleteMany();
     await tx.patient.deleteMany();
+    await tx.supply.deleteMany();
+    await tx.procedureCatalog.deleteMany();
 
     const counts: Record<string, number> = {};
 
@@ -230,6 +254,32 @@ async function restoreDbData(data: any, exportedAt: string) {
       counts.patientImages = data.patientImages.length;
     }
 
+    // New models (may be absent in older v2.0.0 backups)
+    if (data.supplies?.length > 0) {
+      await tx.supply.createMany({ data: data.supplies });
+      counts.supplies = data.supplies.length;
+    }
+
+    if (data.stockTransactions?.length > 0) {
+      await tx.stockTransaction.createMany({ data: data.stockTransactions });
+      counts.stockTransactions = data.stockTransactions.length;
+    }
+
+    if (data.procedureCatalog?.length > 0) {
+      await tx.procedureCatalog.createMany({ data: data.procedureCatalog });
+      counts.procedureCatalog = data.procedureCatalog.length;
+    }
+
+    if (data.recallSchedules?.length > 0) {
+      await tx.recallSchedule.createMany({ data: data.recallSchedules });
+      counts.recallSchedules = data.recallSchedules.length;
+    }
+
+    if (data.procedureSupplies?.length > 0) {
+      await tx.procedureSupply.createMany({ data: data.procedureSupplies });
+      counts.procedureSupplies = data.procedureSupplies.length;
+    }
+
     return counts;
   });
 
@@ -273,7 +323,7 @@ async function restoreFromJson(filePath: string) {
     throw new Error('Invalid backup file format');
   }
 
-  if (backup.version !== '1.0.0' && backup.version !== '2.0.0') {
+  if (!['1.0.0', '2.0.0', '3.0.0'].includes(backup.version)) {
     throw new Error(`Unsupported backup version: ${backup.version}`);
   }
 
@@ -303,7 +353,7 @@ async function restoreFromZip(filePath: string) {
     throw new Error('Invalid backup file format');
   }
 
-  if (backup.version !== '1.0.0' && backup.version !== '2.0.0') {
+  if (!['1.0.0', '2.0.0', '3.0.0'].includes(backup.version)) {
     throw new Error(`Unsupported backup version: ${backup.version}`);
   }
 
