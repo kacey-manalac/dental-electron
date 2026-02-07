@@ -54,7 +54,11 @@ export async function getPatients(filters: { page?: number; limit?: number; sear
       include: {
         _count: {
           select: {
-            appointments: true,
+            appointments: {
+              where: {
+                startTime: { gte: new Date(new Date().setHours(0, 0, 0, 0)) },
+              },
+            },
             treatments: true,
           },
         },
