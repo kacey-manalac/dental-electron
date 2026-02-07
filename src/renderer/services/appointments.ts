@@ -10,6 +10,8 @@ interface AppointmentFilters {
   status?: AppointmentStatus;
   startDate?: string;
   endDate?: string;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
 }
 
 interface CreateAppointmentData {

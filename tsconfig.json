@@ -16,5 +16,5 @@
     "incremental": true
   },
   "include": ["src/main/**/*"],
-  "exclude": ["node_modules", "dist", "src/renderer"]
+  "exclude": ["node_modules", "dist", "src/renderer", "src/**/*.test.ts"]
 }

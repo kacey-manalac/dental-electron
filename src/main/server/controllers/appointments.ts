@@ -169,9 +169,8 @@ export async function deleteAppointment(id: string) {
     throw new Error('Appointment not found');
   }
 
-  await prisma.appointment.update({
+  await prisma.appointment.delete({
     where: { id },
-    data: { status: 'CANCELLED' },
   });
 
   return null;

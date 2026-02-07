@@ -12,6 +12,8 @@ interface AppointmentFilters {
   status?: AppointmentStatus;
   startDate?: string;
   endDate?: string;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
 }
 
 export function useAppointments(filters: AppointmentFilters = {}) {
@@ -68,7 +70,7 @@ export function useDeleteAppointment() {
     mutationFn: appointmentService.deleteAppointment,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
-      toast.success('Appointment cancelled');
+      toast.success('Appointment deleted');
     },
     onError: (error: any) => {
       toast.error(error.message || 'Failed to cancel appointment');

@@ -10,6 +10,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { usePatients } from '../hooks/usePatients';
 import { useAppointments } from '../hooks/useAppointments';
+import * as appointmentService from '../services/appointments';
 import { getTreatments } from '../services/treatments';
 import { getInvoices } from '../services/billing';
 import Card from '../components/common/Card';
@@ -47,32 +48,55 @@ const statCardStyles = [
 ];
 
 export default function DashboardPage() {
+  const refetchInterval = 30000; // Auto-refresh every 30 seconds
+
   const { data: patientsData, isLoading: loadingPatients } = usePatients({ limit: 5 });
+
+  // Today's appointments — query scoped to today only, high limit to get accurate count
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+  const endOfToday = new Date(today);
+  endOfToday.setHours(23, 59, 59, 999);
+
+  const { data: todayAppointments } = useQuery({
+    queryKey: ['appointments', 'today-count'],
+    queryFn: () => appointmentService.getAppointments({
+      startDate: today.toISOString(),
+      endDate: endOfToday.toISOString(),
+      limit: 1,
+    }),
+    refetchInterval,
+  });
+
+  // Upcoming appointments for the list (from today onward, soonest first)
   const { data: appointmentsData, isLoading: loadingAppointments, isError: errorAppointments } = useAppointments({
     limit: 5,
     startDate: today.toISOString(),
+    sortOrder: 'asc',
   });
 
   const { data: pendingTreatments } = useQuery({
     queryKey: ['treatments', 'pending-count'],
     queryFn: () => getTreatments({ status: 'PLANNED' as any, limit: 1 }),
+    refetchInterval,
   });
 
   const { data: inProgressTreatments } = useQuery({
     queryKey: ['treatments', 'inprogress-count'],
     queryFn: () => getTreatments({ status: 'IN_PROGRESS' as any, limit: 1 }),
+    refetchInterval,
   });
 
   const { data: pendingInvoices } = useQuery({
     queryKey: ['invoices', 'pending-count'],
     queryFn: () => getInvoices({ status: 'PENDING' as any, limit: 1 }),
+    refetchInterval,
   });
 
   const { data: overdueInvoices } = useQuery({
     queryKey: ['invoices', 'overdue-count'],
     queryFn: () => getInvoices({ status: 'OVERDUE' as any, limit: 1 }),
+    refetchInterval,
   });
 
   const treatmentCount = (pendingTreatments?.pagination.total || 0) + (inProgressTreatments?.pagination.total || 0);
@@ -87,9 +111,7 @@ export default function DashboardPage() {
     },
     {
       name: "Today's Appointments",
-      value: appointmentsData?.data.filter(a =>
-        format(new Date(a.startTime), 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')
-      ).length || 0,
+      value: todayAppointments?.pagination.total || 0,
       icon: CalendarIcon,
       href: '/appointments',
     },
