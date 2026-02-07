@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { PlusIcon, MagnifyingGlassIcon, DocumentArrowDownIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, MagnifyingGlassIcon, DocumentArrowDownIcon, DocumentCheckIcon } from '@heroicons/react/24/outline';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
 import * as billingService from '../services/billing';
-import { downloadInvoicePDF } from '../services/reports';
+import { downloadInvoicePDF, downloadReceiptPDF } from '../services/reports';
 import { usePatients } from '../hooks/usePatients';
 import { InvoiceStatus, PaymentMethod } from '../types';
 import Button from '../components/common/Button';
@@ -42,6 +42,7 @@ export default function BillingPage() {
   const [selectedInvoiceId, setSelectedInvoiceId] = useState<string | null>(null);
   const [invoiceItems, setInvoiceItems] = useState([{ description: '', quantity: 1, unitPrice: 0 }]);
   const [isDownloadingPDF, setIsDownloadingPDF] = useState(false);
+  const [isDownloadingReceipt, setIsDownloadingReceipt] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -145,6 +146,18 @@ export default function BillingPage() {
       toast.error(error.message || 'Failed to download invoice');
     } finally {
       setIsDownloadingPDF(false);
+    }
+  };
+
+  const handleDownloadReceiptPDF = async (invoiceId: string) => {
+    setIsDownloadingReceipt(true);
+    try {
+      await downloadReceiptPDF(invoiceId);
+      toast.success('Receipt PDF downloaded');
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to download receipt');
+    } finally {
+      setIsDownloadingReceipt(false);
     }
   };
 
@@ -262,10 +275,21 @@ export default function BillingPage() {
                           size="sm"
                           onClick={() => handleDownloadInvoicePDF(invoice.id)}
                           disabled={isDownloadingPDF}
-                          title="Download PDF"
+                          title="Download Invoice"
                         >
                           <DocumentArrowDownIcon className="h-4 w-4" />
                         </Button>
+                        {invoice.status === 'PAID' && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDownloadReceiptPDF(invoice.id)}
+                            disabled={isDownloadingReceipt}
+                            title="Download Receipt"
+                          >
+                            <DocumentCheckIcon className="h-4 w-4 text-green-600" />
+                          </Button>
+                        )}
                         {invoice.status !== 'PAID' && invoice.status !== 'CANCELLED' && (
                           <Button
                             variant="secondary"

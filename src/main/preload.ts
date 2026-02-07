@@ -59,6 +59,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     dentalRecord: (patientId: string) => ipcRenderer.invoke('reports:dentalRecord', patientId),
     invoice: (invoiceId: string) => ipcRenderer.invoke('reports:invoice', invoiceId),
     treatmentSummary: (patientId: string, options: any) => ipcRenderer.invoke('reports:treatmentSummary', patientId, options),
+    receipt: (invoiceId: string) => ipcRenderer.invoke('reports:receipt', invoiceId),
   },
 
   // Analytics

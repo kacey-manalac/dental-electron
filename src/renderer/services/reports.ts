@@ -14,6 +14,13 @@ export async function downloadInvoicePDF(invoiceId: string): Promise<void> {
   }
 }
 
+export async function downloadReceiptPDF(invoiceId: string): Promise<void> {
+  const result = unwrap(await window.electronAPI.reports.receipt(invoiceId));
+  if (result.filePath) {
+    await window.electronAPI.shell.openPath(result.filePath);
+  }
+}
+
 export async function downloadTreatmentSummaryPDF(
   patientId: string,
   startDate?: string,

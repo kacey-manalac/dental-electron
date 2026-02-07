@@ -8,6 +8,7 @@ import {
   EnvelopeIcon,
   MapPinIcon,
   DocumentArrowDownIcon,
+  ClipboardDocumentListIcon,
   ClockIcon,
 } from '@heroicons/react/24/outline';
 import { usePatient, useUpdatePatient, useUpdateMedicalHistory } from '../hooks/usePatients';
@@ -34,6 +35,7 @@ export default function PatientDetailPage() {
   const [showMedicalHistoryModal, setShowMedicalHistoryModal] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isDownloadingSummary, setIsDownloadingSummary] = useState(false);
 
   const { data: patient, isLoading, error } = usePatient(id ?? '');
   const updatePatient = useUpdatePatient();
@@ -125,6 +127,17 @@ export default function PatientDetailPage() {
     }
   };
 
+  const handleDownloadTreatmentSummary = async () => {
+    setIsDownloadingSummary(true);
+    try {
+      await downloadTreatmentSummaryPDF(patient.id);
+    } catch (error) {
+      console.error('Failed to download treatment summary:', error);
+    } finally {
+      setIsDownloadingSummary(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -146,9 +159,13 @@ export default function PatientDetailPage() {
           </div>
         </div>
         <div className="flex space-x-2">
+          <Button variant="secondary" onClick={handleDownloadTreatmentSummary} loading={isDownloadingSummary}>
+            <ClipboardDocumentListIcon className="h-4 w-4 mr-2" />
+            Treatment Summary
+          </Button>
           <Button variant="secondary" onClick={handleDownloadDentalRecord} loading={isDownloading}>
             <DocumentArrowDownIcon className="h-4 w-4 mr-2" />
-            Export PDF
+            Dental Record
           </Button>
           <Button onClick={() => setShowEditModal(true)}>
             <PencilIcon className="h-4 w-4 mr-2" />

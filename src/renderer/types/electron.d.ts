@@ -308,6 +308,7 @@ interface ElectronAPI {
     dentalRecord: (patientId: string) => Promise<IpcResult<ReportResult>>;
     invoice: (invoiceId: string) => Promise<IpcResult<ReportResult>>;
     treatmentSummary: (patientId: string, options: { startDate?: string; endDate?: string }) => Promise<IpcResult<ReportResult>>;
+    receipt: (invoiceId: string) => Promise<IpcResult<ReportResult>>;
   };
   analytics: {
     dashboard: () => Promise<IpcResult<DashboardStats>>;

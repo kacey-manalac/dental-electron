@@ -93,6 +93,7 @@ export function registerAllHandlers() {
   ipcMain.handle('reports:dentalRecord', wrapHandler(reports.generateDentalRecordPDF));
   ipcMain.handle('reports:invoice', wrapHandler(reports.generateInvoicePDF));
   ipcMain.handle('reports:treatmentSummary', wrapHandler(reports.generateTreatmentSummaryPDF));
+  ipcMain.handle('reports:receipt', wrapHandler(reports.generateReceiptPDF));
 
   // Analytics
   ipcMain.handle('analytics:dashboard', wrapHandler(analytics.getDashboardStats));
