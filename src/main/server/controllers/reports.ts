@@ -633,6 +633,109 @@ export async function generateReceiptPDF(invoiceId: string) {
   return { filePath: result.filePath };
 }
 
+export async function generateAccountStatementPDF(patientId: string) {
+  const patient = await prisma.patient.findUnique({ where: { id: patientId } });
+  if (!patient) throw new Error('Patient not found');
+
+  const invoices = await prisma.invoice.findMany({
+    where: { patientId, status: { notIn: ['DRAFT', 'CANCELLED'] } },
+    include: { payments: { orderBy: { paidAt: 'asc' } } },
+    orderBy: { createdAt: 'asc' },
+  });
+
+  const clinicInfo = await getClinicSettings();
+  const doc = createPDFDocument();
+  const bufferPromise = collectPDFToBuffer(doc);
+
+  addAccentBar(doc);
+  const headerBottomY = addInvoiceHeader(doc, clinicInfo);
+  const infoBoxBottomY = addInvoiceInfoBox(
+    doc,
+    [
+      { label: 'Date', value: formatDate(new Date()) },
+      { label: 'Patient', value: `${patient.firstName} ${patient.lastName}` },
+    ],
+    undefined,
+    30,
+  );
+
+  const separatorY = Math.max(headerBottomY, infoBoxBottomY) + 10;
+  doc.save();
+  doc.moveTo(doc.page.margins.left, separatorY)
+    .lineTo(doc.page.width - doc.page.margins.right, separatorY)
+    .strokeColor(COLORS.border).lineWidth(1).stroke();
+  doc.restore();
+
+  doc.y = separatorY + 10;
+  const contentWidth = doc.page.width - doc.page.margins.left - doc.page.margins.right;
+  doc.fontSize(20).font('Helvetica-Bold').fillColor(COLORS.primary)
+    .text('ACCOUNT STATEMENT', doc.page.margins.left, doc.y, { width: contentWidth, align: 'center' });
+  doc.fillColor(COLORS.text);
+  doc.moveDown(0.8);
+
+  addBillToSection(doc, patient);
+
+  // Build chronological entries
+  const entries: string[][] = [];
+  let runningBalance = 0;
+
+  for (const inv of invoices) {
+    const invTotal = Number(inv.total);
+    runningBalance += invTotal;
+    entries.push([
+      formatDate(inv.createdAt),
+      `Invoice ${inv.invoiceNumber}`,
+      formatCurrency(invTotal),
+      '',
+      formatCurrency(runningBalance),
+    ]);
+
+    for (const pay of inv.payments) {
+      runningBalance -= Number(pay.amount);
+      entries.push([
+        formatDate(pay.paidAt),
+        `Payment (${pay.method.replace(/_/g, ' ')})`,
+        '',
+        formatCurrency(pay.amount),
+        formatCurrency(runningBalance),
+      ]);
+    }
+  }
+
+  doc.moveDown(0.3);
+  addItemsTable(
+    doc,
+    ['Date', 'Description', 'Charges', 'Payments', 'Balance'],
+    entries,
+    [85, 170, 80, 80, 80],
+    { rightAlignFrom: 2 },
+  );
+
+  const totalInvoiced = invoices.reduce((sum, inv) => sum + Number(inv.total), 0);
+  const totalPaid = invoices.reduce((sum, inv) =>
+    sum + inv.payments.reduce((ps, p) => ps + Number(p.amount), 0), 0);
+
+  addTotalsBlock(doc, [
+    { label: 'Total Invoiced', value: formatCurrency(totalInvoiced) },
+    { label: 'Total Paid', value: formatCurrency(totalPaid) },
+    { label: 'Balance Due', value: formatCurrency(totalInvoiced - totalPaid), bold: true },
+  ]);
+
+  addInvoiceFooter(doc, 1);
+  doc.end();
+
+  const buffer = await bufferPromise;
+  const win = BrowserWindow.getFocusedWindow();
+  const result = await dialog.showSaveDialog(win!, {
+    defaultPath: `statement-${patient.lastName}-${patient.firstName}.pdf`,
+    filters: [{ name: 'PDF', extensions: ['pdf'] }],
+  });
+
+  if (result.canceled || !result.filePath) return { filePath: null };
+  await fs.promises.writeFile(result.filePath, buffer);
+  return { filePath: result.filePath };
+}
+
 export async function generateTreatmentSummaryPDF(patientId: string, options: { startDate?: string; endDate?: string }) {
   const patient = await prisma.patient.findUnique({
     where: { id: patientId },

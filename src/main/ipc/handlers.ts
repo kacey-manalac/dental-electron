@@ -13,6 +13,10 @@ import * as analytics from '../server/controllers/analytics';
 import * as admin from '../server/controllers/admin';
 import * as supplies from '../server/controllers/supplies';
 import * as clinicSettings from '../server/controllers/clinicSettings';
+import * as procedures from '../server/controllers/procedures';
+import * as recalls from '../server/controllers/recalls';
+import * as csvExports from '../server/controllers/exports';
+import * as search from '../server/controllers/search';
 
 type IpcResult<T = any> = { success: true; data: T } | { success: false; error: string };
 
@@ -62,6 +66,7 @@ export function registerAllHandlers() {
   ipcMain.handle('appointments:create', wrapHandler(appointments.createAppointment));
   ipcMain.handle('appointments:update', wrapHandler(appointments.updateAppointment));
   ipcMain.handle('appointments:delete', wrapHandler(appointments.deleteAppointment));
+  ipcMain.handle('appointments:deleteSeries', wrapHandler(appointments.deleteAppointmentSeries));
 
   // Treatments
   ipcMain.handle('treatments:list', wrapHandler(treatments.getTreatments));
@@ -77,6 +82,7 @@ export function registerAllHandlers() {
   ipcMain.handle('billing:updateInvoice', wrapHandler(billing.updateInvoice));
   ipcMain.handle('billing:getPayments', wrapHandler(billing.getPayments));
   ipcMain.handle('billing:createPayment', wrapHandler(billing.createPayment));
+  ipcMain.handle('billing:patientBalance', wrapHandler(billing.getPatientBalance));
 
   // Dental Chart
   ipcMain.handle('dentalChart:get', wrapHandler(dentalChart.getDentalChart));
@@ -94,6 +100,7 @@ export function registerAllHandlers() {
   ipcMain.handle('reports:invoice', wrapHandler(reports.generateInvoicePDF));
   ipcMain.handle('reports:treatmentSummary', wrapHandler(reports.generateTreatmentSummaryPDF));
   ipcMain.handle('reports:receipt', wrapHandler(reports.generateReceiptPDF));
+  ipcMain.handle('reports:accountStatement', wrapHandler(reports.generateAccountStatementPDF));
 
   // Analytics
   ipcMain.handle('analytics:dashboard', wrapHandler(analytics.getDashboardStats));
@@ -101,6 +108,7 @@ export function registerAllHandlers() {
   ipcMain.handle('analytics:revenue', wrapHandler(analytics.getRevenueAnalytics));
   ipcMain.handle('analytics:patients', wrapHandler(analytics.getPatientAnalytics));
   ipcMain.handle('analytics:conditions', wrapHandler(analytics.getConditionAnalytics));
+  ipcMain.handle('analytics:alerts', wrapHandler(analytics.getDashboardAlerts));
 
   // Admin
   ipcMain.handle('admin:backup', wrapHandler(admin.createBackup));
@@ -125,6 +133,34 @@ export function registerAllHandlers() {
   ipcMain.handle('clinicSettings:update', wrapHandler(clinicSettings.updateClinicSettings));
   ipcMain.handle('clinicSettings:updateLogo', wrapHandler(clinicSettings.updateClinicLogo));
   ipcMain.handle('clinicSettings:removeLogo', wrapHandler(clinicSettings.removeClinicLogo));
+
+  // Procedures
+  ipcMain.handle('procedures:list', wrapHandler(procedures.getProcedures));
+  ipcMain.handle('procedures:get', wrapHandler(procedures.getProcedure));
+  ipcMain.handle('procedures:create', wrapHandler(procedures.createProcedure));
+  ipcMain.handle('procedures:update', wrapHandler(procedures.updateProcedure));
+  ipcMain.handle('procedures:delete', wrapHandler(procedures.deleteProcedure));
+  ipcMain.handle('procedures:active', wrapHandler(procedures.getActiveProcedures));
+  ipcMain.handle('procedures:getSupplies', wrapHandler(procedures.getProcedureSupplies));
+  ipcMain.handle('procedures:addSupply', wrapHandler(procedures.addProcedureSupply));
+  ipcMain.handle('procedures:removeSupply', wrapHandler(procedures.removeProcedureSupply));
+
+  // Recalls
+  ipcMain.handle('recalls:list', wrapHandler(recalls.getRecalls));
+  ipcMain.handle('recalls:create', wrapHandler(recalls.createRecall));
+  ipcMain.handle('recalls:update', wrapHandler(recalls.updateRecall));
+  ipcMain.handle('recalls:delete', wrapHandler(recalls.deleteRecall));
+  ipcMain.handle('recalls:due', wrapHandler(recalls.getDueRecalls));
+
+  // Exports
+  ipcMain.handle('exports:patients', wrapHandler(csvExports.exportPatients));
+  ipcMain.handle('exports:appointments', wrapHandler(csvExports.exportAppointments));
+  ipcMain.handle('exports:treatments', wrapHandler(csvExports.exportTreatments));
+  ipcMain.handle('exports:invoices', wrapHandler(csvExports.exportInvoices));
+  ipcMain.handle('exports:supplies', wrapHandler(csvExports.exportSupplies));
+
+  // Search
+  ipcMain.handle('search:global', wrapHandler(search.globalSearch));
 
   // Dentists (for appointment/treatment forms)
   ipcMain.handle('users:getDentists', wrapHandler(async () => {

@@ -6,14 +6,21 @@ import {
   CurrencyDollarIcon,
   ChevronRightIcon,
   PlusIcon,
+  ExclamationTriangleIcon,
+  ArchiveBoxIcon,
+  ClockIcon,
+  BellAlertIcon,
 } from '@heroicons/react/24/outline';
 import { useQuery } from '@tanstack/react-query';
 import { usePatients } from '../hooks/usePatients';
 import { useAppointments } from '../hooks/useAppointments';
+import { useDueRecalls } from '../hooks/useRecalls';
 import * as appointmentService from '../services/appointments';
 import { getTreatments } from '../services/treatments';
 import { getInvoices } from '../services/billing';
+import { unwrap } from '../services/api';
 import Card from '../components/common/Card';
+import Badge from '../components/common/Badge';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import { format } from 'date-fns';
 
@@ -99,8 +106,18 @@ export default function DashboardPage() {
     refetchInterval,
   });
 
+  const { data: alertsData } = useQuery({
+    queryKey: ['dashboard', 'alerts'],
+    queryFn: async () => unwrap(await window.electronAPI.analytics.alerts()),
+    refetchInterval,
+  });
+
+  const { data: dueRecalls } = useDueRecalls();
+
   const treatmentCount = (pendingTreatments?.pagination.total || 0) + (inProgressTreatments?.pagination.total || 0);
   const invoiceCount = (pendingInvoices?.pagination.total || 0) + (overdueInvoices?.pagination.total || 0);
+
+  const totalAlerts = (alertsData?.overdueInvoices.count || 0) + (alertsData?.lowStock.count || 0) + (alertsData?.overdueRecalls.count || 0);
 
   const stats = [
     {
@@ -277,6 +294,94 @@ export default function DashboardPage() {
           )}
         </Card>
       </div>
+
+      {/* Attention Needed + Recalls Row */}
+      {(totalAlerts > 0 || (dueRecalls && dueRecalls.length > 0)) && (
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          {/* Attention Needed */}
+          {totalAlerts > 0 && (
+            <Card title={<span className="flex items-center gap-2"><BellAlertIcon className="h-5 w-5 text-amber-500" /> Attention Needed</span>}>
+              <div className="space-y-3">
+                {alertsData!.overdueInvoices.count > 0 && (
+                  <Link to="/billing" className="flex items-center gap-3 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors">
+                    <CurrencyDollarIcon className="h-5 w-5 text-red-500 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-red-700 dark:text-red-400">Overdue Invoices</p>
+                      <p className="text-xs text-red-600 dark:text-red-400/70">
+                        {alertsData!.overdueInvoices.items.slice(0, 3).map(i => i.invoiceNumber).join(', ')}
+                      </p>
+                    </div>
+                    <Badge variant="red">{alertsData!.overdueInvoices.count}</Badge>
+                  </Link>
+                )}
+                {alertsData!.lowStock.count > 0 && (
+                  <Link to="/supplies" className="flex items-center gap-3 p-3 rounded-lg bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-colors">
+                    <ArchiveBoxIcon className="h-5 w-5 text-orange-500 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-orange-700 dark:text-orange-400">Low Stock Supplies</p>
+                      <p className="text-xs text-orange-600 dark:text-orange-400/70">
+                        {alertsData!.lowStock.items.slice(0, 3).map(s => s.name).join(', ')}
+                      </p>
+                    </div>
+                    <Badge variant="orange">{alertsData!.lowStock.count}</Badge>
+                  </Link>
+                )}
+                {alertsData!.overdueRecalls.count > 0 && (
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-yellow-50 dark:bg-yellow-900/20">
+                    <ClockIcon className="h-5 w-5 text-yellow-500 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-yellow-700 dark:text-yellow-400">Overdue Recalls</p>
+                      <p className="text-xs text-yellow-600 dark:text-yellow-400/70">
+                        {alertsData!.overdueRecalls.items.slice(0, 3).map(r => `${r.patient?.firstName} ${r.patient?.lastName}`).join(', ')}
+                      </p>
+                    </div>
+                    <Badge variant="yellow">{alertsData!.overdueRecalls.count}</Badge>
+                  </div>
+                )}
+                {alertsData!.todaysAppointments.count > 0 && (
+                  <Link to="/appointments" className="flex items-center gap-3 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+                    <CalendarIcon className="h-5 w-5 text-blue-500 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-blue-700 dark:text-blue-400">Today&apos;s Appointments</p>
+                      <p className="text-xs text-blue-600 dark:text-blue-400/70">
+                        {alertsData!.todaysAppointments.count} appointment{alertsData!.todaysAppointments.count !== 1 ? 's' : ''} scheduled
+                      </p>
+                    </div>
+                    <Badge variant="blue">{alertsData!.todaysAppointments.count}</Badge>
+                  </Link>
+                )}
+              </div>
+            </Card>
+          )}
+
+          {/* Patients Due for Recall */}
+          {dueRecalls && dueRecalls.length > 0 && (
+            <Card title={<span className="flex items-center gap-2"><ClockIcon className="h-5 w-5 text-amber-500" /> Patients Due for Recall</span>}>
+              <div className="divide-y divide-gray-100 dark:divide-gray-700/30">
+                {dueRecalls.slice(0, 5).map((recall) => (
+                  <Link
+                    key={recall.id}
+                    to={`/patients/${recall.patientId}`}
+                    className="group flex items-center justify-between py-3 hover:bg-gray-50/50 dark:hover:bg-surface-900/30 -mx-6 px-6 transition-colors"
+                  >
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                        {recall.patient?.firstName} {recall.patient?.lastName}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {recall.recallType} &middot; Due {format(new Date(recall.nextDueDate), 'MMM d, yyyy')}
+                      </p>
+                    </div>
+                    <Badge variant={recall.status === 'OVERDUE' ? 'red' : 'yellow'}>
+                      {recall.status}
+                    </Badge>
+                  </Link>
+                ))}
+              </div>
+            </Card>
+          )}
+        </div>
+      )}
     </div>
   );
 }

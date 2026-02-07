@@ -31,3 +31,10 @@ export async function downloadTreatmentSummaryPDF(
     await window.electronAPI.shell.openPath(result.filePath);
   }
 }
+
+export async function downloadAccountStatementPDF(patientId: string): Promise<void> {
+  const result = unwrap(await window.electronAPI.reports.accountStatement(patientId));
+  if (result.filePath) {
+    await window.electronAPI.shell.openPath(result.filePath);
+  }
+}

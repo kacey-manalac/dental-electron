@@ -56,3 +56,7 @@ export async function getPayments(filters: { page?: number; limit?: number; invo
 export async function createPayment(data: CreatePaymentData): Promise<Payment> {
   return unwrap(await window.electronAPI.billing.createPayment(data));
 }
+
+export async function getPatientBalance(patientId: string) {
+  return unwrap(await window.electronAPI.billing.patientBalance(patientId));
+}

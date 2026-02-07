@@ -88,6 +88,21 @@ export type Supply = $Result.DefaultSelection<Prisma.$SupplyPayload>
  * 
  */
 export type StockTransaction = $Result.DefaultSelection<Prisma.$StockTransactionPayload>
+/**
+ * Model ProcedureCatalog
+ * 
+ */
+export type ProcedureCatalog = $Result.DefaultSelection<Prisma.$ProcedureCatalogPayload>
+/**
+ * Model RecallSchedule
+ * 
+ */
+export type RecallSchedule = $Result.DefaultSelection<Prisma.$RecallSchedulePayload>
+/**
+ * Model ProcedureSupply
+ * 
+ */
+export type ProcedureSupply = $Result.DefaultSelection<Prisma.$ProcedureSupplyPayload>
 
 /**
  * Enums
@@ -181,6 +196,42 @@ export const SupplyCategory: {
 
 export type SupplyCategory = (typeof SupplyCategory)[keyof typeof SupplyCategory]
 
+
+export const ProcedureCategory: {
+  PREVENTIVE: 'PREVENTIVE',
+  RESTORATIVE: 'RESTORATIVE',
+  ENDODONTIC: 'ENDODONTIC',
+  PROSTHODONTIC: 'PROSTHODONTIC',
+  ORTHODONTIC: 'ORTHODONTIC',
+  SURGICAL: 'SURGICAL',
+  DIAGNOSTIC: 'DIAGNOSTIC',
+  COSMETIC: 'COSMETIC',
+  OTHER: 'OTHER'
+};
+
+export type ProcedureCategory = (typeof ProcedureCategory)[keyof typeof ProcedureCategory]
+
+
+export const RecallType: {
+  CLEANING: 'CLEANING',
+  CHECKUP: 'CHECKUP',
+  FOLLOWUP: 'FOLLOWUP',
+  XRAY: 'XRAY',
+  OTHER: 'OTHER'
+};
+
+export type RecallType = (typeof RecallType)[keyof typeof RecallType]
+
+
+export const RecallStatus: {
+  UPCOMING: 'UPCOMING',
+  DUE: 'DUE',
+  OVERDUE: 'OVERDUE',
+  COMPLETED: 'COMPLETED'
+};
+
+export type RecallStatus = (typeof RecallStatus)[keyof typeof RecallStatus]
+
 }
 
 export type UserRole = $Enums.UserRole
@@ -210,6 +261,18 @@ export const PaymentMethod: typeof $Enums.PaymentMethod
 export type SupplyCategory = $Enums.SupplyCategory
 
 export const SupplyCategory: typeof $Enums.SupplyCategory
+
+export type ProcedureCategory = $Enums.ProcedureCategory
+
+export const ProcedureCategory: typeof $Enums.ProcedureCategory
+
+export type RecallType = $Enums.RecallType
+
+export const RecallType: typeof $Enums.RecallType
+
+export type RecallStatus = $Enums.RecallStatus
+
+export const RecallStatus: typeof $Enums.RecallStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -478,6 +541,36 @@ export class PrismaClient<
     * ```
     */
   get stockTransaction(): Prisma.StockTransactionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.procedureCatalog`: Exposes CRUD operations for the **ProcedureCatalog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProcedureCatalogs
+    * const procedureCatalogs = await prisma.procedureCatalog.findMany()
+    * ```
+    */
+  get procedureCatalog(): Prisma.ProcedureCatalogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.recallSchedule`: Exposes CRUD operations for the **RecallSchedule** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RecallSchedules
+    * const recallSchedules = await prisma.recallSchedule.findMany()
+    * ```
+    */
+  get recallSchedule(): Prisma.RecallScheduleDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.procedureSupply`: Exposes CRUD operations for the **ProcedureSupply** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProcedureSupplies
+    * const procedureSupplies = await prisma.procedureSupply.findMany()
+    * ```
+    */
+  get procedureSupply(): Prisma.ProcedureSupplyDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -933,7 +1026,10 @@ export namespace Prisma {
     AuditLog: 'AuditLog',
     PatientImage: 'PatientImage',
     Supply: 'Supply',
-    StockTransaction: 'StockTransaction'
+    StockTransaction: 'StockTransaction',
+    ProcedureCatalog: 'ProcedureCatalog',
+    RecallSchedule: 'RecallSchedule',
+    ProcedureSupply: 'ProcedureSupply'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -952,7 +1048,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "patient" | "medicalHistory" | "tooth" | "toothConditionHistory" | "toothSurface" | "appointment" | "treatment" | "invoice" | "invoiceItem" | "payment" | "auditLog" | "patientImage" | "supply" | "stockTransaction"
+      modelProps: "user" | "patient" | "medicalHistory" | "tooth" | "toothConditionHistory" | "toothSurface" | "appointment" | "treatment" | "invoice" | "invoiceItem" | "payment" | "auditLog" | "patientImage" | "supply" | "stockTransaction" | "procedureCatalog" | "recallSchedule" | "procedureSupply"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2066,6 +2162,228 @@ export namespace Prisma {
           }
         }
       }
+      ProcedureCatalog: {
+        payload: Prisma.$ProcedureCatalogPayload<ExtArgs>
+        fields: Prisma.ProcedureCatalogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProcedureCatalogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureCatalogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProcedureCatalogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureCatalogPayload>
+          }
+          findFirst: {
+            args: Prisma.ProcedureCatalogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureCatalogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProcedureCatalogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureCatalogPayload>
+          }
+          findMany: {
+            args: Prisma.ProcedureCatalogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureCatalogPayload>[]
+          }
+          create: {
+            args: Prisma.ProcedureCatalogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureCatalogPayload>
+          }
+          createMany: {
+            args: Prisma.ProcedureCatalogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProcedureCatalogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureCatalogPayload>[]
+          }
+          delete: {
+            args: Prisma.ProcedureCatalogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureCatalogPayload>
+          }
+          update: {
+            args: Prisma.ProcedureCatalogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureCatalogPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProcedureCatalogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProcedureCatalogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProcedureCatalogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureCatalogPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProcedureCatalogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureCatalogPayload>
+          }
+          aggregate: {
+            args: Prisma.ProcedureCatalogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProcedureCatalog>
+          }
+          groupBy: {
+            args: Prisma.ProcedureCatalogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProcedureCatalogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProcedureCatalogCountArgs<ExtArgs>
+            result: $Utils.Optional<ProcedureCatalogCountAggregateOutputType> | number
+          }
+        }
+      }
+      RecallSchedule: {
+        payload: Prisma.$RecallSchedulePayload<ExtArgs>
+        fields: Prisma.RecallScheduleFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RecallScheduleFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecallSchedulePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RecallScheduleFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecallSchedulePayload>
+          }
+          findFirst: {
+            args: Prisma.RecallScheduleFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecallSchedulePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RecallScheduleFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecallSchedulePayload>
+          }
+          findMany: {
+            args: Prisma.RecallScheduleFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecallSchedulePayload>[]
+          }
+          create: {
+            args: Prisma.RecallScheduleCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecallSchedulePayload>
+          }
+          createMany: {
+            args: Prisma.RecallScheduleCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RecallScheduleCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecallSchedulePayload>[]
+          }
+          delete: {
+            args: Prisma.RecallScheduleDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecallSchedulePayload>
+          }
+          update: {
+            args: Prisma.RecallScheduleUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecallSchedulePayload>
+          }
+          deleteMany: {
+            args: Prisma.RecallScheduleDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RecallScheduleUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RecallScheduleUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecallSchedulePayload>[]
+          }
+          upsert: {
+            args: Prisma.RecallScheduleUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecallSchedulePayload>
+          }
+          aggregate: {
+            args: Prisma.RecallScheduleAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRecallSchedule>
+          }
+          groupBy: {
+            args: Prisma.RecallScheduleGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RecallScheduleGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RecallScheduleCountArgs<ExtArgs>
+            result: $Utils.Optional<RecallScheduleCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProcedureSupply: {
+        payload: Prisma.$ProcedureSupplyPayload<ExtArgs>
+        fields: Prisma.ProcedureSupplyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProcedureSupplyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureSupplyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProcedureSupplyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureSupplyPayload>
+          }
+          findFirst: {
+            args: Prisma.ProcedureSupplyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureSupplyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProcedureSupplyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureSupplyPayload>
+          }
+          findMany: {
+            args: Prisma.ProcedureSupplyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureSupplyPayload>[]
+          }
+          create: {
+            args: Prisma.ProcedureSupplyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureSupplyPayload>
+          }
+          createMany: {
+            args: Prisma.ProcedureSupplyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProcedureSupplyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureSupplyPayload>[]
+          }
+          delete: {
+            args: Prisma.ProcedureSupplyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureSupplyPayload>
+          }
+          update: {
+            args: Prisma.ProcedureSupplyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureSupplyPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProcedureSupplyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProcedureSupplyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProcedureSupplyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureSupplyPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProcedureSupplyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProcedureSupplyPayload>
+          }
+          aggregate: {
+            args: Prisma.ProcedureSupplyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProcedureSupply>
+          }
+          groupBy: {
+            args: Prisma.ProcedureSupplyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProcedureSupplyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProcedureSupplyCountArgs<ExtArgs>
+            result: $Utils.Optional<ProcedureSupplyCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2177,6 +2495,9 @@ export namespace Prisma {
     patientImage?: PatientImageOmit
     supply?: SupplyOmit
     stockTransaction?: StockTransactionOmit
+    procedureCatalog?: ProcedureCatalogOmit
+    recallSchedule?: RecallScheduleOmit
+    procedureSupply?: ProcedureSupplyOmit
   }
 
   /* Types for Logging */
@@ -2320,6 +2641,7 @@ export namespace Prisma {
     treatments: number
     invoices: number
     images: number
+    recalls: number
   }
 
   export type PatientCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2328,6 +2650,7 @@ export namespace Prisma {
     treatments?: boolean | PatientCountOutputTypeCountTreatmentsArgs
     invoices?: boolean | PatientCountOutputTypeCountInvoicesArgs
     images?: boolean | PatientCountOutputTypeCountImagesArgs
+    recalls?: boolean | PatientCountOutputTypeCountRecallsArgs
   }
 
   // Custom InputTypes
@@ -2374,6 +2697,13 @@ export namespace Prisma {
    */
   export type PatientCountOutputTypeCountImagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PatientImageWhereInput
+  }
+
+  /**
+   * PatientCountOutputType without action
+   */
+  export type PatientCountOutputTypeCountRecallsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RecallScheduleWhereInput
   }
 
 
@@ -2534,10 +2864,12 @@ export namespace Prisma {
 
   export type SupplyCountOutputType = {
     transactions: number
+    procedureSupplies: number
   }
 
   export type SupplyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     transactions?: boolean | SupplyCountOutputTypeCountTransactionsArgs
+    procedureSupplies?: boolean | SupplyCountOutputTypeCountProcedureSuppliesArgs
   }
 
   // Custom InputTypes
@@ -2556,6 +2888,44 @@ export namespace Prisma {
    */
   export type SupplyCountOutputTypeCountTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StockTransactionWhereInput
+  }
+
+  /**
+   * SupplyCountOutputType without action
+   */
+  export type SupplyCountOutputTypeCountProcedureSuppliesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProcedureSupplyWhereInput
+  }
+
+
+  /**
+   * Count Type ProcedureCatalogCountOutputType
+   */
+
+  export type ProcedureCatalogCountOutputType = {
+    procedureSupplies: number
+  }
+
+  export type ProcedureCatalogCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    procedureSupplies?: boolean | ProcedureCatalogCountOutputTypeCountProcedureSuppliesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProcedureCatalogCountOutputType without action
+   */
+  export type ProcedureCatalogCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureCatalogCountOutputType
+     */
+    select?: ProcedureCatalogCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProcedureCatalogCountOutputType without action
+   */
+  export type ProcedureCatalogCountOutputTypeCountProcedureSuppliesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProcedureSupplyWhereInput
   }
 
 
@@ -4038,6 +4408,7 @@ export namespace Prisma {
     treatments?: boolean | Patient$treatmentsArgs<ExtArgs>
     invoices?: boolean | Patient$invoicesArgs<ExtArgs>
     images?: boolean | Patient$imagesArgs<ExtArgs>
+    recalls?: boolean | Patient$recallsArgs<ExtArgs>
     _count?: boolean | PatientCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["patient"]>
 
@@ -4106,6 +4477,7 @@ export namespace Prisma {
     treatments?: boolean | Patient$treatmentsArgs<ExtArgs>
     invoices?: boolean | Patient$invoicesArgs<ExtArgs>
     images?: boolean | Patient$imagesArgs<ExtArgs>
+    recalls?: boolean | Patient$recallsArgs<ExtArgs>
     _count?: boolean | PatientCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PatientIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4120,6 +4492,7 @@ export namespace Prisma {
       treatments: Prisma.$TreatmentPayload<ExtArgs>[]
       invoices: Prisma.$InvoicePayload<ExtArgs>[]
       images: Prisma.$PatientImagePayload<ExtArgs>[]
+      recalls: Prisma.$RecallSchedulePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4538,6 +4911,7 @@ export namespace Prisma {
     treatments<T extends Patient$treatmentsArgs<ExtArgs> = {}>(args?: Subset<T, Patient$treatmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TreatmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     invoices<T extends Patient$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, Patient$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     images<T extends Patient$imagesArgs<ExtArgs> = {}>(args?: Subset<T, Patient$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    recalls<T extends Patient$recallsArgs<ExtArgs> = {}>(args?: Subset<T, Patient$recallsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecallSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5105,6 +5479,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PatientImageScalarFieldEnum | PatientImageScalarFieldEnum[]
+  }
+
+  /**
+   * Patient.recalls
+   */
+  export type Patient$recallsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecallSchedule
+     */
+    select?: RecallScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecallSchedule
+     */
+    omit?: RecallScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecallScheduleInclude<ExtArgs> | null
+    where?: RecallScheduleWhereInput
+    orderBy?: RecallScheduleOrderByWithRelationInput | RecallScheduleOrderByWithRelationInput[]
+    cursor?: RecallScheduleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RecallScheduleScalarFieldEnum | RecallScheduleScalarFieldEnum[]
   }
 
   /**
@@ -9675,8 +10073,18 @@ export namespace Prisma {
 
   export type AggregateAppointment = {
     _count: AppointmentCountAggregateOutputType | null
+    _avg: AppointmentAvgAggregateOutputType | null
+    _sum: AppointmentSumAggregateOutputType | null
     _min: AppointmentMinAggregateOutputType | null
     _max: AppointmentMaxAggregateOutputType | null
+  }
+
+  export type AppointmentAvgAggregateOutputType = {
+    recurrenceInterval: number | null
+  }
+
+  export type AppointmentSumAggregateOutputType = {
+    recurrenceInterval: number | null
   }
 
   export type AppointmentMinAggregateOutputType = {
@@ -9689,6 +10097,12 @@ export namespace Prisma {
     endTime: Date | null
     status: $Enums.AppointmentStatus | null
     notes: string | null
+    clinicalNotes: string | null
+    isRecurring: boolean | null
+    recurrencePattern: string | null
+    recurrenceInterval: number | null
+    recurrenceEndDate: Date | null
+    seriesId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9703,6 +10117,12 @@ export namespace Prisma {
     endTime: Date | null
     status: $Enums.AppointmentStatus | null
     notes: string | null
+    clinicalNotes: string | null
+    isRecurring: boolean | null
+    recurrencePattern: string | null
+    recurrenceInterval: number | null
+    recurrenceEndDate: Date | null
+    seriesId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9717,11 +10137,25 @@ export namespace Prisma {
     endTime: number
     status: number
     notes: number
+    clinicalNotes: number
+    isRecurring: number
+    recurrencePattern: number
+    recurrenceInterval: number
+    recurrenceEndDate: number
+    seriesId: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
+
+  export type AppointmentAvgAggregateInputType = {
+    recurrenceInterval?: true
+  }
+
+  export type AppointmentSumAggregateInputType = {
+    recurrenceInterval?: true
+  }
 
   export type AppointmentMinAggregateInputType = {
     id?: true
@@ -9733,6 +10167,12 @@ export namespace Prisma {
     endTime?: true
     status?: true
     notes?: true
+    clinicalNotes?: true
+    isRecurring?: true
+    recurrencePattern?: true
+    recurrenceInterval?: true
+    recurrenceEndDate?: true
+    seriesId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9747,6 +10187,12 @@ export namespace Prisma {
     endTime?: true
     status?: true
     notes?: true
+    clinicalNotes?: true
+    isRecurring?: true
+    recurrencePattern?: true
+    recurrenceInterval?: true
+    recurrenceEndDate?: true
+    seriesId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9761,6 +10207,12 @@ export namespace Prisma {
     endTime?: true
     status?: true
     notes?: true
+    clinicalNotes?: true
+    isRecurring?: true
+    recurrencePattern?: true
+    recurrenceInterval?: true
+    recurrenceEndDate?: true
+    seriesId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -9804,6 +10256,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: AppointmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AppointmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: AppointmentMinAggregateInputType
@@ -9834,6 +10298,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: AppointmentCountAggregateInputType | true
+    _avg?: AppointmentAvgAggregateInputType
+    _sum?: AppointmentSumAggregateInputType
     _min?: AppointmentMinAggregateInputType
     _max?: AppointmentMaxAggregateInputType
   }
@@ -9848,9 +10314,17 @@ export namespace Prisma {
     endTime: Date
     status: $Enums.AppointmentStatus
     notes: string | null
+    clinicalNotes: string | null
+    isRecurring: boolean
+    recurrencePattern: string | null
+    recurrenceInterval: number | null
+    recurrenceEndDate: Date | null
+    seriesId: string | null
     createdAt: Date
     updatedAt: Date
     _count: AppointmentCountAggregateOutputType | null
+    _avg: AppointmentAvgAggregateOutputType | null
+    _sum: AppointmentSumAggregateOutputType | null
     _min: AppointmentMinAggregateOutputType | null
     _max: AppointmentMaxAggregateOutputType | null
   }
@@ -9879,6 +10353,12 @@ export namespace Prisma {
     endTime?: boolean
     status?: boolean
     notes?: boolean
+    clinicalNotes?: boolean
+    isRecurring?: boolean
+    recurrencePattern?: boolean
+    recurrenceInterval?: boolean
+    recurrenceEndDate?: boolean
+    seriesId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     patient?: boolean | PatientDefaultArgs<ExtArgs>
@@ -9897,6 +10377,12 @@ export namespace Prisma {
     endTime?: boolean
     status?: boolean
     notes?: boolean
+    clinicalNotes?: boolean
+    isRecurring?: boolean
+    recurrencePattern?: boolean
+    recurrenceInterval?: boolean
+    recurrenceEndDate?: boolean
+    seriesId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     patient?: boolean | PatientDefaultArgs<ExtArgs>
@@ -9913,6 +10399,12 @@ export namespace Prisma {
     endTime?: boolean
     status?: boolean
     notes?: boolean
+    clinicalNotes?: boolean
+    isRecurring?: boolean
+    recurrencePattern?: boolean
+    recurrenceInterval?: boolean
+    recurrenceEndDate?: boolean
+    seriesId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     patient?: boolean | PatientDefaultArgs<ExtArgs>
@@ -9929,11 +10421,17 @@ export namespace Prisma {
     endTime?: boolean
     status?: boolean
     notes?: boolean
+    clinicalNotes?: boolean
+    isRecurring?: boolean
+    recurrencePattern?: boolean
+    recurrenceInterval?: boolean
+    recurrenceEndDate?: boolean
+    seriesId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AppointmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "patientId" | "dentistId" | "title" | "description" | "startTime" | "endTime" | "status" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["appointment"]>
+  export type AppointmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "patientId" | "dentistId" | "title" | "description" | "startTime" | "endTime" | "status" | "notes" | "clinicalNotes" | "isRecurring" | "recurrencePattern" | "recurrenceInterval" | "recurrenceEndDate" | "seriesId" | "createdAt" | "updatedAt", ExtArgs["result"]["appointment"]>
   export type AppointmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     patient?: boolean | PatientDefaultArgs<ExtArgs>
     dentist?: boolean | UserDefaultArgs<ExtArgs>
@@ -9966,6 +10464,12 @@ export namespace Prisma {
       endTime: Date
       status: $Enums.AppointmentStatus
       notes: string | null
+      clinicalNotes: string | null
+      isRecurring: boolean
+      recurrencePattern: string | null
+      recurrenceInterval: number | null
+      recurrenceEndDate: Date | null
+      seriesId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["appointment"]>
@@ -10403,6 +10907,12 @@ export namespace Prisma {
     readonly endTime: FieldRef<"Appointment", 'DateTime'>
     readonly status: FieldRef<"Appointment", 'AppointmentStatus'>
     readonly notes: FieldRef<"Appointment", 'String'>
+    readonly clinicalNotes: FieldRef<"Appointment", 'String'>
+    readonly isRecurring: FieldRef<"Appointment", 'Boolean'>
+    readonly recurrencePattern: FieldRef<"Appointment", 'String'>
+    readonly recurrenceInterval: FieldRef<"Appointment", 'Int'>
+    readonly recurrenceEndDate: FieldRef<"Appointment", 'DateTime'>
+    readonly seriesId: FieldRef<"Appointment", 'String'>
     readonly createdAt: FieldRef<"Appointment", 'DateTime'>
     readonly updatedAt: FieldRef<"Appointment", 'DateTime'>
   }
@@ -18296,6 +18806,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     transactions?: boolean | Supply$transactionsArgs<ExtArgs>
+    procedureSupplies?: boolean | Supply$procedureSuppliesArgs<ExtArgs>
     _count?: boolean | SupplyCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["supply"]>
 
@@ -18356,6 +18867,7 @@ export namespace Prisma {
   export type SupplyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "category" | "sku" | "description" | "unit" | "currentStock" | "minimumStock" | "costPerUnit" | "supplier" | "location" | "expiryDate" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["supply"]>
   export type SupplyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     transactions?: boolean | Supply$transactionsArgs<ExtArgs>
+    procedureSupplies?: boolean | Supply$procedureSuppliesArgs<ExtArgs>
     _count?: boolean | SupplyCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SupplyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -18365,6 +18877,7 @@ export namespace Prisma {
     name: "Supply"
     objects: {
       transactions: Prisma.$StockTransactionPayload<ExtArgs>[]
+      procedureSupplies: Prisma.$ProcedureSupplyPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -18777,6 +19290,7 @@ export namespace Prisma {
   export interface Prisma__SupplyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     transactions<T extends Supply$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, Supply$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StockTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    procedureSupplies<T extends Supply$procedureSuppliesArgs<ExtArgs> = {}>(args?: Subset<T, Supply$procedureSuppliesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcedureSupplyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19228,6 +19742,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: StockTransactionScalarFieldEnum | StockTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Supply.procedureSupplies
+   */
+  export type Supply$procedureSuppliesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureSupply
+     */
+    select?: ProcedureSupplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureSupply
+     */
+    omit?: ProcedureSupplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureSupplyInclude<ExtArgs> | null
+    where?: ProcedureSupplyWhereInput
+    orderBy?: ProcedureSupplyOrderByWithRelationInput | ProcedureSupplyOrderByWithRelationInput[]
+    cursor?: ProcedureSupplyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProcedureSupplyScalarFieldEnum | ProcedureSupplyScalarFieldEnum[]
   }
 
   /**
@@ -20366,6 +20904,3430 @@ export namespace Prisma {
 
 
   /**
+   * Model ProcedureCatalog
+   */
+
+  export type AggregateProcedureCatalog = {
+    _count: ProcedureCatalogCountAggregateOutputType | null
+    _avg: ProcedureCatalogAvgAggregateOutputType | null
+    _sum: ProcedureCatalogSumAggregateOutputType | null
+    _min: ProcedureCatalogMinAggregateOutputType | null
+    _max: ProcedureCatalogMaxAggregateOutputType | null
+  }
+
+  export type ProcedureCatalogAvgAggregateOutputType = {
+    defaultCost: number | null
+    estimatedDuration: number | null
+  }
+
+  export type ProcedureCatalogSumAggregateOutputType = {
+    defaultCost: number | null
+    estimatedDuration: number | null
+  }
+
+  export type ProcedureCatalogMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    code: string | null
+    description: string | null
+    defaultCost: number | null
+    category: $Enums.ProcedureCategory | null
+    estimatedDuration: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProcedureCatalogMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    code: string | null
+    description: string | null
+    defaultCost: number | null
+    category: $Enums.ProcedureCategory | null
+    estimatedDuration: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProcedureCatalogCountAggregateOutputType = {
+    id: number
+    name: number
+    code: number
+    description: number
+    defaultCost: number
+    category: number
+    estimatedDuration: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ProcedureCatalogAvgAggregateInputType = {
+    defaultCost?: true
+    estimatedDuration?: true
+  }
+
+  export type ProcedureCatalogSumAggregateInputType = {
+    defaultCost?: true
+    estimatedDuration?: true
+  }
+
+  export type ProcedureCatalogMinAggregateInputType = {
+    id?: true
+    name?: true
+    code?: true
+    description?: true
+    defaultCost?: true
+    category?: true
+    estimatedDuration?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProcedureCatalogMaxAggregateInputType = {
+    id?: true
+    name?: true
+    code?: true
+    description?: true
+    defaultCost?: true
+    category?: true
+    estimatedDuration?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProcedureCatalogCountAggregateInputType = {
+    id?: true
+    name?: true
+    code?: true
+    description?: true
+    defaultCost?: true
+    category?: true
+    estimatedDuration?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProcedureCatalogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProcedureCatalog to aggregate.
+     */
+    where?: ProcedureCatalogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProcedureCatalogs to fetch.
+     */
+    orderBy?: ProcedureCatalogOrderByWithRelationInput | ProcedureCatalogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProcedureCatalogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProcedureCatalogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProcedureCatalogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProcedureCatalogs
+    **/
+    _count?: true | ProcedureCatalogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProcedureCatalogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProcedureCatalogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProcedureCatalogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProcedureCatalogMaxAggregateInputType
+  }
+
+  export type GetProcedureCatalogAggregateType<T extends ProcedureCatalogAggregateArgs> = {
+        [P in keyof T & keyof AggregateProcedureCatalog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProcedureCatalog[P]>
+      : GetScalarType<T[P], AggregateProcedureCatalog[P]>
+  }
+
+
+
+
+  export type ProcedureCatalogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProcedureCatalogWhereInput
+    orderBy?: ProcedureCatalogOrderByWithAggregationInput | ProcedureCatalogOrderByWithAggregationInput[]
+    by: ProcedureCatalogScalarFieldEnum[] | ProcedureCatalogScalarFieldEnum
+    having?: ProcedureCatalogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProcedureCatalogCountAggregateInputType | true
+    _avg?: ProcedureCatalogAvgAggregateInputType
+    _sum?: ProcedureCatalogSumAggregateInputType
+    _min?: ProcedureCatalogMinAggregateInputType
+    _max?: ProcedureCatalogMaxAggregateInputType
+  }
+
+  export type ProcedureCatalogGroupByOutputType = {
+    id: string
+    name: string
+    code: string | null
+    description: string | null
+    defaultCost: number
+    category: $Enums.ProcedureCategory
+    estimatedDuration: number | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: ProcedureCatalogCountAggregateOutputType | null
+    _avg: ProcedureCatalogAvgAggregateOutputType | null
+    _sum: ProcedureCatalogSumAggregateOutputType | null
+    _min: ProcedureCatalogMinAggregateOutputType | null
+    _max: ProcedureCatalogMaxAggregateOutputType | null
+  }
+
+  type GetProcedureCatalogGroupByPayload<T extends ProcedureCatalogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProcedureCatalogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProcedureCatalogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProcedureCatalogGroupByOutputType[P]>
+            : GetScalarType<T[P], ProcedureCatalogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProcedureCatalogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    code?: boolean
+    description?: boolean
+    defaultCost?: boolean
+    category?: boolean
+    estimatedDuration?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    procedureSupplies?: boolean | ProcedureCatalog$procedureSuppliesArgs<ExtArgs>
+    _count?: boolean | ProcedureCatalogCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["procedureCatalog"]>
+
+  export type ProcedureCatalogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    code?: boolean
+    description?: boolean
+    defaultCost?: boolean
+    category?: boolean
+    estimatedDuration?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["procedureCatalog"]>
+
+  export type ProcedureCatalogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    code?: boolean
+    description?: boolean
+    defaultCost?: boolean
+    category?: boolean
+    estimatedDuration?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["procedureCatalog"]>
+
+  export type ProcedureCatalogSelectScalar = {
+    id?: boolean
+    name?: boolean
+    code?: boolean
+    description?: boolean
+    defaultCost?: boolean
+    category?: boolean
+    estimatedDuration?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProcedureCatalogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "code" | "description" | "defaultCost" | "category" | "estimatedDuration" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["procedureCatalog"]>
+  export type ProcedureCatalogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    procedureSupplies?: boolean | ProcedureCatalog$procedureSuppliesArgs<ExtArgs>
+    _count?: boolean | ProcedureCatalogCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ProcedureCatalogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ProcedureCatalogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ProcedureCatalogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProcedureCatalog"
+    objects: {
+      procedureSupplies: Prisma.$ProcedureSupplyPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      code: string | null
+      description: string | null
+      defaultCost: number
+      category: $Enums.ProcedureCategory
+      estimatedDuration: number | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["procedureCatalog"]>
+    composites: {}
+  }
+
+  type ProcedureCatalogGetPayload<S extends boolean | null | undefined | ProcedureCatalogDefaultArgs> = $Result.GetResult<Prisma.$ProcedureCatalogPayload, S>
+
+  type ProcedureCatalogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProcedureCatalogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProcedureCatalogCountAggregateInputType | true
+    }
+
+  export interface ProcedureCatalogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProcedureCatalog'], meta: { name: 'ProcedureCatalog' } }
+    /**
+     * Find zero or one ProcedureCatalog that matches the filter.
+     * @param {ProcedureCatalogFindUniqueArgs} args - Arguments to find a ProcedureCatalog
+     * @example
+     * // Get one ProcedureCatalog
+     * const procedureCatalog = await prisma.procedureCatalog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProcedureCatalogFindUniqueArgs>(args: SelectSubset<T, ProcedureCatalogFindUniqueArgs<ExtArgs>>): Prisma__ProcedureCatalogClient<$Result.GetResult<Prisma.$ProcedureCatalogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProcedureCatalog that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProcedureCatalogFindUniqueOrThrowArgs} args - Arguments to find a ProcedureCatalog
+     * @example
+     * // Get one ProcedureCatalog
+     * const procedureCatalog = await prisma.procedureCatalog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProcedureCatalogFindUniqueOrThrowArgs>(args: SelectSubset<T, ProcedureCatalogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProcedureCatalogClient<$Result.GetResult<Prisma.$ProcedureCatalogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProcedureCatalog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureCatalogFindFirstArgs} args - Arguments to find a ProcedureCatalog
+     * @example
+     * // Get one ProcedureCatalog
+     * const procedureCatalog = await prisma.procedureCatalog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProcedureCatalogFindFirstArgs>(args?: SelectSubset<T, ProcedureCatalogFindFirstArgs<ExtArgs>>): Prisma__ProcedureCatalogClient<$Result.GetResult<Prisma.$ProcedureCatalogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProcedureCatalog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureCatalogFindFirstOrThrowArgs} args - Arguments to find a ProcedureCatalog
+     * @example
+     * // Get one ProcedureCatalog
+     * const procedureCatalog = await prisma.procedureCatalog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProcedureCatalogFindFirstOrThrowArgs>(args?: SelectSubset<T, ProcedureCatalogFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProcedureCatalogClient<$Result.GetResult<Prisma.$ProcedureCatalogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProcedureCatalogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureCatalogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProcedureCatalogs
+     * const procedureCatalogs = await prisma.procedureCatalog.findMany()
+     * 
+     * // Get first 10 ProcedureCatalogs
+     * const procedureCatalogs = await prisma.procedureCatalog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const procedureCatalogWithIdOnly = await prisma.procedureCatalog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProcedureCatalogFindManyArgs>(args?: SelectSubset<T, ProcedureCatalogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcedureCatalogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProcedureCatalog.
+     * @param {ProcedureCatalogCreateArgs} args - Arguments to create a ProcedureCatalog.
+     * @example
+     * // Create one ProcedureCatalog
+     * const ProcedureCatalog = await prisma.procedureCatalog.create({
+     *   data: {
+     *     // ... data to create a ProcedureCatalog
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProcedureCatalogCreateArgs>(args: SelectSubset<T, ProcedureCatalogCreateArgs<ExtArgs>>): Prisma__ProcedureCatalogClient<$Result.GetResult<Prisma.$ProcedureCatalogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProcedureCatalogs.
+     * @param {ProcedureCatalogCreateManyArgs} args - Arguments to create many ProcedureCatalogs.
+     * @example
+     * // Create many ProcedureCatalogs
+     * const procedureCatalog = await prisma.procedureCatalog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProcedureCatalogCreateManyArgs>(args?: SelectSubset<T, ProcedureCatalogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProcedureCatalogs and returns the data saved in the database.
+     * @param {ProcedureCatalogCreateManyAndReturnArgs} args - Arguments to create many ProcedureCatalogs.
+     * @example
+     * // Create many ProcedureCatalogs
+     * const procedureCatalog = await prisma.procedureCatalog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProcedureCatalogs and only return the `id`
+     * const procedureCatalogWithIdOnly = await prisma.procedureCatalog.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProcedureCatalogCreateManyAndReturnArgs>(args?: SelectSubset<T, ProcedureCatalogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcedureCatalogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProcedureCatalog.
+     * @param {ProcedureCatalogDeleteArgs} args - Arguments to delete one ProcedureCatalog.
+     * @example
+     * // Delete one ProcedureCatalog
+     * const ProcedureCatalog = await prisma.procedureCatalog.delete({
+     *   where: {
+     *     // ... filter to delete one ProcedureCatalog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProcedureCatalogDeleteArgs>(args: SelectSubset<T, ProcedureCatalogDeleteArgs<ExtArgs>>): Prisma__ProcedureCatalogClient<$Result.GetResult<Prisma.$ProcedureCatalogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProcedureCatalog.
+     * @param {ProcedureCatalogUpdateArgs} args - Arguments to update one ProcedureCatalog.
+     * @example
+     * // Update one ProcedureCatalog
+     * const procedureCatalog = await prisma.procedureCatalog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProcedureCatalogUpdateArgs>(args: SelectSubset<T, ProcedureCatalogUpdateArgs<ExtArgs>>): Prisma__ProcedureCatalogClient<$Result.GetResult<Prisma.$ProcedureCatalogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProcedureCatalogs.
+     * @param {ProcedureCatalogDeleteManyArgs} args - Arguments to filter ProcedureCatalogs to delete.
+     * @example
+     * // Delete a few ProcedureCatalogs
+     * const { count } = await prisma.procedureCatalog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProcedureCatalogDeleteManyArgs>(args?: SelectSubset<T, ProcedureCatalogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProcedureCatalogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureCatalogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProcedureCatalogs
+     * const procedureCatalog = await prisma.procedureCatalog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProcedureCatalogUpdateManyArgs>(args: SelectSubset<T, ProcedureCatalogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProcedureCatalogs and returns the data updated in the database.
+     * @param {ProcedureCatalogUpdateManyAndReturnArgs} args - Arguments to update many ProcedureCatalogs.
+     * @example
+     * // Update many ProcedureCatalogs
+     * const procedureCatalog = await prisma.procedureCatalog.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProcedureCatalogs and only return the `id`
+     * const procedureCatalogWithIdOnly = await prisma.procedureCatalog.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProcedureCatalogUpdateManyAndReturnArgs>(args: SelectSubset<T, ProcedureCatalogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcedureCatalogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProcedureCatalog.
+     * @param {ProcedureCatalogUpsertArgs} args - Arguments to update or create a ProcedureCatalog.
+     * @example
+     * // Update or create a ProcedureCatalog
+     * const procedureCatalog = await prisma.procedureCatalog.upsert({
+     *   create: {
+     *     // ... data to create a ProcedureCatalog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProcedureCatalog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProcedureCatalogUpsertArgs>(args: SelectSubset<T, ProcedureCatalogUpsertArgs<ExtArgs>>): Prisma__ProcedureCatalogClient<$Result.GetResult<Prisma.$ProcedureCatalogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProcedureCatalogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureCatalogCountArgs} args - Arguments to filter ProcedureCatalogs to count.
+     * @example
+     * // Count the number of ProcedureCatalogs
+     * const count = await prisma.procedureCatalog.count({
+     *   where: {
+     *     // ... the filter for the ProcedureCatalogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProcedureCatalogCountArgs>(
+      args?: Subset<T, ProcedureCatalogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProcedureCatalogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProcedureCatalog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureCatalogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProcedureCatalogAggregateArgs>(args: Subset<T, ProcedureCatalogAggregateArgs>): Prisma.PrismaPromise<GetProcedureCatalogAggregateType<T>>
+
+    /**
+     * Group by ProcedureCatalog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureCatalogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProcedureCatalogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProcedureCatalogGroupByArgs['orderBy'] }
+        : { orderBy?: ProcedureCatalogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProcedureCatalogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProcedureCatalogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProcedureCatalog model
+   */
+  readonly fields: ProcedureCatalogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProcedureCatalog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProcedureCatalogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    procedureSupplies<T extends ProcedureCatalog$procedureSuppliesArgs<ExtArgs> = {}>(args?: Subset<T, ProcedureCatalog$procedureSuppliesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcedureSupplyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProcedureCatalog model
+   */
+  interface ProcedureCatalogFieldRefs {
+    readonly id: FieldRef<"ProcedureCatalog", 'String'>
+    readonly name: FieldRef<"ProcedureCatalog", 'String'>
+    readonly code: FieldRef<"ProcedureCatalog", 'String'>
+    readonly description: FieldRef<"ProcedureCatalog", 'String'>
+    readonly defaultCost: FieldRef<"ProcedureCatalog", 'Float'>
+    readonly category: FieldRef<"ProcedureCatalog", 'ProcedureCategory'>
+    readonly estimatedDuration: FieldRef<"ProcedureCatalog", 'Int'>
+    readonly isActive: FieldRef<"ProcedureCatalog", 'Boolean'>
+    readonly createdAt: FieldRef<"ProcedureCatalog", 'DateTime'>
+    readonly updatedAt: FieldRef<"ProcedureCatalog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProcedureCatalog findUnique
+   */
+  export type ProcedureCatalogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureCatalog
+     */
+    select?: ProcedureCatalogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureCatalog
+     */
+    omit?: ProcedureCatalogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureCatalogInclude<ExtArgs> | null
+    /**
+     * Filter, which ProcedureCatalog to fetch.
+     */
+    where: ProcedureCatalogWhereUniqueInput
+  }
+
+  /**
+   * ProcedureCatalog findUniqueOrThrow
+   */
+  export type ProcedureCatalogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureCatalog
+     */
+    select?: ProcedureCatalogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureCatalog
+     */
+    omit?: ProcedureCatalogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureCatalogInclude<ExtArgs> | null
+    /**
+     * Filter, which ProcedureCatalog to fetch.
+     */
+    where: ProcedureCatalogWhereUniqueInput
+  }
+
+  /**
+   * ProcedureCatalog findFirst
+   */
+  export type ProcedureCatalogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureCatalog
+     */
+    select?: ProcedureCatalogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureCatalog
+     */
+    omit?: ProcedureCatalogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureCatalogInclude<ExtArgs> | null
+    /**
+     * Filter, which ProcedureCatalog to fetch.
+     */
+    where?: ProcedureCatalogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProcedureCatalogs to fetch.
+     */
+    orderBy?: ProcedureCatalogOrderByWithRelationInput | ProcedureCatalogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProcedureCatalogs.
+     */
+    cursor?: ProcedureCatalogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProcedureCatalogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProcedureCatalogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProcedureCatalogs.
+     */
+    distinct?: ProcedureCatalogScalarFieldEnum | ProcedureCatalogScalarFieldEnum[]
+  }
+
+  /**
+   * ProcedureCatalog findFirstOrThrow
+   */
+  export type ProcedureCatalogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureCatalog
+     */
+    select?: ProcedureCatalogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureCatalog
+     */
+    omit?: ProcedureCatalogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureCatalogInclude<ExtArgs> | null
+    /**
+     * Filter, which ProcedureCatalog to fetch.
+     */
+    where?: ProcedureCatalogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProcedureCatalogs to fetch.
+     */
+    orderBy?: ProcedureCatalogOrderByWithRelationInput | ProcedureCatalogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProcedureCatalogs.
+     */
+    cursor?: ProcedureCatalogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProcedureCatalogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProcedureCatalogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProcedureCatalogs.
+     */
+    distinct?: ProcedureCatalogScalarFieldEnum | ProcedureCatalogScalarFieldEnum[]
+  }
+
+  /**
+   * ProcedureCatalog findMany
+   */
+  export type ProcedureCatalogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureCatalog
+     */
+    select?: ProcedureCatalogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureCatalog
+     */
+    omit?: ProcedureCatalogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureCatalogInclude<ExtArgs> | null
+    /**
+     * Filter, which ProcedureCatalogs to fetch.
+     */
+    where?: ProcedureCatalogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProcedureCatalogs to fetch.
+     */
+    orderBy?: ProcedureCatalogOrderByWithRelationInput | ProcedureCatalogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProcedureCatalogs.
+     */
+    cursor?: ProcedureCatalogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProcedureCatalogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProcedureCatalogs.
+     */
+    skip?: number
+    distinct?: ProcedureCatalogScalarFieldEnum | ProcedureCatalogScalarFieldEnum[]
+  }
+
+  /**
+   * ProcedureCatalog create
+   */
+  export type ProcedureCatalogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureCatalog
+     */
+    select?: ProcedureCatalogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureCatalog
+     */
+    omit?: ProcedureCatalogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureCatalogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProcedureCatalog.
+     */
+    data: XOR<ProcedureCatalogCreateInput, ProcedureCatalogUncheckedCreateInput>
+  }
+
+  /**
+   * ProcedureCatalog createMany
+   */
+  export type ProcedureCatalogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProcedureCatalogs.
+     */
+    data: ProcedureCatalogCreateManyInput | ProcedureCatalogCreateManyInput[]
+  }
+
+  /**
+   * ProcedureCatalog createManyAndReturn
+   */
+  export type ProcedureCatalogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureCatalog
+     */
+    select?: ProcedureCatalogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureCatalog
+     */
+    omit?: ProcedureCatalogOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProcedureCatalogs.
+     */
+    data: ProcedureCatalogCreateManyInput | ProcedureCatalogCreateManyInput[]
+  }
+
+  /**
+   * ProcedureCatalog update
+   */
+  export type ProcedureCatalogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureCatalog
+     */
+    select?: ProcedureCatalogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureCatalog
+     */
+    omit?: ProcedureCatalogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureCatalogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProcedureCatalog.
+     */
+    data: XOR<ProcedureCatalogUpdateInput, ProcedureCatalogUncheckedUpdateInput>
+    /**
+     * Choose, which ProcedureCatalog to update.
+     */
+    where: ProcedureCatalogWhereUniqueInput
+  }
+
+  /**
+   * ProcedureCatalog updateMany
+   */
+  export type ProcedureCatalogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProcedureCatalogs.
+     */
+    data: XOR<ProcedureCatalogUpdateManyMutationInput, ProcedureCatalogUncheckedUpdateManyInput>
+    /**
+     * Filter which ProcedureCatalogs to update
+     */
+    where?: ProcedureCatalogWhereInput
+    /**
+     * Limit how many ProcedureCatalogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProcedureCatalog updateManyAndReturn
+   */
+  export type ProcedureCatalogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureCatalog
+     */
+    select?: ProcedureCatalogSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureCatalog
+     */
+    omit?: ProcedureCatalogOmit<ExtArgs> | null
+    /**
+     * The data used to update ProcedureCatalogs.
+     */
+    data: XOR<ProcedureCatalogUpdateManyMutationInput, ProcedureCatalogUncheckedUpdateManyInput>
+    /**
+     * Filter which ProcedureCatalogs to update
+     */
+    where?: ProcedureCatalogWhereInput
+    /**
+     * Limit how many ProcedureCatalogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProcedureCatalog upsert
+   */
+  export type ProcedureCatalogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureCatalog
+     */
+    select?: ProcedureCatalogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureCatalog
+     */
+    omit?: ProcedureCatalogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureCatalogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProcedureCatalog to update in case it exists.
+     */
+    where: ProcedureCatalogWhereUniqueInput
+    /**
+     * In case the ProcedureCatalog found by the `where` argument doesn't exist, create a new ProcedureCatalog with this data.
+     */
+    create: XOR<ProcedureCatalogCreateInput, ProcedureCatalogUncheckedCreateInput>
+    /**
+     * In case the ProcedureCatalog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProcedureCatalogUpdateInput, ProcedureCatalogUncheckedUpdateInput>
+  }
+
+  /**
+   * ProcedureCatalog delete
+   */
+  export type ProcedureCatalogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureCatalog
+     */
+    select?: ProcedureCatalogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureCatalog
+     */
+    omit?: ProcedureCatalogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureCatalogInclude<ExtArgs> | null
+    /**
+     * Filter which ProcedureCatalog to delete.
+     */
+    where: ProcedureCatalogWhereUniqueInput
+  }
+
+  /**
+   * ProcedureCatalog deleteMany
+   */
+  export type ProcedureCatalogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProcedureCatalogs to delete
+     */
+    where?: ProcedureCatalogWhereInput
+    /**
+     * Limit how many ProcedureCatalogs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProcedureCatalog.procedureSupplies
+   */
+  export type ProcedureCatalog$procedureSuppliesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureSupply
+     */
+    select?: ProcedureSupplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureSupply
+     */
+    omit?: ProcedureSupplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureSupplyInclude<ExtArgs> | null
+    where?: ProcedureSupplyWhereInput
+    orderBy?: ProcedureSupplyOrderByWithRelationInput | ProcedureSupplyOrderByWithRelationInput[]
+    cursor?: ProcedureSupplyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProcedureSupplyScalarFieldEnum | ProcedureSupplyScalarFieldEnum[]
+  }
+
+  /**
+   * ProcedureCatalog without action
+   */
+  export type ProcedureCatalogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureCatalog
+     */
+    select?: ProcedureCatalogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureCatalog
+     */
+    omit?: ProcedureCatalogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureCatalogInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RecallSchedule
+   */
+
+  export type AggregateRecallSchedule = {
+    _count: RecallScheduleCountAggregateOutputType | null
+    _avg: RecallScheduleAvgAggregateOutputType | null
+    _sum: RecallScheduleSumAggregateOutputType | null
+    _min: RecallScheduleMinAggregateOutputType | null
+    _max: RecallScheduleMaxAggregateOutputType | null
+  }
+
+  export type RecallScheduleAvgAggregateOutputType = {
+    intervalMonths: number | null
+  }
+
+  export type RecallScheduleSumAggregateOutputType = {
+    intervalMonths: number | null
+  }
+
+  export type RecallScheduleMinAggregateOutputType = {
+    id: string | null
+    patientId: string | null
+    recallType: $Enums.RecallType | null
+    intervalMonths: number | null
+    lastVisitDate: Date | null
+    nextDueDate: Date | null
+    status: $Enums.RecallStatus | null
+    notes: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RecallScheduleMaxAggregateOutputType = {
+    id: string | null
+    patientId: string | null
+    recallType: $Enums.RecallType | null
+    intervalMonths: number | null
+    lastVisitDate: Date | null
+    nextDueDate: Date | null
+    status: $Enums.RecallStatus | null
+    notes: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RecallScheduleCountAggregateOutputType = {
+    id: number
+    patientId: number
+    recallType: number
+    intervalMonths: number
+    lastVisitDate: number
+    nextDueDate: number
+    status: number
+    notes: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RecallScheduleAvgAggregateInputType = {
+    intervalMonths?: true
+  }
+
+  export type RecallScheduleSumAggregateInputType = {
+    intervalMonths?: true
+  }
+
+  export type RecallScheduleMinAggregateInputType = {
+    id?: true
+    patientId?: true
+    recallType?: true
+    intervalMonths?: true
+    lastVisitDate?: true
+    nextDueDate?: true
+    status?: true
+    notes?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RecallScheduleMaxAggregateInputType = {
+    id?: true
+    patientId?: true
+    recallType?: true
+    intervalMonths?: true
+    lastVisitDate?: true
+    nextDueDate?: true
+    status?: true
+    notes?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RecallScheduleCountAggregateInputType = {
+    id?: true
+    patientId?: true
+    recallType?: true
+    intervalMonths?: true
+    lastVisitDate?: true
+    nextDueDate?: true
+    status?: true
+    notes?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RecallScheduleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RecallSchedule to aggregate.
+     */
+    where?: RecallScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecallSchedules to fetch.
+     */
+    orderBy?: RecallScheduleOrderByWithRelationInput | RecallScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RecallScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecallSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecallSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RecallSchedules
+    **/
+    _count?: true | RecallScheduleCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RecallScheduleAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RecallScheduleSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RecallScheduleMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RecallScheduleMaxAggregateInputType
+  }
+
+  export type GetRecallScheduleAggregateType<T extends RecallScheduleAggregateArgs> = {
+        [P in keyof T & keyof AggregateRecallSchedule]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRecallSchedule[P]>
+      : GetScalarType<T[P], AggregateRecallSchedule[P]>
+  }
+
+
+
+
+  export type RecallScheduleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RecallScheduleWhereInput
+    orderBy?: RecallScheduleOrderByWithAggregationInput | RecallScheduleOrderByWithAggregationInput[]
+    by: RecallScheduleScalarFieldEnum[] | RecallScheduleScalarFieldEnum
+    having?: RecallScheduleScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RecallScheduleCountAggregateInputType | true
+    _avg?: RecallScheduleAvgAggregateInputType
+    _sum?: RecallScheduleSumAggregateInputType
+    _min?: RecallScheduleMinAggregateInputType
+    _max?: RecallScheduleMaxAggregateInputType
+  }
+
+  export type RecallScheduleGroupByOutputType = {
+    id: string
+    patientId: string
+    recallType: $Enums.RecallType
+    intervalMonths: number
+    lastVisitDate: Date | null
+    nextDueDate: Date
+    status: $Enums.RecallStatus
+    notes: string | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: RecallScheduleCountAggregateOutputType | null
+    _avg: RecallScheduleAvgAggregateOutputType | null
+    _sum: RecallScheduleSumAggregateOutputType | null
+    _min: RecallScheduleMinAggregateOutputType | null
+    _max: RecallScheduleMaxAggregateOutputType | null
+  }
+
+  type GetRecallScheduleGroupByPayload<T extends RecallScheduleGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RecallScheduleGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RecallScheduleGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RecallScheduleGroupByOutputType[P]>
+            : GetScalarType<T[P], RecallScheduleGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RecallScheduleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    patientId?: boolean
+    recallType?: boolean
+    intervalMonths?: boolean
+    lastVisitDate?: boolean
+    nextDueDate?: boolean
+    status?: boolean
+    notes?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["recallSchedule"]>
+
+  export type RecallScheduleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    patientId?: boolean
+    recallType?: boolean
+    intervalMonths?: boolean
+    lastVisitDate?: boolean
+    nextDueDate?: boolean
+    status?: boolean
+    notes?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["recallSchedule"]>
+
+  export type RecallScheduleSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    patientId?: boolean
+    recallType?: boolean
+    intervalMonths?: boolean
+    lastVisitDate?: boolean
+    nextDueDate?: boolean
+    status?: boolean
+    notes?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["recallSchedule"]>
+
+  export type RecallScheduleSelectScalar = {
+    id?: boolean
+    patientId?: boolean
+    recallType?: boolean
+    intervalMonths?: boolean
+    lastVisitDate?: boolean
+    nextDueDate?: boolean
+    status?: boolean
+    notes?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RecallScheduleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "patientId" | "recallType" | "intervalMonths" | "lastVisitDate" | "nextDueDate" | "status" | "notes" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["recallSchedule"]>
+  export type RecallScheduleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }
+  export type RecallScheduleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }
+  export type RecallScheduleIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    patient?: boolean | PatientDefaultArgs<ExtArgs>
+  }
+
+  export type $RecallSchedulePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RecallSchedule"
+    objects: {
+      patient: Prisma.$PatientPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      patientId: string
+      recallType: $Enums.RecallType
+      intervalMonths: number
+      lastVisitDate: Date | null
+      nextDueDate: Date
+      status: $Enums.RecallStatus
+      notes: string | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["recallSchedule"]>
+    composites: {}
+  }
+
+  type RecallScheduleGetPayload<S extends boolean | null | undefined | RecallScheduleDefaultArgs> = $Result.GetResult<Prisma.$RecallSchedulePayload, S>
+
+  type RecallScheduleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RecallScheduleFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RecallScheduleCountAggregateInputType | true
+    }
+
+  export interface RecallScheduleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RecallSchedule'], meta: { name: 'RecallSchedule' } }
+    /**
+     * Find zero or one RecallSchedule that matches the filter.
+     * @param {RecallScheduleFindUniqueArgs} args - Arguments to find a RecallSchedule
+     * @example
+     * // Get one RecallSchedule
+     * const recallSchedule = await prisma.recallSchedule.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RecallScheduleFindUniqueArgs>(args: SelectSubset<T, RecallScheduleFindUniqueArgs<ExtArgs>>): Prisma__RecallScheduleClient<$Result.GetResult<Prisma.$RecallSchedulePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RecallSchedule that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RecallScheduleFindUniqueOrThrowArgs} args - Arguments to find a RecallSchedule
+     * @example
+     * // Get one RecallSchedule
+     * const recallSchedule = await prisma.recallSchedule.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RecallScheduleFindUniqueOrThrowArgs>(args: SelectSubset<T, RecallScheduleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RecallScheduleClient<$Result.GetResult<Prisma.$RecallSchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RecallSchedule that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecallScheduleFindFirstArgs} args - Arguments to find a RecallSchedule
+     * @example
+     * // Get one RecallSchedule
+     * const recallSchedule = await prisma.recallSchedule.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RecallScheduleFindFirstArgs>(args?: SelectSubset<T, RecallScheduleFindFirstArgs<ExtArgs>>): Prisma__RecallScheduleClient<$Result.GetResult<Prisma.$RecallSchedulePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RecallSchedule that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecallScheduleFindFirstOrThrowArgs} args - Arguments to find a RecallSchedule
+     * @example
+     * // Get one RecallSchedule
+     * const recallSchedule = await prisma.recallSchedule.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RecallScheduleFindFirstOrThrowArgs>(args?: SelectSubset<T, RecallScheduleFindFirstOrThrowArgs<ExtArgs>>): Prisma__RecallScheduleClient<$Result.GetResult<Prisma.$RecallSchedulePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RecallSchedules that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecallScheduleFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RecallSchedules
+     * const recallSchedules = await prisma.recallSchedule.findMany()
+     * 
+     * // Get first 10 RecallSchedules
+     * const recallSchedules = await prisma.recallSchedule.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const recallScheduleWithIdOnly = await prisma.recallSchedule.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RecallScheduleFindManyArgs>(args?: SelectSubset<T, RecallScheduleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecallSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RecallSchedule.
+     * @param {RecallScheduleCreateArgs} args - Arguments to create a RecallSchedule.
+     * @example
+     * // Create one RecallSchedule
+     * const RecallSchedule = await prisma.recallSchedule.create({
+     *   data: {
+     *     // ... data to create a RecallSchedule
+     *   }
+     * })
+     * 
+     */
+    create<T extends RecallScheduleCreateArgs>(args: SelectSubset<T, RecallScheduleCreateArgs<ExtArgs>>): Prisma__RecallScheduleClient<$Result.GetResult<Prisma.$RecallSchedulePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RecallSchedules.
+     * @param {RecallScheduleCreateManyArgs} args - Arguments to create many RecallSchedules.
+     * @example
+     * // Create many RecallSchedules
+     * const recallSchedule = await prisma.recallSchedule.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RecallScheduleCreateManyArgs>(args?: SelectSubset<T, RecallScheduleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RecallSchedules and returns the data saved in the database.
+     * @param {RecallScheduleCreateManyAndReturnArgs} args - Arguments to create many RecallSchedules.
+     * @example
+     * // Create many RecallSchedules
+     * const recallSchedule = await prisma.recallSchedule.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RecallSchedules and only return the `id`
+     * const recallScheduleWithIdOnly = await prisma.recallSchedule.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RecallScheduleCreateManyAndReturnArgs>(args?: SelectSubset<T, RecallScheduleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecallSchedulePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RecallSchedule.
+     * @param {RecallScheduleDeleteArgs} args - Arguments to delete one RecallSchedule.
+     * @example
+     * // Delete one RecallSchedule
+     * const RecallSchedule = await prisma.recallSchedule.delete({
+     *   where: {
+     *     // ... filter to delete one RecallSchedule
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RecallScheduleDeleteArgs>(args: SelectSubset<T, RecallScheduleDeleteArgs<ExtArgs>>): Prisma__RecallScheduleClient<$Result.GetResult<Prisma.$RecallSchedulePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RecallSchedule.
+     * @param {RecallScheduleUpdateArgs} args - Arguments to update one RecallSchedule.
+     * @example
+     * // Update one RecallSchedule
+     * const recallSchedule = await prisma.recallSchedule.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RecallScheduleUpdateArgs>(args: SelectSubset<T, RecallScheduleUpdateArgs<ExtArgs>>): Prisma__RecallScheduleClient<$Result.GetResult<Prisma.$RecallSchedulePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RecallSchedules.
+     * @param {RecallScheduleDeleteManyArgs} args - Arguments to filter RecallSchedules to delete.
+     * @example
+     * // Delete a few RecallSchedules
+     * const { count } = await prisma.recallSchedule.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RecallScheduleDeleteManyArgs>(args?: SelectSubset<T, RecallScheduleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RecallSchedules.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecallScheduleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RecallSchedules
+     * const recallSchedule = await prisma.recallSchedule.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RecallScheduleUpdateManyArgs>(args: SelectSubset<T, RecallScheduleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RecallSchedules and returns the data updated in the database.
+     * @param {RecallScheduleUpdateManyAndReturnArgs} args - Arguments to update many RecallSchedules.
+     * @example
+     * // Update many RecallSchedules
+     * const recallSchedule = await prisma.recallSchedule.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RecallSchedules and only return the `id`
+     * const recallScheduleWithIdOnly = await prisma.recallSchedule.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RecallScheduleUpdateManyAndReturnArgs>(args: SelectSubset<T, RecallScheduleUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecallSchedulePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RecallSchedule.
+     * @param {RecallScheduleUpsertArgs} args - Arguments to update or create a RecallSchedule.
+     * @example
+     * // Update or create a RecallSchedule
+     * const recallSchedule = await prisma.recallSchedule.upsert({
+     *   create: {
+     *     // ... data to create a RecallSchedule
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RecallSchedule we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RecallScheduleUpsertArgs>(args: SelectSubset<T, RecallScheduleUpsertArgs<ExtArgs>>): Prisma__RecallScheduleClient<$Result.GetResult<Prisma.$RecallSchedulePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RecallSchedules.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecallScheduleCountArgs} args - Arguments to filter RecallSchedules to count.
+     * @example
+     * // Count the number of RecallSchedules
+     * const count = await prisma.recallSchedule.count({
+     *   where: {
+     *     // ... the filter for the RecallSchedules we want to count
+     *   }
+     * })
+    **/
+    count<T extends RecallScheduleCountArgs>(
+      args?: Subset<T, RecallScheduleCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RecallScheduleCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RecallSchedule.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecallScheduleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RecallScheduleAggregateArgs>(args: Subset<T, RecallScheduleAggregateArgs>): Prisma.PrismaPromise<GetRecallScheduleAggregateType<T>>
+
+    /**
+     * Group by RecallSchedule.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecallScheduleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RecallScheduleGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RecallScheduleGroupByArgs['orderBy'] }
+        : { orderBy?: RecallScheduleGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RecallScheduleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRecallScheduleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RecallSchedule model
+   */
+  readonly fields: RecallScheduleFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RecallSchedule.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RecallScheduleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    patient<T extends PatientDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PatientDefaultArgs<ExtArgs>>): Prisma__PatientClient<$Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RecallSchedule model
+   */
+  interface RecallScheduleFieldRefs {
+    readonly id: FieldRef<"RecallSchedule", 'String'>
+    readonly patientId: FieldRef<"RecallSchedule", 'String'>
+    readonly recallType: FieldRef<"RecallSchedule", 'RecallType'>
+    readonly intervalMonths: FieldRef<"RecallSchedule", 'Int'>
+    readonly lastVisitDate: FieldRef<"RecallSchedule", 'DateTime'>
+    readonly nextDueDate: FieldRef<"RecallSchedule", 'DateTime'>
+    readonly status: FieldRef<"RecallSchedule", 'RecallStatus'>
+    readonly notes: FieldRef<"RecallSchedule", 'String'>
+    readonly isActive: FieldRef<"RecallSchedule", 'Boolean'>
+    readonly createdAt: FieldRef<"RecallSchedule", 'DateTime'>
+    readonly updatedAt: FieldRef<"RecallSchedule", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RecallSchedule findUnique
+   */
+  export type RecallScheduleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecallSchedule
+     */
+    select?: RecallScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecallSchedule
+     */
+    omit?: RecallScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecallScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which RecallSchedule to fetch.
+     */
+    where: RecallScheduleWhereUniqueInput
+  }
+
+  /**
+   * RecallSchedule findUniqueOrThrow
+   */
+  export type RecallScheduleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecallSchedule
+     */
+    select?: RecallScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecallSchedule
+     */
+    omit?: RecallScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecallScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which RecallSchedule to fetch.
+     */
+    where: RecallScheduleWhereUniqueInput
+  }
+
+  /**
+   * RecallSchedule findFirst
+   */
+  export type RecallScheduleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecallSchedule
+     */
+    select?: RecallScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecallSchedule
+     */
+    omit?: RecallScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecallScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which RecallSchedule to fetch.
+     */
+    where?: RecallScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecallSchedules to fetch.
+     */
+    orderBy?: RecallScheduleOrderByWithRelationInput | RecallScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RecallSchedules.
+     */
+    cursor?: RecallScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecallSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecallSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RecallSchedules.
+     */
+    distinct?: RecallScheduleScalarFieldEnum | RecallScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * RecallSchedule findFirstOrThrow
+   */
+  export type RecallScheduleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecallSchedule
+     */
+    select?: RecallScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecallSchedule
+     */
+    omit?: RecallScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecallScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which RecallSchedule to fetch.
+     */
+    where?: RecallScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecallSchedules to fetch.
+     */
+    orderBy?: RecallScheduleOrderByWithRelationInput | RecallScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RecallSchedules.
+     */
+    cursor?: RecallScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecallSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecallSchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RecallSchedules.
+     */
+    distinct?: RecallScheduleScalarFieldEnum | RecallScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * RecallSchedule findMany
+   */
+  export type RecallScheduleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecallSchedule
+     */
+    select?: RecallScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecallSchedule
+     */
+    omit?: RecallScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecallScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which RecallSchedules to fetch.
+     */
+    where?: RecallScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecallSchedules to fetch.
+     */
+    orderBy?: RecallScheduleOrderByWithRelationInput | RecallScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RecallSchedules.
+     */
+    cursor?: RecallScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecallSchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecallSchedules.
+     */
+    skip?: number
+    distinct?: RecallScheduleScalarFieldEnum | RecallScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * RecallSchedule create
+   */
+  export type RecallScheduleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecallSchedule
+     */
+    select?: RecallScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecallSchedule
+     */
+    omit?: RecallScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecallScheduleInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RecallSchedule.
+     */
+    data: XOR<RecallScheduleCreateInput, RecallScheduleUncheckedCreateInput>
+  }
+
+  /**
+   * RecallSchedule createMany
+   */
+  export type RecallScheduleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RecallSchedules.
+     */
+    data: RecallScheduleCreateManyInput | RecallScheduleCreateManyInput[]
+  }
+
+  /**
+   * RecallSchedule createManyAndReturn
+   */
+  export type RecallScheduleCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecallSchedule
+     */
+    select?: RecallScheduleSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecallSchedule
+     */
+    omit?: RecallScheduleOmit<ExtArgs> | null
+    /**
+     * The data used to create many RecallSchedules.
+     */
+    data: RecallScheduleCreateManyInput | RecallScheduleCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecallScheduleIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RecallSchedule update
+   */
+  export type RecallScheduleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecallSchedule
+     */
+    select?: RecallScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecallSchedule
+     */
+    omit?: RecallScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecallScheduleInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RecallSchedule.
+     */
+    data: XOR<RecallScheduleUpdateInput, RecallScheduleUncheckedUpdateInput>
+    /**
+     * Choose, which RecallSchedule to update.
+     */
+    where: RecallScheduleWhereUniqueInput
+  }
+
+  /**
+   * RecallSchedule updateMany
+   */
+  export type RecallScheduleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RecallSchedules.
+     */
+    data: XOR<RecallScheduleUpdateManyMutationInput, RecallScheduleUncheckedUpdateManyInput>
+    /**
+     * Filter which RecallSchedules to update
+     */
+    where?: RecallScheduleWhereInput
+    /**
+     * Limit how many RecallSchedules to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RecallSchedule updateManyAndReturn
+   */
+  export type RecallScheduleUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecallSchedule
+     */
+    select?: RecallScheduleSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecallSchedule
+     */
+    omit?: RecallScheduleOmit<ExtArgs> | null
+    /**
+     * The data used to update RecallSchedules.
+     */
+    data: XOR<RecallScheduleUpdateManyMutationInput, RecallScheduleUncheckedUpdateManyInput>
+    /**
+     * Filter which RecallSchedules to update
+     */
+    where?: RecallScheduleWhereInput
+    /**
+     * Limit how many RecallSchedules to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecallScheduleIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RecallSchedule upsert
+   */
+  export type RecallScheduleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecallSchedule
+     */
+    select?: RecallScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecallSchedule
+     */
+    omit?: RecallScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecallScheduleInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RecallSchedule to update in case it exists.
+     */
+    where: RecallScheduleWhereUniqueInput
+    /**
+     * In case the RecallSchedule found by the `where` argument doesn't exist, create a new RecallSchedule with this data.
+     */
+    create: XOR<RecallScheduleCreateInput, RecallScheduleUncheckedCreateInput>
+    /**
+     * In case the RecallSchedule was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RecallScheduleUpdateInput, RecallScheduleUncheckedUpdateInput>
+  }
+
+  /**
+   * RecallSchedule delete
+   */
+  export type RecallScheduleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecallSchedule
+     */
+    select?: RecallScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecallSchedule
+     */
+    omit?: RecallScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecallScheduleInclude<ExtArgs> | null
+    /**
+     * Filter which RecallSchedule to delete.
+     */
+    where: RecallScheduleWhereUniqueInput
+  }
+
+  /**
+   * RecallSchedule deleteMany
+   */
+  export type RecallScheduleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RecallSchedules to delete
+     */
+    where?: RecallScheduleWhereInput
+    /**
+     * Limit how many RecallSchedules to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RecallSchedule without action
+   */
+  export type RecallScheduleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecallSchedule
+     */
+    select?: RecallScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecallSchedule
+     */
+    omit?: RecallScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecallScheduleInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProcedureSupply
+   */
+
+  export type AggregateProcedureSupply = {
+    _count: ProcedureSupplyCountAggregateOutputType | null
+    _avg: ProcedureSupplyAvgAggregateOutputType | null
+    _sum: ProcedureSupplySumAggregateOutputType | null
+    _min: ProcedureSupplyMinAggregateOutputType | null
+    _max: ProcedureSupplyMaxAggregateOutputType | null
+  }
+
+  export type ProcedureSupplyAvgAggregateOutputType = {
+    quantityUsed: number | null
+  }
+
+  export type ProcedureSupplySumAggregateOutputType = {
+    quantityUsed: number | null
+  }
+
+  export type ProcedureSupplyMinAggregateOutputType = {
+    id: string | null
+    procedureCatalogId: string | null
+    supplyId: string | null
+    quantityUsed: number | null
+  }
+
+  export type ProcedureSupplyMaxAggregateOutputType = {
+    id: string | null
+    procedureCatalogId: string | null
+    supplyId: string | null
+    quantityUsed: number | null
+  }
+
+  export type ProcedureSupplyCountAggregateOutputType = {
+    id: number
+    procedureCatalogId: number
+    supplyId: number
+    quantityUsed: number
+    _all: number
+  }
+
+
+  export type ProcedureSupplyAvgAggregateInputType = {
+    quantityUsed?: true
+  }
+
+  export type ProcedureSupplySumAggregateInputType = {
+    quantityUsed?: true
+  }
+
+  export type ProcedureSupplyMinAggregateInputType = {
+    id?: true
+    procedureCatalogId?: true
+    supplyId?: true
+    quantityUsed?: true
+  }
+
+  export type ProcedureSupplyMaxAggregateInputType = {
+    id?: true
+    procedureCatalogId?: true
+    supplyId?: true
+    quantityUsed?: true
+  }
+
+  export type ProcedureSupplyCountAggregateInputType = {
+    id?: true
+    procedureCatalogId?: true
+    supplyId?: true
+    quantityUsed?: true
+    _all?: true
+  }
+
+  export type ProcedureSupplyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProcedureSupply to aggregate.
+     */
+    where?: ProcedureSupplyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProcedureSupplies to fetch.
+     */
+    orderBy?: ProcedureSupplyOrderByWithRelationInput | ProcedureSupplyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProcedureSupplyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProcedureSupplies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProcedureSupplies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProcedureSupplies
+    **/
+    _count?: true | ProcedureSupplyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProcedureSupplyAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProcedureSupplySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProcedureSupplyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProcedureSupplyMaxAggregateInputType
+  }
+
+  export type GetProcedureSupplyAggregateType<T extends ProcedureSupplyAggregateArgs> = {
+        [P in keyof T & keyof AggregateProcedureSupply]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProcedureSupply[P]>
+      : GetScalarType<T[P], AggregateProcedureSupply[P]>
+  }
+
+
+
+
+  export type ProcedureSupplyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProcedureSupplyWhereInput
+    orderBy?: ProcedureSupplyOrderByWithAggregationInput | ProcedureSupplyOrderByWithAggregationInput[]
+    by: ProcedureSupplyScalarFieldEnum[] | ProcedureSupplyScalarFieldEnum
+    having?: ProcedureSupplyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProcedureSupplyCountAggregateInputType | true
+    _avg?: ProcedureSupplyAvgAggregateInputType
+    _sum?: ProcedureSupplySumAggregateInputType
+    _min?: ProcedureSupplyMinAggregateInputType
+    _max?: ProcedureSupplyMaxAggregateInputType
+  }
+
+  export type ProcedureSupplyGroupByOutputType = {
+    id: string
+    procedureCatalogId: string
+    supplyId: string
+    quantityUsed: number
+    _count: ProcedureSupplyCountAggregateOutputType | null
+    _avg: ProcedureSupplyAvgAggregateOutputType | null
+    _sum: ProcedureSupplySumAggregateOutputType | null
+    _min: ProcedureSupplyMinAggregateOutputType | null
+    _max: ProcedureSupplyMaxAggregateOutputType | null
+  }
+
+  type GetProcedureSupplyGroupByPayload<T extends ProcedureSupplyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProcedureSupplyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProcedureSupplyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProcedureSupplyGroupByOutputType[P]>
+            : GetScalarType<T[P], ProcedureSupplyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProcedureSupplySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    procedureCatalogId?: boolean
+    supplyId?: boolean
+    quantityUsed?: boolean
+    procedure?: boolean | ProcedureCatalogDefaultArgs<ExtArgs>
+    supply?: boolean | SupplyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["procedureSupply"]>
+
+  export type ProcedureSupplySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    procedureCatalogId?: boolean
+    supplyId?: boolean
+    quantityUsed?: boolean
+    procedure?: boolean | ProcedureCatalogDefaultArgs<ExtArgs>
+    supply?: boolean | SupplyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["procedureSupply"]>
+
+  export type ProcedureSupplySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    procedureCatalogId?: boolean
+    supplyId?: boolean
+    quantityUsed?: boolean
+    procedure?: boolean | ProcedureCatalogDefaultArgs<ExtArgs>
+    supply?: boolean | SupplyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["procedureSupply"]>
+
+  export type ProcedureSupplySelectScalar = {
+    id?: boolean
+    procedureCatalogId?: boolean
+    supplyId?: boolean
+    quantityUsed?: boolean
+  }
+
+  export type ProcedureSupplyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "procedureCatalogId" | "supplyId" | "quantityUsed", ExtArgs["result"]["procedureSupply"]>
+  export type ProcedureSupplyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    procedure?: boolean | ProcedureCatalogDefaultArgs<ExtArgs>
+    supply?: boolean | SupplyDefaultArgs<ExtArgs>
+  }
+  export type ProcedureSupplyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    procedure?: boolean | ProcedureCatalogDefaultArgs<ExtArgs>
+    supply?: boolean | SupplyDefaultArgs<ExtArgs>
+  }
+  export type ProcedureSupplyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    procedure?: boolean | ProcedureCatalogDefaultArgs<ExtArgs>
+    supply?: boolean | SupplyDefaultArgs<ExtArgs>
+  }
+
+  export type $ProcedureSupplyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProcedureSupply"
+    objects: {
+      procedure: Prisma.$ProcedureCatalogPayload<ExtArgs>
+      supply: Prisma.$SupplyPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      procedureCatalogId: string
+      supplyId: string
+      quantityUsed: number
+    }, ExtArgs["result"]["procedureSupply"]>
+    composites: {}
+  }
+
+  type ProcedureSupplyGetPayload<S extends boolean | null | undefined | ProcedureSupplyDefaultArgs> = $Result.GetResult<Prisma.$ProcedureSupplyPayload, S>
+
+  type ProcedureSupplyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProcedureSupplyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProcedureSupplyCountAggregateInputType | true
+    }
+
+  export interface ProcedureSupplyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProcedureSupply'], meta: { name: 'ProcedureSupply' } }
+    /**
+     * Find zero or one ProcedureSupply that matches the filter.
+     * @param {ProcedureSupplyFindUniqueArgs} args - Arguments to find a ProcedureSupply
+     * @example
+     * // Get one ProcedureSupply
+     * const procedureSupply = await prisma.procedureSupply.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProcedureSupplyFindUniqueArgs>(args: SelectSubset<T, ProcedureSupplyFindUniqueArgs<ExtArgs>>): Prisma__ProcedureSupplyClient<$Result.GetResult<Prisma.$ProcedureSupplyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProcedureSupply that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProcedureSupplyFindUniqueOrThrowArgs} args - Arguments to find a ProcedureSupply
+     * @example
+     * // Get one ProcedureSupply
+     * const procedureSupply = await prisma.procedureSupply.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProcedureSupplyFindUniqueOrThrowArgs>(args: SelectSubset<T, ProcedureSupplyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProcedureSupplyClient<$Result.GetResult<Prisma.$ProcedureSupplyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProcedureSupply that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureSupplyFindFirstArgs} args - Arguments to find a ProcedureSupply
+     * @example
+     * // Get one ProcedureSupply
+     * const procedureSupply = await prisma.procedureSupply.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProcedureSupplyFindFirstArgs>(args?: SelectSubset<T, ProcedureSupplyFindFirstArgs<ExtArgs>>): Prisma__ProcedureSupplyClient<$Result.GetResult<Prisma.$ProcedureSupplyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProcedureSupply that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureSupplyFindFirstOrThrowArgs} args - Arguments to find a ProcedureSupply
+     * @example
+     * // Get one ProcedureSupply
+     * const procedureSupply = await prisma.procedureSupply.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProcedureSupplyFindFirstOrThrowArgs>(args?: SelectSubset<T, ProcedureSupplyFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProcedureSupplyClient<$Result.GetResult<Prisma.$ProcedureSupplyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProcedureSupplies that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureSupplyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProcedureSupplies
+     * const procedureSupplies = await prisma.procedureSupply.findMany()
+     * 
+     * // Get first 10 ProcedureSupplies
+     * const procedureSupplies = await prisma.procedureSupply.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const procedureSupplyWithIdOnly = await prisma.procedureSupply.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProcedureSupplyFindManyArgs>(args?: SelectSubset<T, ProcedureSupplyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcedureSupplyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProcedureSupply.
+     * @param {ProcedureSupplyCreateArgs} args - Arguments to create a ProcedureSupply.
+     * @example
+     * // Create one ProcedureSupply
+     * const ProcedureSupply = await prisma.procedureSupply.create({
+     *   data: {
+     *     // ... data to create a ProcedureSupply
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProcedureSupplyCreateArgs>(args: SelectSubset<T, ProcedureSupplyCreateArgs<ExtArgs>>): Prisma__ProcedureSupplyClient<$Result.GetResult<Prisma.$ProcedureSupplyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProcedureSupplies.
+     * @param {ProcedureSupplyCreateManyArgs} args - Arguments to create many ProcedureSupplies.
+     * @example
+     * // Create many ProcedureSupplies
+     * const procedureSupply = await prisma.procedureSupply.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProcedureSupplyCreateManyArgs>(args?: SelectSubset<T, ProcedureSupplyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProcedureSupplies and returns the data saved in the database.
+     * @param {ProcedureSupplyCreateManyAndReturnArgs} args - Arguments to create many ProcedureSupplies.
+     * @example
+     * // Create many ProcedureSupplies
+     * const procedureSupply = await prisma.procedureSupply.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProcedureSupplies and only return the `id`
+     * const procedureSupplyWithIdOnly = await prisma.procedureSupply.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProcedureSupplyCreateManyAndReturnArgs>(args?: SelectSubset<T, ProcedureSupplyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcedureSupplyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProcedureSupply.
+     * @param {ProcedureSupplyDeleteArgs} args - Arguments to delete one ProcedureSupply.
+     * @example
+     * // Delete one ProcedureSupply
+     * const ProcedureSupply = await prisma.procedureSupply.delete({
+     *   where: {
+     *     // ... filter to delete one ProcedureSupply
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProcedureSupplyDeleteArgs>(args: SelectSubset<T, ProcedureSupplyDeleteArgs<ExtArgs>>): Prisma__ProcedureSupplyClient<$Result.GetResult<Prisma.$ProcedureSupplyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProcedureSupply.
+     * @param {ProcedureSupplyUpdateArgs} args - Arguments to update one ProcedureSupply.
+     * @example
+     * // Update one ProcedureSupply
+     * const procedureSupply = await prisma.procedureSupply.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProcedureSupplyUpdateArgs>(args: SelectSubset<T, ProcedureSupplyUpdateArgs<ExtArgs>>): Prisma__ProcedureSupplyClient<$Result.GetResult<Prisma.$ProcedureSupplyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProcedureSupplies.
+     * @param {ProcedureSupplyDeleteManyArgs} args - Arguments to filter ProcedureSupplies to delete.
+     * @example
+     * // Delete a few ProcedureSupplies
+     * const { count } = await prisma.procedureSupply.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProcedureSupplyDeleteManyArgs>(args?: SelectSubset<T, ProcedureSupplyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProcedureSupplies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureSupplyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProcedureSupplies
+     * const procedureSupply = await prisma.procedureSupply.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProcedureSupplyUpdateManyArgs>(args: SelectSubset<T, ProcedureSupplyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProcedureSupplies and returns the data updated in the database.
+     * @param {ProcedureSupplyUpdateManyAndReturnArgs} args - Arguments to update many ProcedureSupplies.
+     * @example
+     * // Update many ProcedureSupplies
+     * const procedureSupply = await prisma.procedureSupply.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProcedureSupplies and only return the `id`
+     * const procedureSupplyWithIdOnly = await prisma.procedureSupply.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProcedureSupplyUpdateManyAndReturnArgs>(args: SelectSubset<T, ProcedureSupplyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcedureSupplyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProcedureSupply.
+     * @param {ProcedureSupplyUpsertArgs} args - Arguments to update or create a ProcedureSupply.
+     * @example
+     * // Update or create a ProcedureSupply
+     * const procedureSupply = await prisma.procedureSupply.upsert({
+     *   create: {
+     *     // ... data to create a ProcedureSupply
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProcedureSupply we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProcedureSupplyUpsertArgs>(args: SelectSubset<T, ProcedureSupplyUpsertArgs<ExtArgs>>): Prisma__ProcedureSupplyClient<$Result.GetResult<Prisma.$ProcedureSupplyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProcedureSupplies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureSupplyCountArgs} args - Arguments to filter ProcedureSupplies to count.
+     * @example
+     * // Count the number of ProcedureSupplies
+     * const count = await prisma.procedureSupply.count({
+     *   where: {
+     *     // ... the filter for the ProcedureSupplies we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProcedureSupplyCountArgs>(
+      args?: Subset<T, ProcedureSupplyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProcedureSupplyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProcedureSupply.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureSupplyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProcedureSupplyAggregateArgs>(args: Subset<T, ProcedureSupplyAggregateArgs>): Prisma.PrismaPromise<GetProcedureSupplyAggregateType<T>>
+
+    /**
+     * Group by ProcedureSupply.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProcedureSupplyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProcedureSupplyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProcedureSupplyGroupByArgs['orderBy'] }
+        : { orderBy?: ProcedureSupplyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProcedureSupplyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProcedureSupplyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProcedureSupply model
+   */
+  readonly fields: ProcedureSupplyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProcedureSupply.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProcedureSupplyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    procedure<T extends ProcedureCatalogDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProcedureCatalogDefaultArgs<ExtArgs>>): Prisma__ProcedureCatalogClient<$Result.GetResult<Prisma.$ProcedureCatalogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    supply<T extends SupplyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SupplyDefaultArgs<ExtArgs>>): Prisma__SupplyClient<$Result.GetResult<Prisma.$SupplyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProcedureSupply model
+   */
+  interface ProcedureSupplyFieldRefs {
+    readonly id: FieldRef<"ProcedureSupply", 'String'>
+    readonly procedureCatalogId: FieldRef<"ProcedureSupply", 'String'>
+    readonly supplyId: FieldRef<"ProcedureSupply", 'String'>
+    readonly quantityUsed: FieldRef<"ProcedureSupply", 'Float'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProcedureSupply findUnique
+   */
+  export type ProcedureSupplyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureSupply
+     */
+    select?: ProcedureSupplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureSupply
+     */
+    omit?: ProcedureSupplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureSupplyInclude<ExtArgs> | null
+    /**
+     * Filter, which ProcedureSupply to fetch.
+     */
+    where: ProcedureSupplyWhereUniqueInput
+  }
+
+  /**
+   * ProcedureSupply findUniqueOrThrow
+   */
+  export type ProcedureSupplyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureSupply
+     */
+    select?: ProcedureSupplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureSupply
+     */
+    omit?: ProcedureSupplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureSupplyInclude<ExtArgs> | null
+    /**
+     * Filter, which ProcedureSupply to fetch.
+     */
+    where: ProcedureSupplyWhereUniqueInput
+  }
+
+  /**
+   * ProcedureSupply findFirst
+   */
+  export type ProcedureSupplyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureSupply
+     */
+    select?: ProcedureSupplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureSupply
+     */
+    omit?: ProcedureSupplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureSupplyInclude<ExtArgs> | null
+    /**
+     * Filter, which ProcedureSupply to fetch.
+     */
+    where?: ProcedureSupplyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProcedureSupplies to fetch.
+     */
+    orderBy?: ProcedureSupplyOrderByWithRelationInput | ProcedureSupplyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProcedureSupplies.
+     */
+    cursor?: ProcedureSupplyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProcedureSupplies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProcedureSupplies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProcedureSupplies.
+     */
+    distinct?: ProcedureSupplyScalarFieldEnum | ProcedureSupplyScalarFieldEnum[]
+  }
+
+  /**
+   * ProcedureSupply findFirstOrThrow
+   */
+  export type ProcedureSupplyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureSupply
+     */
+    select?: ProcedureSupplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureSupply
+     */
+    omit?: ProcedureSupplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureSupplyInclude<ExtArgs> | null
+    /**
+     * Filter, which ProcedureSupply to fetch.
+     */
+    where?: ProcedureSupplyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProcedureSupplies to fetch.
+     */
+    orderBy?: ProcedureSupplyOrderByWithRelationInput | ProcedureSupplyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProcedureSupplies.
+     */
+    cursor?: ProcedureSupplyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProcedureSupplies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProcedureSupplies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProcedureSupplies.
+     */
+    distinct?: ProcedureSupplyScalarFieldEnum | ProcedureSupplyScalarFieldEnum[]
+  }
+
+  /**
+   * ProcedureSupply findMany
+   */
+  export type ProcedureSupplyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureSupply
+     */
+    select?: ProcedureSupplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureSupply
+     */
+    omit?: ProcedureSupplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureSupplyInclude<ExtArgs> | null
+    /**
+     * Filter, which ProcedureSupplies to fetch.
+     */
+    where?: ProcedureSupplyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProcedureSupplies to fetch.
+     */
+    orderBy?: ProcedureSupplyOrderByWithRelationInput | ProcedureSupplyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProcedureSupplies.
+     */
+    cursor?: ProcedureSupplyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProcedureSupplies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProcedureSupplies.
+     */
+    skip?: number
+    distinct?: ProcedureSupplyScalarFieldEnum | ProcedureSupplyScalarFieldEnum[]
+  }
+
+  /**
+   * ProcedureSupply create
+   */
+  export type ProcedureSupplyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureSupply
+     */
+    select?: ProcedureSupplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureSupply
+     */
+    omit?: ProcedureSupplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureSupplyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProcedureSupply.
+     */
+    data: XOR<ProcedureSupplyCreateInput, ProcedureSupplyUncheckedCreateInput>
+  }
+
+  /**
+   * ProcedureSupply createMany
+   */
+  export type ProcedureSupplyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProcedureSupplies.
+     */
+    data: ProcedureSupplyCreateManyInput | ProcedureSupplyCreateManyInput[]
+  }
+
+  /**
+   * ProcedureSupply createManyAndReturn
+   */
+  export type ProcedureSupplyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureSupply
+     */
+    select?: ProcedureSupplySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureSupply
+     */
+    omit?: ProcedureSupplyOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProcedureSupplies.
+     */
+    data: ProcedureSupplyCreateManyInput | ProcedureSupplyCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureSupplyIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProcedureSupply update
+   */
+  export type ProcedureSupplyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureSupply
+     */
+    select?: ProcedureSupplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureSupply
+     */
+    omit?: ProcedureSupplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureSupplyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProcedureSupply.
+     */
+    data: XOR<ProcedureSupplyUpdateInput, ProcedureSupplyUncheckedUpdateInput>
+    /**
+     * Choose, which ProcedureSupply to update.
+     */
+    where: ProcedureSupplyWhereUniqueInput
+  }
+
+  /**
+   * ProcedureSupply updateMany
+   */
+  export type ProcedureSupplyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProcedureSupplies.
+     */
+    data: XOR<ProcedureSupplyUpdateManyMutationInput, ProcedureSupplyUncheckedUpdateManyInput>
+    /**
+     * Filter which ProcedureSupplies to update
+     */
+    where?: ProcedureSupplyWhereInput
+    /**
+     * Limit how many ProcedureSupplies to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProcedureSupply updateManyAndReturn
+   */
+  export type ProcedureSupplyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureSupply
+     */
+    select?: ProcedureSupplySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureSupply
+     */
+    omit?: ProcedureSupplyOmit<ExtArgs> | null
+    /**
+     * The data used to update ProcedureSupplies.
+     */
+    data: XOR<ProcedureSupplyUpdateManyMutationInput, ProcedureSupplyUncheckedUpdateManyInput>
+    /**
+     * Filter which ProcedureSupplies to update
+     */
+    where?: ProcedureSupplyWhereInput
+    /**
+     * Limit how many ProcedureSupplies to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureSupplyIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProcedureSupply upsert
+   */
+  export type ProcedureSupplyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureSupply
+     */
+    select?: ProcedureSupplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureSupply
+     */
+    omit?: ProcedureSupplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureSupplyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProcedureSupply to update in case it exists.
+     */
+    where: ProcedureSupplyWhereUniqueInput
+    /**
+     * In case the ProcedureSupply found by the `where` argument doesn't exist, create a new ProcedureSupply with this data.
+     */
+    create: XOR<ProcedureSupplyCreateInput, ProcedureSupplyUncheckedCreateInput>
+    /**
+     * In case the ProcedureSupply was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProcedureSupplyUpdateInput, ProcedureSupplyUncheckedUpdateInput>
+  }
+
+  /**
+   * ProcedureSupply delete
+   */
+  export type ProcedureSupplyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureSupply
+     */
+    select?: ProcedureSupplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureSupply
+     */
+    omit?: ProcedureSupplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureSupplyInclude<ExtArgs> | null
+    /**
+     * Filter which ProcedureSupply to delete.
+     */
+    where: ProcedureSupplyWhereUniqueInput
+  }
+
+  /**
+   * ProcedureSupply deleteMany
+   */
+  export type ProcedureSupplyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProcedureSupplies to delete
+     */
+    where?: ProcedureSupplyWhereInput
+    /**
+     * Limit how many ProcedureSupplies to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProcedureSupply without action
+   */
+  export type ProcedureSupplyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProcedureSupply
+     */
+    select?: ProcedureSupplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProcedureSupply
+     */
+    omit?: ProcedureSupplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcedureSupplyInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -20483,6 +24445,12 @@ export namespace Prisma {
     endTime: 'endTime',
     status: 'status',
     notes: 'notes',
+    clinicalNotes: 'clinicalNotes',
+    isRecurring: 'isRecurring',
+    recurrencePattern: 'recurrencePattern',
+    recurrenceInterval: 'recurrenceInterval',
+    recurrenceEndDate: 'recurrenceEndDate',
+    seriesId: 'seriesId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -20622,6 +24590,49 @@ export namespace Prisma {
   };
 
   export type StockTransactionScalarFieldEnum = (typeof StockTransactionScalarFieldEnum)[keyof typeof StockTransactionScalarFieldEnum]
+
+
+  export const ProcedureCatalogScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    code: 'code',
+    description: 'description',
+    defaultCost: 'defaultCost',
+    category: 'category',
+    estimatedDuration: 'estimatedDuration',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ProcedureCatalogScalarFieldEnum = (typeof ProcedureCatalogScalarFieldEnum)[keyof typeof ProcedureCatalogScalarFieldEnum]
+
+
+  export const RecallScheduleScalarFieldEnum: {
+    id: 'id',
+    patientId: 'patientId',
+    recallType: 'recallType',
+    intervalMonths: 'intervalMonths',
+    lastVisitDate: 'lastVisitDate',
+    nextDueDate: 'nextDueDate',
+    status: 'status',
+    notes: 'notes',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RecallScheduleScalarFieldEnum = (typeof RecallScheduleScalarFieldEnum)[keyof typeof RecallScheduleScalarFieldEnum]
+
+
+  export const ProcedureSupplyScalarFieldEnum: {
+    id: 'id',
+    procedureCatalogId: 'procedureCatalogId',
+    supplyId: 'supplyId',
+    quantityUsed: 'quantityUsed'
+  };
+
+  export type ProcedureSupplyScalarFieldEnum = (typeof ProcedureSupplyScalarFieldEnum)[keyof typeof ProcedureSupplyScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -20766,6 +24777,27 @@ export namespace Prisma {
    */
   export type EnumSupplyCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupplyCategory'>
     
+
+
+  /**
+   * Reference to a field of type 'ProcedureCategory'
+   */
+  export type EnumProcedureCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProcedureCategory'>
+    
+
+
+  /**
+   * Reference to a field of type 'RecallType'
+   */
+  export type EnumRecallTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RecallType'>
+    
+
+
+  /**
+   * Reference to a field of type 'RecallStatus'
+   */
+  export type EnumRecallStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RecallStatus'>
+    
   /**
    * Deep Input Types
    */
@@ -20886,6 +24918,7 @@ export namespace Prisma {
     treatments?: TreatmentListRelationFilter
     invoices?: InvoiceListRelationFilter
     images?: PatientImageListRelationFilter
+    recalls?: RecallScheduleListRelationFilter
   }
 
   export type PatientOrderByWithRelationInput = {
@@ -20911,6 +24944,7 @@ export namespace Prisma {
     treatments?: TreatmentOrderByRelationAggregateInput
     invoices?: InvoiceOrderByRelationAggregateInput
     images?: PatientImageOrderByRelationAggregateInput
+    recalls?: RecallScheduleOrderByRelationAggregateInput
   }
 
   export type PatientWhereUniqueInput = Prisma.AtLeast<{
@@ -20939,6 +24973,7 @@ export namespace Prisma {
     treatments?: TreatmentListRelationFilter
     invoices?: InvoiceListRelationFilter
     images?: PatientImageListRelationFilter
+    recalls?: RecallScheduleListRelationFilter
   }, "id" | "email">
 
   export type PatientOrderByWithAggregationInput = {
@@ -21306,6 +25341,12 @@ export namespace Prisma {
     endTime?: DateTimeFilter<"Appointment"> | Date | string
     status?: EnumAppointmentStatusFilter<"Appointment"> | $Enums.AppointmentStatus
     notes?: StringNullableFilter<"Appointment"> | string | null
+    clinicalNotes?: StringNullableFilter<"Appointment"> | string | null
+    isRecurring?: BoolFilter<"Appointment"> | boolean
+    recurrencePattern?: StringNullableFilter<"Appointment"> | string | null
+    recurrenceInterval?: IntNullableFilter<"Appointment"> | number | null
+    recurrenceEndDate?: DateTimeNullableFilter<"Appointment"> | Date | string | null
+    seriesId?: StringNullableFilter<"Appointment"> | string | null
     createdAt?: DateTimeFilter<"Appointment"> | Date | string
     updatedAt?: DateTimeFilter<"Appointment"> | Date | string
     patient?: XOR<PatientScalarRelationFilter, PatientWhereInput>
@@ -21323,6 +25364,12 @@ export namespace Prisma {
     endTime?: SortOrder
     status?: SortOrder
     notes?: SortOrderInput | SortOrder
+    clinicalNotes?: SortOrderInput | SortOrder
+    isRecurring?: SortOrder
+    recurrencePattern?: SortOrderInput | SortOrder
+    recurrenceInterval?: SortOrderInput | SortOrder
+    recurrenceEndDate?: SortOrderInput | SortOrder
+    seriesId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     patient?: PatientOrderByWithRelationInput
@@ -21343,6 +25390,12 @@ export namespace Prisma {
     endTime?: DateTimeFilter<"Appointment"> | Date | string
     status?: EnumAppointmentStatusFilter<"Appointment"> | $Enums.AppointmentStatus
     notes?: StringNullableFilter<"Appointment"> | string | null
+    clinicalNotes?: StringNullableFilter<"Appointment"> | string | null
+    isRecurring?: BoolFilter<"Appointment"> | boolean
+    recurrencePattern?: StringNullableFilter<"Appointment"> | string | null
+    recurrenceInterval?: IntNullableFilter<"Appointment"> | number | null
+    recurrenceEndDate?: DateTimeNullableFilter<"Appointment"> | Date | string | null
+    seriesId?: StringNullableFilter<"Appointment"> | string | null
     createdAt?: DateTimeFilter<"Appointment"> | Date | string
     updatedAt?: DateTimeFilter<"Appointment"> | Date | string
     patient?: XOR<PatientScalarRelationFilter, PatientWhereInput>
@@ -21360,11 +25413,19 @@ export namespace Prisma {
     endTime?: SortOrder
     status?: SortOrder
     notes?: SortOrderInput | SortOrder
+    clinicalNotes?: SortOrderInput | SortOrder
+    isRecurring?: SortOrder
+    recurrencePattern?: SortOrderInput | SortOrder
+    recurrenceInterval?: SortOrderInput | SortOrder
+    recurrenceEndDate?: SortOrderInput | SortOrder
+    seriesId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: AppointmentCountOrderByAggregateInput
+    _avg?: AppointmentAvgOrderByAggregateInput
     _max?: AppointmentMaxOrderByAggregateInput
     _min?: AppointmentMinOrderByAggregateInput
+    _sum?: AppointmentSumOrderByAggregateInput
   }
 
   export type AppointmentScalarWhereWithAggregatesInput = {
@@ -21380,6 +25441,12 @@ export namespace Prisma {
     endTime?: DateTimeWithAggregatesFilter<"Appointment"> | Date | string
     status?: EnumAppointmentStatusWithAggregatesFilter<"Appointment"> | $Enums.AppointmentStatus
     notes?: StringNullableWithAggregatesFilter<"Appointment"> | string | null
+    clinicalNotes?: StringNullableWithAggregatesFilter<"Appointment"> | string | null
+    isRecurring?: BoolWithAggregatesFilter<"Appointment"> | boolean
+    recurrencePattern?: StringNullableWithAggregatesFilter<"Appointment"> | string | null
+    recurrenceInterval?: IntNullableWithAggregatesFilter<"Appointment"> | number | null
+    recurrenceEndDate?: DateTimeNullableWithAggregatesFilter<"Appointment"> | Date | string | null
+    seriesId?: StringNullableWithAggregatesFilter<"Appointment"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Appointment"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Appointment"> | Date | string
   }
@@ -21938,6 +26005,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Supply"> | Date | string
     updatedAt?: DateTimeFilter<"Supply"> | Date | string
     transactions?: StockTransactionListRelationFilter
+    procedureSupplies?: ProcedureSupplyListRelationFilter
   }
 
   export type SupplyOrderByWithRelationInput = {
@@ -21957,6 +26025,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     transactions?: StockTransactionOrderByRelationAggregateInput
+    procedureSupplies?: ProcedureSupplyOrderByRelationAggregateInput
   }
 
   export type SupplyWhereUniqueInput = Prisma.AtLeast<{
@@ -21979,6 +26048,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Supply"> | Date | string
     updatedAt?: DateTimeFilter<"Supply"> | Date | string
     transactions?: StockTransactionListRelationFilter
+    procedureSupplies?: ProcedureSupplyListRelationFilter
   }, "id" | "sku">
 
   export type SupplyOrderByWithAggregationInput = {
@@ -22090,6 +26160,231 @@ export namespace Prisma {
     notes?: StringNullableWithAggregatesFilter<"StockTransaction"> | string | null
     reference?: StringNullableWithAggregatesFilter<"StockTransaction"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"StockTransaction"> | Date | string
+  }
+
+  export type ProcedureCatalogWhereInput = {
+    AND?: ProcedureCatalogWhereInput | ProcedureCatalogWhereInput[]
+    OR?: ProcedureCatalogWhereInput[]
+    NOT?: ProcedureCatalogWhereInput | ProcedureCatalogWhereInput[]
+    id?: StringFilter<"ProcedureCatalog"> | string
+    name?: StringFilter<"ProcedureCatalog"> | string
+    code?: StringNullableFilter<"ProcedureCatalog"> | string | null
+    description?: StringNullableFilter<"ProcedureCatalog"> | string | null
+    defaultCost?: FloatFilter<"ProcedureCatalog"> | number
+    category?: EnumProcedureCategoryFilter<"ProcedureCatalog"> | $Enums.ProcedureCategory
+    estimatedDuration?: IntNullableFilter<"ProcedureCatalog"> | number | null
+    isActive?: BoolFilter<"ProcedureCatalog"> | boolean
+    createdAt?: DateTimeFilter<"ProcedureCatalog"> | Date | string
+    updatedAt?: DateTimeFilter<"ProcedureCatalog"> | Date | string
+    procedureSupplies?: ProcedureSupplyListRelationFilter
+  }
+
+  export type ProcedureCatalogOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    code?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    defaultCost?: SortOrder
+    category?: SortOrder
+    estimatedDuration?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    procedureSupplies?: ProcedureSupplyOrderByRelationAggregateInput
+  }
+
+  export type ProcedureCatalogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: ProcedureCatalogWhereInput | ProcedureCatalogWhereInput[]
+    OR?: ProcedureCatalogWhereInput[]
+    NOT?: ProcedureCatalogWhereInput | ProcedureCatalogWhereInput[]
+    name?: StringFilter<"ProcedureCatalog"> | string
+    description?: StringNullableFilter<"ProcedureCatalog"> | string | null
+    defaultCost?: FloatFilter<"ProcedureCatalog"> | number
+    category?: EnumProcedureCategoryFilter<"ProcedureCatalog"> | $Enums.ProcedureCategory
+    estimatedDuration?: IntNullableFilter<"ProcedureCatalog"> | number | null
+    isActive?: BoolFilter<"ProcedureCatalog"> | boolean
+    createdAt?: DateTimeFilter<"ProcedureCatalog"> | Date | string
+    updatedAt?: DateTimeFilter<"ProcedureCatalog"> | Date | string
+    procedureSupplies?: ProcedureSupplyListRelationFilter
+  }, "id" | "code">
+
+  export type ProcedureCatalogOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    code?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    defaultCost?: SortOrder
+    category?: SortOrder
+    estimatedDuration?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProcedureCatalogCountOrderByAggregateInput
+    _avg?: ProcedureCatalogAvgOrderByAggregateInput
+    _max?: ProcedureCatalogMaxOrderByAggregateInput
+    _min?: ProcedureCatalogMinOrderByAggregateInput
+    _sum?: ProcedureCatalogSumOrderByAggregateInput
+  }
+
+  export type ProcedureCatalogScalarWhereWithAggregatesInput = {
+    AND?: ProcedureCatalogScalarWhereWithAggregatesInput | ProcedureCatalogScalarWhereWithAggregatesInput[]
+    OR?: ProcedureCatalogScalarWhereWithAggregatesInput[]
+    NOT?: ProcedureCatalogScalarWhereWithAggregatesInput | ProcedureCatalogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProcedureCatalog"> | string
+    name?: StringWithAggregatesFilter<"ProcedureCatalog"> | string
+    code?: StringNullableWithAggregatesFilter<"ProcedureCatalog"> | string | null
+    description?: StringNullableWithAggregatesFilter<"ProcedureCatalog"> | string | null
+    defaultCost?: FloatWithAggregatesFilter<"ProcedureCatalog"> | number
+    category?: EnumProcedureCategoryWithAggregatesFilter<"ProcedureCatalog"> | $Enums.ProcedureCategory
+    estimatedDuration?: IntNullableWithAggregatesFilter<"ProcedureCatalog"> | number | null
+    isActive?: BoolWithAggregatesFilter<"ProcedureCatalog"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"ProcedureCatalog"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProcedureCatalog"> | Date | string
+  }
+
+  export type RecallScheduleWhereInput = {
+    AND?: RecallScheduleWhereInput | RecallScheduleWhereInput[]
+    OR?: RecallScheduleWhereInput[]
+    NOT?: RecallScheduleWhereInput | RecallScheduleWhereInput[]
+    id?: StringFilter<"RecallSchedule"> | string
+    patientId?: StringFilter<"RecallSchedule"> | string
+    recallType?: EnumRecallTypeFilter<"RecallSchedule"> | $Enums.RecallType
+    intervalMonths?: IntFilter<"RecallSchedule"> | number
+    lastVisitDate?: DateTimeNullableFilter<"RecallSchedule"> | Date | string | null
+    nextDueDate?: DateTimeFilter<"RecallSchedule"> | Date | string
+    status?: EnumRecallStatusFilter<"RecallSchedule"> | $Enums.RecallStatus
+    notes?: StringNullableFilter<"RecallSchedule"> | string | null
+    isActive?: BoolFilter<"RecallSchedule"> | boolean
+    createdAt?: DateTimeFilter<"RecallSchedule"> | Date | string
+    updatedAt?: DateTimeFilter<"RecallSchedule"> | Date | string
+    patient?: XOR<PatientScalarRelationFilter, PatientWhereInput>
+  }
+
+  export type RecallScheduleOrderByWithRelationInput = {
+    id?: SortOrder
+    patientId?: SortOrder
+    recallType?: SortOrder
+    intervalMonths?: SortOrder
+    lastVisitDate?: SortOrderInput | SortOrder
+    nextDueDate?: SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    patient?: PatientOrderByWithRelationInput
+  }
+
+  export type RecallScheduleWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: RecallScheduleWhereInput | RecallScheduleWhereInput[]
+    OR?: RecallScheduleWhereInput[]
+    NOT?: RecallScheduleWhereInput | RecallScheduleWhereInput[]
+    patientId?: StringFilter<"RecallSchedule"> | string
+    recallType?: EnumRecallTypeFilter<"RecallSchedule"> | $Enums.RecallType
+    intervalMonths?: IntFilter<"RecallSchedule"> | number
+    lastVisitDate?: DateTimeNullableFilter<"RecallSchedule"> | Date | string | null
+    nextDueDate?: DateTimeFilter<"RecallSchedule"> | Date | string
+    status?: EnumRecallStatusFilter<"RecallSchedule"> | $Enums.RecallStatus
+    notes?: StringNullableFilter<"RecallSchedule"> | string | null
+    isActive?: BoolFilter<"RecallSchedule"> | boolean
+    createdAt?: DateTimeFilter<"RecallSchedule"> | Date | string
+    updatedAt?: DateTimeFilter<"RecallSchedule"> | Date | string
+    patient?: XOR<PatientScalarRelationFilter, PatientWhereInput>
+  }, "id">
+
+  export type RecallScheduleOrderByWithAggregationInput = {
+    id?: SortOrder
+    patientId?: SortOrder
+    recallType?: SortOrder
+    intervalMonths?: SortOrder
+    lastVisitDate?: SortOrderInput | SortOrder
+    nextDueDate?: SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RecallScheduleCountOrderByAggregateInput
+    _avg?: RecallScheduleAvgOrderByAggregateInput
+    _max?: RecallScheduleMaxOrderByAggregateInput
+    _min?: RecallScheduleMinOrderByAggregateInput
+    _sum?: RecallScheduleSumOrderByAggregateInput
+  }
+
+  export type RecallScheduleScalarWhereWithAggregatesInput = {
+    AND?: RecallScheduleScalarWhereWithAggregatesInput | RecallScheduleScalarWhereWithAggregatesInput[]
+    OR?: RecallScheduleScalarWhereWithAggregatesInput[]
+    NOT?: RecallScheduleScalarWhereWithAggregatesInput | RecallScheduleScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"RecallSchedule"> | string
+    patientId?: StringWithAggregatesFilter<"RecallSchedule"> | string
+    recallType?: EnumRecallTypeWithAggregatesFilter<"RecallSchedule"> | $Enums.RecallType
+    intervalMonths?: IntWithAggregatesFilter<"RecallSchedule"> | number
+    lastVisitDate?: DateTimeNullableWithAggregatesFilter<"RecallSchedule"> | Date | string | null
+    nextDueDate?: DateTimeWithAggregatesFilter<"RecallSchedule"> | Date | string
+    status?: EnumRecallStatusWithAggregatesFilter<"RecallSchedule"> | $Enums.RecallStatus
+    notes?: StringNullableWithAggregatesFilter<"RecallSchedule"> | string | null
+    isActive?: BoolWithAggregatesFilter<"RecallSchedule"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"RecallSchedule"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"RecallSchedule"> | Date | string
+  }
+
+  export type ProcedureSupplyWhereInput = {
+    AND?: ProcedureSupplyWhereInput | ProcedureSupplyWhereInput[]
+    OR?: ProcedureSupplyWhereInput[]
+    NOT?: ProcedureSupplyWhereInput | ProcedureSupplyWhereInput[]
+    id?: StringFilter<"ProcedureSupply"> | string
+    procedureCatalogId?: StringFilter<"ProcedureSupply"> | string
+    supplyId?: StringFilter<"ProcedureSupply"> | string
+    quantityUsed?: FloatFilter<"ProcedureSupply"> | number
+    procedure?: XOR<ProcedureCatalogScalarRelationFilter, ProcedureCatalogWhereInput>
+    supply?: XOR<SupplyScalarRelationFilter, SupplyWhereInput>
+  }
+
+  export type ProcedureSupplyOrderByWithRelationInput = {
+    id?: SortOrder
+    procedureCatalogId?: SortOrder
+    supplyId?: SortOrder
+    quantityUsed?: SortOrder
+    procedure?: ProcedureCatalogOrderByWithRelationInput
+    supply?: SupplyOrderByWithRelationInput
+  }
+
+  export type ProcedureSupplyWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    procedureCatalogId_supplyId?: ProcedureSupplyProcedureCatalogIdSupplyIdCompoundUniqueInput
+    AND?: ProcedureSupplyWhereInput | ProcedureSupplyWhereInput[]
+    OR?: ProcedureSupplyWhereInput[]
+    NOT?: ProcedureSupplyWhereInput | ProcedureSupplyWhereInput[]
+    procedureCatalogId?: StringFilter<"ProcedureSupply"> | string
+    supplyId?: StringFilter<"ProcedureSupply"> | string
+    quantityUsed?: FloatFilter<"ProcedureSupply"> | number
+    procedure?: XOR<ProcedureCatalogScalarRelationFilter, ProcedureCatalogWhereInput>
+    supply?: XOR<SupplyScalarRelationFilter, SupplyWhereInput>
+  }, "id" | "procedureCatalogId_supplyId">
+
+  export type ProcedureSupplyOrderByWithAggregationInput = {
+    id?: SortOrder
+    procedureCatalogId?: SortOrder
+    supplyId?: SortOrder
+    quantityUsed?: SortOrder
+    _count?: ProcedureSupplyCountOrderByAggregateInput
+    _avg?: ProcedureSupplyAvgOrderByAggregateInput
+    _max?: ProcedureSupplyMaxOrderByAggregateInput
+    _min?: ProcedureSupplyMinOrderByAggregateInput
+    _sum?: ProcedureSupplySumOrderByAggregateInput
+  }
+
+  export type ProcedureSupplyScalarWhereWithAggregatesInput = {
+    AND?: ProcedureSupplyScalarWhereWithAggregatesInput | ProcedureSupplyScalarWhereWithAggregatesInput[]
+    OR?: ProcedureSupplyScalarWhereWithAggregatesInput[]
+    NOT?: ProcedureSupplyScalarWhereWithAggregatesInput | ProcedureSupplyScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProcedureSupply"> | string
+    procedureCatalogId?: StringWithAggregatesFilter<"ProcedureSupply"> | string
+    supplyId?: StringWithAggregatesFilter<"ProcedureSupply"> | string
+    quantityUsed?: FloatWithAggregatesFilter<"ProcedureSupply"> | number
   }
 
   export type UserCreateInput = {
@@ -22222,6 +26517,7 @@ export namespace Prisma {
     treatments?: TreatmentCreateNestedManyWithoutPatientInput
     invoices?: InvoiceCreateNestedManyWithoutPatientInput
     images?: PatientImageCreateNestedManyWithoutPatientInput
+    recalls?: RecallScheduleCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUncheckedCreateInput = {
@@ -22247,6 +26543,7 @@ export namespace Prisma {
     treatments?: TreatmentUncheckedCreateNestedManyWithoutPatientInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutPatientInput
     images?: PatientImageUncheckedCreateNestedManyWithoutPatientInput
+    recalls?: RecallScheduleUncheckedCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUpdateInput = {
@@ -22272,6 +26569,7 @@ export namespace Prisma {
     treatments?: TreatmentUpdateManyWithoutPatientNestedInput
     invoices?: InvoiceUpdateManyWithoutPatientNestedInput
     images?: PatientImageUpdateManyWithoutPatientNestedInput
+    recalls?: RecallScheduleUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateInput = {
@@ -22297,6 +26595,7 @@ export namespace Prisma {
     treatments?: TreatmentUncheckedUpdateManyWithoutPatientNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutPatientNestedInput
     images?: PatientImageUncheckedUpdateManyWithoutPatientNestedInput
+    recalls?: RecallScheduleUncheckedUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientCreateManyInput = {
@@ -22701,6 +27000,12 @@ export namespace Prisma {
     endTime: Date | string
     status?: $Enums.AppointmentStatus
     notes?: string | null
+    clinicalNotes?: string | null
+    isRecurring?: boolean
+    recurrencePattern?: string | null
+    recurrenceInterval?: number | null
+    recurrenceEndDate?: Date | string | null
+    seriesId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     patient: PatientCreateNestedOneWithoutAppointmentsInput
@@ -22718,6 +27023,12 @@ export namespace Prisma {
     endTime: Date | string
     status?: $Enums.AppointmentStatus
     notes?: string | null
+    clinicalNotes?: string | null
+    isRecurring?: boolean
+    recurrencePattern?: string | null
+    recurrenceInterval?: number | null
+    recurrenceEndDate?: Date | string | null
+    seriesId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     treatments?: TreatmentUncheckedCreateNestedManyWithoutAppointmentInput
@@ -22731,6 +27042,12 @@ export namespace Prisma {
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    isRecurring?: BoolFieldUpdateOperationsInput | boolean
+    recurrencePattern?: NullableStringFieldUpdateOperationsInput | string | null
+    recurrenceInterval?: NullableIntFieldUpdateOperationsInput | number | null
+    recurrenceEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     patient?: PatientUpdateOneRequiredWithoutAppointmentsNestedInput
@@ -22748,6 +27065,12 @@ export namespace Prisma {
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    isRecurring?: BoolFieldUpdateOperationsInput | boolean
+    recurrencePattern?: NullableStringFieldUpdateOperationsInput | string | null
+    recurrenceInterval?: NullableIntFieldUpdateOperationsInput | number | null
+    recurrenceEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     treatments?: TreatmentUncheckedUpdateManyWithoutAppointmentNestedInput
@@ -22763,6 +27086,12 @@ export namespace Prisma {
     endTime: Date | string
     status?: $Enums.AppointmentStatus
     notes?: string | null
+    clinicalNotes?: string | null
+    isRecurring?: boolean
+    recurrencePattern?: string | null
+    recurrenceInterval?: number | null
+    recurrenceEndDate?: Date | string | null
+    seriesId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22775,6 +27104,12 @@ export namespace Prisma {
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    isRecurring?: BoolFieldUpdateOperationsInput | boolean
+    recurrencePattern?: NullableStringFieldUpdateOperationsInput | string | null
+    recurrenceInterval?: NullableIntFieldUpdateOperationsInput | number | null
+    recurrenceEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -22789,6 +27124,12 @@ export namespace Prisma {
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    isRecurring?: BoolFieldUpdateOperationsInput | boolean
+    recurrencePattern?: NullableStringFieldUpdateOperationsInput | string | null
+    recurrenceInterval?: NullableIntFieldUpdateOperationsInput | number | null
+    recurrenceEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23385,6 +27726,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     transactions?: StockTransactionCreateNestedManyWithoutSupplyInput
+    procedureSupplies?: ProcedureSupplyCreateNestedManyWithoutSupplyInput
   }
 
   export type SupplyUncheckedCreateInput = {
@@ -23404,6 +27746,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     transactions?: StockTransactionUncheckedCreateNestedManyWithoutSupplyInput
+    procedureSupplies?: ProcedureSupplyUncheckedCreateNestedManyWithoutSupplyInput
   }
 
   export type SupplyUpdateInput = {
@@ -23423,6 +27766,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: StockTransactionUpdateManyWithoutSupplyNestedInput
+    procedureSupplies?: ProcedureSupplyUpdateManyWithoutSupplyNestedInput
   }
 
   export type SupplyUncheckedUpdateInput = {
@@ -23442,6 +27786,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: StockTransactionUncheckedUpdateManyWithoutSupplyNestedInput
+    procedureSupplies?: ProcedureSupplyUncheckedUpdateManyWithoutSupplyNestedInput
   }
 
   export type SupplyCreateManyInput = {
@@ -23565,6 +27910,245 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProcedureCatalogCreateInput = {
+    id?: string
+    name: string
+    code?: string | null
+    description?: string | null
+    defaultCost: number
+    category?: $Enums.ProcedureCategory
+    estimatedDuration?: number | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    procedureSupplies?: ProcedureSupplyCreateNestedManyWithoutProcedureInput
+  }
+
+  export type ProcedureCatalogUncheckedCreateInput = {
+    id?: string
+    name: string
+    code?: string | null
+    description?: string | null
+    defaultCost: number
+    category?: $Enums.ProcedureCategory
+    estimatedDuration?: number | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    procedureSupplies?: ProcedureSupplyUncheckedCreateNestedManyWithoutProcedureInput
+  }
+
+  export type ProcedureCatalogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCost?: FloatFieldUpdateOperationsInput | number
+    category?: EnumProcedureCategoryFieldUpdateOperationsInput | $Enums.ProcedureCategory
+    estimatedDuration?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    procedureSupplies?: ProcedureSupplyUpdateManyWithoutProcedureNestedInput
+  }
+
+  export type ProcedureCatalogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCost?: FloatFieldUpdateOperationsInput | number
+    category?: EnumProcedureCategoryFieldUpdateOperationsInput | $Enums.ProcedureCategory
+    estimatedDuration?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    procedureSupplies?: ProcedureSupplyUncheckedUpdateManyWithoutProcedureNestedInput
+  }
+
+  export type ProcedureCatalogCreateManyInput = {
+    id?: string
+    name: string
+    code?: string | null
+    description?: string | null
+    defaultCost: number
+    category?: $Enums.ProcedureCategory
+    estimatedDuration?: number | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProcedureCatalogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCost?: FloatFieldUpdateOperationsInput | number
+    category?: EnumProcedureCategoryFieldUpdateOperationsInput | $Enums.ProcedureCategory
+    estimatedDuration?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProcedureCatalogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCost?: FloatFieldUpdateOperationsInput | number
+    category?: EnumProcedureCategoryFieldUpdateOperationsInput | $Enums.ProcedureCategory
+    estimatedDuration?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecallScheduleCreateInput = {
+    id?: string
+    recallType: $Enums.RecallType
+    intervalMonths: number
+    lastVisitDate?: Date | string | null
+    nextDueDate: Date | string
+    status?: $Enums.RecallStatus
+    notes?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    patient: PatientCreateNestedOneWithoutRecallsInput
+  }
+
+  export type RecallScheduleUncheckedCreateInput = {
+    id?: string
+    patientId: string
+    recallType: $Enums.RecallType
+    intervalMonths: number
+    lastVisitDate?: Date | string | null
+    nextDueDate: Date | string
+    status?: $Enums.RecallStatus
+    notes?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RecallScheduleUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recallType?: EnumRecallTypeFieldUpdateOperationsInput | $Enums.RecallType
+    intervalMonths?: IntFieldUpdateOperationsInput | number
+    lastVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextDueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumRecallStatusFieldUpdateOperationsInput | $Enums.RecallStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    patient?: PatientUpdateOneRequiredWithoutRecallsNestedInput
+  }
+
+  export type RecallScheduleUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    recallType?: EnumRecallTypeFieldUpdateOperationsInput | $Enums.RecallType
+    intervalMonths?: IntFieldUpdateOperationsInput | number
+    lastVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextDueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumRecallStatusFieldUpdateOperationsInput | $Enums.RecallStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecallScheduleCreateManyInput = {
+    id?: string
+    patientId: string
+    recallType: $Enums.RecallType
+    intervalMonths: number
+    lastVisitDate?: Date | string | null
+    nextDueDate: Date | string
+    status?: $Enums.RecallStatus
+    notes?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RecallScheduleUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recallType?: EnumRecallTypeFieldUpdateOperationsInput | $Enums.RecallType
+    intervalMonths?: IntFieldUpdateOperationsInput | number
+    lastVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextDueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumRecallStatusFieldUpdateOperationsInput | $Enums.RecallStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecallScheduleUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    patientId?: StringFieldUpdateOperationsInput | string
+    recallType?: EnumRecallTypeFieldUpdateOperationsInput | $Enums.RecallType
+    intervalMonths?: IntFieldUpdateOperationsInput | number
+    lastVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextDueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumRecallStatusFieldUpdateOperationsInput | $Enums.RecallStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProcedureSupplyCreateInput = {
+    id?: string
+    quantityUsed?: number
+    procedure: ProcedureCatalogCreateNestedOneWithoutProcedureSuppliesInput
+    supply: SupplyCreateNestedOneWithoutProcedureSuppliesInput
+  }
+
+  export type ProcedureSupplyUncheckedCreateInput = {
+    id?: string
+    procedureCatalogId: string
+    supplyId: string
+    quantityUsed?: number
+  }
+
+  export type ProcedureSupplyUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: FloatFieldUpdateOperationsInput | number
+    procedure?: ProcedureCatalogUpdateOneRequiredWithoutProcedureSuppliesNestedInput
+    supply?: SupplyUpdateOneRequiredWithoutProcedureSuppliesNestedInput
+  }
+
+  export type ProcedureSupplyUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    procedureCatalogId?: StringFieldUpdateOperationsInput | string
+    supplyId?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type ProcedureSupplyCreateManyInput = {
+    id?: string
+    procedureCatalogId: string
+    supplyId: string
+    quantityUsed?: number
+  }
+
+  export type ProcedureSupplyUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type ProcedureSupplyUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    procedureCatalogId?: StringFieldUpdateOperationsInput | string
+    supplyId?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: FloatFieldUpdateOperationsInput | number
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -23785,11 +28369,21 @@ export namespace Prisma {
     none?: InvoiceWhereInput
   }
 
+  export type RecallScheduleListRelationFilter = {
+    every?: RecallScheduleWhereInput
+    some?: RecallScheduleWhereInput
+    none?: RecallScheduleWhereInput
+  }
+
   export type ToothOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type InvoiceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RecallScheduleOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -24117,6 +28711,17 @@ export namespace Prisma {
     not?: NestedEnumAppointmentStatusFilter<$PrismaModel> | $Enums.AppointmentStatus
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -24132,8 +28737,18 @@ export namespace Prisma {
     endTime?: SortOrder
     status?: SortOrder
     notes?: SortOrder
+    clinicalNotes?: SortOrder
+    isRecurring?: SortOrder
+    recurrencePattern?: SortOrder
+    recurrenceInterval?: SortOrder
+    recurrenceEndDate?: SortOrder
+    seriesId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type AppointmentAvgOrderByAggregateInput = {
+    recurrenceInterval?: SortOrder
   }
 
   export type AppointmentMaxOrderByAggregateInput = {
@@ -24146,6 +28761,12 @@ export namespace Prisma {
     endTime?: SortOrder
     status?: SortOrder
     notes?: SortOrder
+    clinicalNotes?: SortOrder
+    isRecurring?: SortOrder
+    recurrencePattern?: SortOrder
+    recurrenceInterval?: SortOrder
+    recurrenceEndDate?: SortOrder
+    seriesId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -24160,8 +28781,18 @@ export namespace Prisma {
     endTime?: SortOrder
     status?: SortOrder
     notes?: SortOrder
+    clinicalNotes?: SortOrder
+    isRecurring?: SortOrder
+    recurrencePattern?: SortOrder
+    recurrenceInterval?: SortOrder
+    recurrenceEndDate?: SortOrder
+    seriesId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type AppointmentSumOrderByAggregateInput = {
+    recurrenceInterval?: SortOrder
   }
 
   export type EnumAppointmentStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -24174,7 +28805,7 @@ export namespace Prisma {
     _max?: NestedEnumAppointmentStatusFilter<$PrismaModel>
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | null
     notIn?: number[] | null
@@ -24182,7 +28813,12 @@ export namespace Prisma {
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type EnumTreatmentStatusFilter<$PrismaModel = never> = {
@@ -24277,22 +28913,6 @@ export namespace Prisma {
   export type TreatmentSumOrderByAggregateInput = {
     toothNumber?: SortOrder
     cost?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type EnumTreatmentStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -24670,7 +29290,17 @@ export namespace Prisma {
     none?: StockTransactionWhereInput
   }
 
+  export type ProcedureSupplyListRelationFilter = {
+    every?: ProcedureSupplyWhereInput
+    some?: ProcedureSupplyWhereInput
+    none?: ProcedureSupplyWhereInput
+  }
+
   export type StockTransactionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProcedureSupplyOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -24791,6 +29421,195 @@ export namespace Prisma {
 
   export type StockTransactionSumOrderByAggregateInput = {
     quantity?: SortOrder
+  }
+
+  export type EnumProcedureCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProcedureCategory | EnumProcedureCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.ProcedureCategory[]
+    notIn?: $Enums.ProcedureCategory[]
+    not?: NestedEnumProcedureCategoryFilter<$PrismaModel> | $Enums.ProcedureCategory
+  }
+
+  export type ProcedureCatalogCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    description?: SortOrder
+    defaultCost?: SortOrder
+    category?: SortOrder
+    estimatedDuration?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProcedureCatalogAvgOrderByAggregateInput = {
+    defaultCost?: SortOrder
+    estimatedDuration?: SortOrder
+  }
+
+  export type ProcedureCatalogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    description?: SortOrder
+    defaultCost?: SortOrder
+    category?: SortOrder
+    estimatedDuration?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProcedureCatalogMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    description?: SortOrder
+    defaultCost?: SortOrder
+    category?: SortOrder
+    estimatedDuration?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProcedureCatalogSumOrderByAggregateInput = {
+    defaultCost?: SortOrder
+    estimatedDuration?: SortOrder
+  }
+
+  export type EnumProcedureCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProcedureCategory | EnumProcedureCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.ProcedureCategory[]
+    notIn?: $Enums.ProcedureCategory[]
+    not?: NestedEnumProcedureCategoryWithAggregatesFilter<$PrismaModel> | $Enums.ProcedureCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProcedureCategoryFilter<$PrismaModel>
+    _max?: NestedEnumProcedureCategoryFilter<$PrismaModel>
+  }
+
+  export type EnumRecallTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.RecallType | EnumRecallTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RecallType[]
+    notIn?: $Enums.RecallType[]
+    not?: NestedEnumRecallTypeFilter<$PrismaModel> | $Enums.RecallType
+  }
+
+  export type EnumRecallStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.RecallStatus | EnumRecallStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RecallStatus[]
+    notIn?: $Enums.RecallStatus[]
+    not?: NestedEnumRecallStatusFilter<$PrismaModel> | $Enums.RecallStatus
+  }
+
+  export type RecallScheduleCountOrderByAggregateInput = {
+    id?: SortOrder
+    patientId?: SortOrder
+    recallType?: SortOrder
+    intervalMonths?: SortOrder
+    lastVisitDate?: SortOrder
+    nextDueDate?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RecallScheduleAvgOrderByAggregateInput = {
+    intervalMonths?: SortOrder
+  }
+
+  export type RecallScheduleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    patientId?: SortOrder
+    recallType?: SortOrder
+    intervalMonths?: SortOrder
+    lastVisitDate?: SortOrder
+    nextDueDate?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RecallScheduleMinOrderByAggregateInput = {
+    id?: SortOrder
+    patientId?: SortOrder
+    recallType?: SortOrder
+    intervalMonths?: SortOrder
+    lastVisitDate?: SortOrder
+    nextDueDate?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RecallScheduleSumOrderByAggregateInput = {
+    intervalMonths?: SortOrder
+  }
+
+  export type EnumRecallTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RecallType | EnumRecallTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RecallType[]
+    notIn?: $Enums.RecallType[]
+    not?: NestedEnumRecallTypeWithAggregatesFilter<$PrismaModel> | $Enums.RecallType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRecallTypeFilter<$PrismaModel>
+    _max?: NestedEnumRecallTypeFilter<$PrismaModel>
+  }
+
+  export type EnumRecallStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RecallStatus | EnumRecallStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RecallStatus[]
+    notIn?: $Enums.RecallStatus[]
+    not?: NestedEnumRecallStatusWithAggregatesFilter<$PrismaModel> | $Enums.RecallStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRecallStatusFilter<$PrismaModel>
+    _max?: NestedEnumRecallStatusFilter<$PrismaModel>
+  }
+
+  export type ProcedureCatalogScalarRelationFilter = {
+    is?: ProcedureCatalogWhereInput
+    isNot?: ProcedureCatalogWhereInput
+  }
+
+  export type ProcedureSupplyProcedureCatalogIdSupplyIdCompoundUniqueInput = {
+    procedureCatalogId: string
+    supplyId: string
+  }
+
+  export type ProcedureSupplyCountOrderByAggregateInput = {
+    id?: SortOrder
+    procedureCatalogId?: SortOrder
+    supplyId?: SortOrder
+    quantityUsed?: SortOrder
+  }
+
+  export type ProcedureSupplyAvgOrderByAggregateInput = {
+    quantityUsed?: SortOrder
+  }
+
+  export type ProcedureSupplyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    procedureCatalogId?: SortOrder
+    supplyId?: SortOrder
+    quantityUsed?: SortOrder
+  }
+
+  export type ProcedureSupplyMinOrderByAggregateInput = {
+    id?: SortOrder
+    procedureCatalogId?: SortOrder
+    supplyId?: SortOrder
+    quantityUsed?: SortOrder
+  }
+
+  export type ProcedureSupplySumOrderByAggregateInput = {
+    quantityUsed?: SortOrder
   }
 
   export type AppointmentCreateNestedManyWithoutDentistInput = {
@@ -25022,6 +29841,13 @@ export namespace Prisma {
     connect?: PatientImageWhereUniqueInput | PatientImageWhereUniqueInput[]
   }
 
+  export type RecallScheduleCreateNestedManyWithoutPatientInput = {
+    create?: XOR<RecallScheduleCreateWithoutPatientInput, RecallScheduleUncheckedCreateWithoutPatientInput> | RecallScheduleCreateWithoutPatientInput[] | RecallScheduleUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: RecallScheduleCreateOrConnectWithoutPatientInput | RecallScheduleCreateOrConnectWithoutPatientInput[]
+    createMany?: RecallScheduleCreateManyPatientInputEnvelope
+    connect?: RecallScheduleWhereUniqueInput | RecallScheduleWhereUniqueInput[]
+  }
+
   export type MedicalHistoryUncheckedCreateNestedOneWithoutPatientInput = {
     create?: XOR<MedicalHistoryCreateWithoutPatientInput, MedicalHistoryUncheckedCreateWithoutPatientInput>
     connectOrCreate?: MedicalHistoryCreateOrConnectWithoutPatientInput
@@ -25061,6 +29887,13 @@ export namespace Prisma {
     connectOrCreate?: PatientImageCreateOrConnectWithoutPatientInput | PatientImageCreateOrConnectWithoutPatientInput[]
     createMany?: PatientImageCreateManyPatientInputEnvelope
     connect?: PatientImageWhereUniqueInput | PatientImageWhereUniqueInput[]
+  }
+
+  export type RecallScheduleUncheckedCreateNestedManyWithoutPatientInput = {
+    create?: XOR<RecallScheduleCreateWithoutPatientInput, RecallScheduleUncheckedCreateWithoutPatientInput> | RecallScheduleCreateWithoutPatientInput[] | RecallScheduleUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: RecallScheduleCreateOrConnectWithoutPatientInput | RecallScheduleCreateOrConnectWithoutPatientInput[]
+    createMany?: RecallScheduleCreateManyPatientInputEnvelope
+    connect?: RecallScheduleWhereUniqueInput | RecallScheduleWhereUniqueInput[]
   }
 
   export type MedicalHistoryUpdateOneWithoutPatientNestedInput = {
@@ -25143,6 +29976,20 @@ export namespace Prisma {
     deleteMany?: PatientImageScalarWhereInput | PatientImageScalarWhereInput[]
   }
 
+  export type RecallScheduleUpdateManyWithoutPatientNestedInput = {
+    create?: XOR<RecallScheduleCreateWithoutPatientInput, RecallScheduleUncheckedCreateWithoutPatientInput> | RecallScheduleCreateWithoutPatientInput[] | RecallScheduleUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: RecallScheduleCreateOrConnectWithoutPatientInput | RecallScheduleCreateOrConnectWithoutPatientInput[]
+    upsert?: RecallScheduleUpsertWithWhereUniqueWithoutPatientInput | RecallScheduleUpsertWithWhereUniqueWithoutPatientInput[]
+    createMany?: RecallScheduleCreateManyPatientInputEnvelope
+    set?: RecallScheduleWhereUniqueInput | RecallScheduleWhereUniqueInput[]
+    disconnect?: RecallScheduleWhereUniqueInput | RecallScheduleWhereUniqueInput[]
+    delete?: RecallScheduleWhereUniqueInput | RecallScheduleWhereUniqueInput[]
+    connect?: RecallScheduleWhereUniqueInput | RecallScheduleWhereUniqueInput[]
+    update?: RecallScheduleUpdateWithWhereUniqueWithoutPatientInput | RecallScheduleUpdateWithWhereUniqueWithoutPatientInput[]
+    updateMany?: RecallScheduleUpdateManyWithWhereWithoutPatientInput | RecallScheduleUpdateManyWithWhereWithoutPatientInput[]
+    deleteMany?: RecallScheduleScalarWhereInput | RecallScheduleScalarWhereInput[]
+  }
+
   export type MedicalHistoryUncheckedUpdateOneWithoutPatientNestedInput = {
     create?: XOR<MedicalHistoryCreateWithoutPatientInput, MedicalHistoryUncheckedCreateWithoutPatientInput>
     connectOrCreate?: MedicalHistoryCreateOrConnectWithoutPatientInput
@@ -25221,6 +30068,20 @@ export namespace Prisma {
     update?: PatientImageUpdateWithWhereUniqueWithoutPatientInput | PatientImageUpdateWithWhereUniqueWithoutPatientInput[]
     updateMany?: PatientImageUpdateManyWithWhereWithoutPatientInput | PatientImageUpdateManyWithWhereWithoutPatientInput[]
     deleteMany?: PatientImageScalarWhereInput | PatientImageScalarWhereInput[]
+  }
+
+  export type RecallScheduleUncheckedUpdateManyWithoutPatientNestedInput = {
+    create?: XOR<RecallScheduleCreateWithoutPatientInput, RecallScheduleUncheckedCreateWithoutPatientInput> | RecallScheduleCreateWithoutPatientInput[] | RecallScheduleUncheckedCreateWithoutPatientInput[]
+    connectOrCreate?: RecallScheduleCreateOrConnectWithoutPatientInput | RecallScheduleCreateOrConnectWithoutPatientInput[]
+    upsert?: RecallScheduleUpsertWithWhereUniqueWithoutPatientInput | RecallScheduleUpsertWithWhereUniqueWithoutPatientInput[]
+    createMany?: RecallScheduleCreateManyPatientInputEnvelope
+    set?: RecallScheduleWhereUniqueInput | RecallScheduleWhereUniqueInput[]
+    disconnect?: RecallScheduleWhereUniqueInput | RecallScheduleWhereUniqueInput[]
+    delete?: RecallScheduleWhereUniqueInput | RecallScheduleWhereUniqueInput[]
+    connect?: RecallScheduleWhereUniqueInput | RecallScheduleWhereUniqueInput[]
+    update?: RecallScheduleUpdateWithWhereUniqueWithoutPatientInput | RecallScheduleUpdateWithWhereUniqueWithoutPatientInput[]
+    updateMany?: RecallScheduleUpdateManyWithWhereWithoutPatientInput | RecallScheduleUpdateManyWithWhereWithoutPatientInput[]
+    deleteMany?: RecallScheduleScalarWhereInput | RecallScheduleScalarWhereInput[]
   }
 
   export type PatientCreateNestedOneWithoutMedicalHistoryInput = {
@@ -25451,6 +30312,14 @@ export namespace Prisma {
     set?: $Enums.AppointmentStatus
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type PatientUpdateOneRequiredWithoutAppointmentsNestedInput = {
     create?: XOR<PatientCreateWithoutAppointmentsInput, PatientUncheckedCreateWithoutAppointmentsInput>
     connectOrCreate?: PatientCreateOrConnectWithoutAppointmentsInput
@@ -25525,14 +30394,6 @@ export namespace Prisma {
     connectOrCreate?: InvoiceItemCreateOrConnectWithoutTreatmentInput | InvoiceItemCreateOrConnectWithoutTreatmentInput[]
     createMany?: InvoiceItemCreateManyTreatmentInputEnvelope
     connect?: InvoiceItemWhereUniqueInput | InvoiceItemWhereUniqueInput[]
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type EnumTreatmentStatusFieldUpdateOperationsInput = {
@@ -25818,11 +30679,25 @@ export namespace Prisma {
     connect?: StockTransactionWhereUniqueInput | StockTransactionWhereUniqueInput[]
   }
 
+  export type ProcedureSupplyCreateNestedManyWithoutSupplyInput = {
+    create?: XOR<ProcedureSupplyCreateWithoutSupplyInput, ProcedureSupplyUncheckedCreateWithoutSupplyInput> | ProcedureSupplyCreateWithoutSupplyInput[] | ProcedureSupplyUncheckedCreateWithoutSupplyInput[]
+    connectOrCreate?: ProcedureSupplyCreateOrConnectWithoutSupplyInput | ProcedureSupplyCreateOrConnectWithoutSupplyInput[]
+    createMany?: ProcedureSupplyCreateManySupplyInputEnvelope
+    connect?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+  }
+
   export type StockTransactionUncheckedCreateNestedManyWithoutSupplyInput = {
     create?: XOR<StockTransactionCreateWithoutSupplyInput, StockTransactionUncheckedCreateWithoutSupplyInput> | StockTransactionCreateWithoutSupplyInput[] | StockTransactionUncheckedCreateWithoutSupplyInput[]
     connectOrCreate?: StockTransactionCreateOrConnectWithoutSupplyInput | StockTransactionCreateOrConnectWithoutSupplyInput[]
     createMany?: StockTransactionCreateManySupplyInputEnvelope
     connect?: StockTransactionWhereUniqueInput | StockTransactionWhereUniqueInput[]
+  }
+
+  export type ProcedureSupplyUncheckedCreateNestedManyWithoutSupplyInput = {
+    create?: XOR<ProcedureSupplyCreateWithoutSupplyInput, ProcedureSupplyUncheckedCreateWithoutSupplyInput> | ProcedureSupplyCreateWithoutSupplyInput[] | ProcedureSupplyUncheckedCreateWithoutSupplyInput[]
+    connectOrCreate?: ProcedureSupplyCreateOrConnectWithoutSupplyInput | ProcedureSupplyCreateOrConnectWithoutSupplyInput[]
+    createMany?: ProcedureSupplyCreateManySupplyInputEnvelope
+    connect?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
   }
 
   export type EnumSupplyCategoryFieldUpdateOperationsInput = {
@@ -25843,6 +30718,20 @@ export namespace Prisma {
     deleteMany?: StockTransactionScalarWhereInput | StockTransactionScalarWhereInput[]
   }
 
+  export type ProcedureSupplyUpdateManyWithoutSupplyNestedInput = {
+    create?: XOR<ProcedureSupplyCreateWithoutSupplyInput, ProcedureSupplyUncheckedCreateWithoutSupplyInput> | ProcedureSupplyCreateWithoutSupplyInput[] | ProcedureSupplyUncheckedCreateWithoutSupplyInput[]
+    connectOrCreate?: ProcedureSupplyCreateOrConnectWithoutSupplyInput | ProcedureSupplyCreateOrConnectWithoutSupplyInput[]
+    upsert?: ProcedureSupplyUpsertWithWhereUniqueWithoutSupplyInput | ProcedureSupplyUpsertWithWhereUniqueWithoutSupplyInput[]
+    createMany?: ProcedureSupplyCreateManySupplyInputEnvelope
+    set?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+    disconnect?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+    delete?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+    connect?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+    update?: ProcedureSupplyUpdateWithWhereUniqueWithoutSupplyInput | ProcedureSupplyUpdateWithWhereUniqueWithoutSupplyInput[]
+    updateMany?: ProcedureSupplyUpdateManyWithWhereWithoutSupplyInput | ProcedureSupplyUpdateManyWithWhereWithoutSupplyInput[]
+    deleteMany?: ProcedureSupplyScalarWhereInput | ProcedureSupplyScalarWhereInput[]
+  }
+
   export type StockTransactionUncheckedUpdateManyWithoutSupplyNestedInput = {
     create?: XOR<StockTransactionCreateWithoutSupplyInput, StockTransactionUncheckedCreateWithoutSupplyInput> | StockTransactionCreateWithoutSupplyInput[] | StockTransactionUncheckedCreateWithoutSupplyInput[]
     connectOrCreate?: StockTransactionCreateOrConnectWithoutSupplyInput | StockTransactionCreateOrConnectWithoutSupplyInput[]
@@ -25857,6 +30746,20 @@ export namespace Prisma {
     deleteMany?: StockTransactionScalarWhereInput | StockTransactionScalarWhereInput[]
   }
 
+  export type ProcedureSupplyUncheckedUpdateManyWithoutSupplyNestedInput = {
+    create?: XOR<ProcedureSupplyCreateWithoutSupplyInput, ProcedureSupplyUncheckedCreateWithoutSupplyInput> | ProcedureSupplyCreateWithoutSupplyInput[] | ProcedureSupplyUncheckedCreateWithoutSupplyInput[]
+    connectOrCreate?: ProcedureSupplyCreateOrConnectWithoutSupplyInput | ProcedureSupplyCreateOrConnectWithoutSupplyInput[]
+    upsert?: ProcedureSupplyUpsertWithWhereUniqueWithoutSupplyInput | ProcedureSupplyUpsertWithWhereUniqueWithoutSupplyInput[]
+    createMany?: ProcedureSupplyCreateManySupplyInputEnvelope
+    set?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+    disconnect?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+    delete?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+    connect?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+    update?: ProcedureSupplyUpdateWithWhereUniqueWithoutSupplyInput | ProcedureSupplyUpdateWithWhereUniqueWithoutSupplyInput[]
+    updateMany?: ProcedureSupplyUpdateManyWithWhereWithoutSupplyInput | ProcedureSupplyUpdateManyWithWhereWithoutSupplyInput[]
+    deleteMany?: ProcedureSupplyScalarWhereInput | ProcedureSupplyScalarWhereInput[]
+  }
+
   export type SupplyCreateNestedOneWithoutTransactionsInput = {
     create?: XOR<SupplyCreateWithoutTransactionsInput, SupplyUncheckedCreateWithoutTransactionsInput>
     connectOrCreate?: SupplyCreateOrConnectWithoutTransactionsInput
@@ -25869,6 +30772,102 @@ export namespace Prisma {
     upsert?: SupplyUpsertWithoutTransactionsInput
     connect?: SupplyWhereUniqueInput
     update?: XOR<XOR<SupplyUpdateToOneWithWhereWithoutTransactionsInput, SupplyUpdateWithoutTransactionsInput>, SupplyUncheckedUpdateWithoutTransactionsInput>
+  }
+
+  export type ProcedureSupplyCreateNestedManyWithoutProcedureInput = {
+    create?: XOR<ProcedureSupplyCreateWithoutProcedureInput, ProcedureSupplyUncheckedCreateWithoutProcedureInput> | ProcedureSupplyCreateWithoutProcedureInput[] | ProcedureSupplyUncheckedCreateWithoutProcedureInput[]
+    connectOrCreate?: ProcedureSupplyCreateOrConnectWithoutProcedureInput | ProcedureSupplyCreateOrConnectWithoutProcedureInput[]
+    createMany?: ProcedureSupplyCreateManyProcedureInputEnvelope
+    connect?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+  }
+
+  export type ProcedureSupplyUncheckedCreateNestedManyWithoutProcedureInput = {
+    create?: XOR<ProcedureSupplyCreateWithoutProcedureInput, ProcedureSupplyUncheckedCreateWithoutProcedureInput> | ProcedureSupplyCreateWithoutProcedureInput[] | ProcedureSupplyUncheckedCreateWithoutProcedureInput[]
+    connectOrCreate?: ProcedureSupplyCreateOrConnectWithoutProcedureInput | ProcedureSupplyCreateOrConnectWithoutProcedureInput[]
+    createMany?: ProcedureSupplyCreateManyProcedureInputEnvelope
+    connect?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+  }
+
+  export type EnumProcedureCategoryFieldUpdateOperationsInput = {
+    set?: $Enums.ProcedureCategory
+  }
+
+  export type ProcedureSupplyUpdateManyWithoutProcedureNestedInput = {
+    create?: XOR<ProcedureSupplyCreateWithoutProcedureInput, ProcedureSupplyUncheckedCreateWithoutProcedureInput> | ProcedureSupplyCreateWithoutProcedureInput[] | ProcedureSupplyUncheckedCreateWithoutProcedureInput[]
+    connectOrCreate?: ProcedureSupplyCreateOrConnectWithoutProcedureInput | ProcedureSupplyCreateOrConnectWithoutProcedureInput[]
+    upsert?: ProcedureSupplyUpsertWithWhereUniqueWithoutProcedureInput | ProcedureSupplyUpsertWithWhereUniqueWithoutProcedureInput[]
+    createMany?: ProcedureSupplyCreateManyProcedureInputEnvelope
+    set?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+    disconnect?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+    delete?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+    connect?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+    update?: ProcedureSupplyUpdateWithWhereUniqueWithoutProcedureInput | ProcedureSupplyUpdateWithWhereUniqueWithoutProcedureInput[]
+    updateMany?: ProcedureSupplyUpdateManyWithWhereWithoutProcedureInput | ProcedureSupplyUpdateManyWithWhereWithoutProcedureInput[]
+    deleteMany?: ProcedureSupplyScalarWhereInput | ProcedureSupplyScalarWhereInput[]
+  }
+
+  export type ProcedureSupplyUncheckedUpdateManyWithoutProcedureNestedInput = {
+    create?: XOR<ProcedureSupplyCreateWithoutProcedureInput, ProcedureSupplyUncheckedCreateWithoutProcedureInput> | ProcedureSupplyCreateWithoutProcedureInput[] | ProcedureSupplyUncheckedCreateWithoutProcedureInput[]
+    connectOrCreate?: ProcedureSupplyCreateOrConnectWithoutProcedureInput | ProcedureSupplyCreateOrConnectWithoutProcedureInput[]
+    upsert?: ProcedureSupplyUpsertWithWhereUniqueWithoutProcedureInput | ProcedureSupplyUpsertWithWhereUniqueWithoutProcedureInput[]
+    createMany?: ProcedureSupplyCreateManyProcedureInputEnvelope
+    set?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+    disconnect?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+    delete?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+    connect?: ProcedureSupplyWhereUniqueInput | ProcedureSupplyWhereUniqueInput[]
+    update?: ProcedureSupplyUpdateWithWhereUniqueWithoutProcedureInput | ProcedureSupplyUpdateWithWhereUniqueWithoutProcedureInput[]
+    updateMany?: ProcedureSupplyUpdateManyWithWhereWithoutProcedureInput | ProcedureSupplyUpdateManyWithWhereWithoutProcedureInput[]
+    deleteMany?: ProcedureSupplyScalarWhereInput | ProcedureSupplyScalarWhereInput[]
+  }
+
+  export type PatientCreateNestedOneWithoutRecallsInput = {
+    create?: XOR<PatientCreateWithoutRecallsInput, PatientUncheckedCreateWithoutRecallsInput>
+    connectOrCreate?: PatientCreateOrConnectWithoutRecallsInput
+    connect?: PatientWhereUniqueInput
+  }
+
+  export type EnumRecallTypeFieldUpdateOperationsInput = {
+    set?: $Enums.RecallType
+  }
+
+  export type EnumRecallStatusFieldUpdateOperationsInput = {
+    set?: $Enums.RecallStatus
+  }
+
+  export type PatientUpdateOneRequiredWithoutRecallsNestedInput = {
+    create?: XOR<PatientCreateWithoutRecallsInput, PatientUncheckedCreateWithoutRecallsInput>
+    connectOrCreate?: PatientCreateOrConnectWithoutRecallsInput
+    upsert?: PatientUpsertWithoutRecallsInput
+    connect?: PatientWhereUniqueInput
+    update?: XOR<XOR<PatientUpdateToOneWithWhereWithoutRecallsInput, PatientUpdateWithoutRecallsInput>, PatientUncheckedUpdateWithoutRecallsInput>
+  }
+
+  export type ProcedureCatalogCreateNestedOneWithoutProcedureSuppliesInput = {
+    create?: XOR<ProcedureCatalogCreateWithoutProcedureSuppliesInput, ProcedureCatalogUncheckedCreateWithoutProcedureSuppliesInput>
+    connectOrCreate?: ProcedureCatalogCreateOrConnectWithoutProcedureSuppliesInput
+    connect?: ProcedureCatalogWhereUniqueInput
+  }
+
+  export type SupplyCreateNestedOneWithoutProcedureSuppliesInput = {
+    create?: XOR<SupplyCreateWithoutProcedureSuppliesInput, SupplyUncheckedCreateWithoutProcedureSuppliesInput>
+    connectOrCreate?: SupplyCreateOrConnectWithoutProcedureSuppliesInput
+    connect?: SupplyWhereUniqueInput
+  }
+
+  export type ProcedureCatalogUpdateOneRequiredWithoutProcedureSuppliesNestedInput = {
+    create?: XOR<ProcedureCatalogCreateWithoutProcedureSuppliesInput, ProcedureCatalogUncheckedCreateWithoutProcedureSuppliesInput>
+    connectOrCreate?: ProcedureCatalogCreateOrConnectWithoutProcedureSuppliesInput
+    upsert?: ProcedureCatalogUpsertWithoutProcedureSuppliesInput
+    connect?: ProcedureCatalogWhereUniqueInput
+    update?: XOR<XOR<ProcedureCatalogUpdateToOneWithWhereWithoutProcedureSuppliesInput, ProcedureCatalogUpdateWithoutProcedureSuppliesInput>, ProcedureCatalogUncheckedUpdateWithoutProcedureSuppliesInput>
+  }
+
+  export type SupplyUpdateOneRequiredWithoutProcedureSuppliesNestedInput = {
+    create?: XOR<SupplyCreateWithoutProcedureSuppliesInput, SupplyUncheckedCreateWithoutProcedureSuppliesInput>
+    connectOrCreate?: SupplyCreateOrConnectWithoutProcedureSuppliesInput
+    upsert?: SupplyUpsertWithoutProcedureSuppliesInput
+    connect?: SupplyWhereUniqueInput
+    update?: XOR<XOR<SupplyUpdateToOneWithWhereWithoutProcedureSuppliesInput, SupplyUpdateWithoutProcedureSuppliesInput>, SupplyUncheckedUpdateWithoutProcedureSuppliesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -26096,13 +31095,6 @@ export namespace Prisma {
     _max?: NestedEnumAppointmentStatusFilter<$PrismaModel>
   }
 
-  export type NestedEnumTreatmentStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.TreatmentStatus | EnumTreatmentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TreatmentStatus[]
-    notIn?: $Enums.TreatmentStatus[]
-    not?: NestedEnumTreatmentStatusFilter<$PrismaModel> | $Enums.TreatmentStatus
-  }
-
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | null
@@ -26128,6 +31120,13 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumTreatmentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TreatmentStatus | EnumTreatmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TreatmentStatus[]
+    notIn?: $Enums.TreatmentStatus[]
+    not?: NestedEnumTreatmentStatusFilter<$PrismaModel> | $Enums.TreatmentStatus
   }
 
   export type NestedEnumTreatmentStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -26225,6 +31224,57 @@ export namespace Prisma {
     _max?: NestedEnumSupplyCategoryFilter<$PrismaModel>
   }
 
+  export type NestedEnumProcedureCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProcedureCategory | EnumProcedureCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.ProcedureCategory[]
+    notIn?: $Enums.ProcedureCategory[]
+    not?: NestedEnumProcedureCategoryFilter<$PrismaModel> | $Enums.ProcedureCategory
+  }
+
+  export type NestedEnumProcedureCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProcedureCategory | EnumProcedureCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.ProcedureCategory[]
+    notIn?: $Enums.ProcedureCategory[]
+    not?: NestedEnumProcedureCategoryWithAggregatesFilter<$PrismaModel> | $Enums.ProcedureCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProcedureCategoryFilter<$PrismaModel>
+    _max?: NestedEnumProcedureCategoryFilter<$PrismaModel>
+  }
+
+  export type NestedEnumRecallTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.RecallType | EnumRecallTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RecallType[]
+    notIn?: $Enums.RecallType[]
+    not?: NestedEnumRecallTypeFilter<$PrismaModel> | $Enums.RecallType
+  }
+
+  export type NestedEnumRecallStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.RecallStatus | EnumRecallStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RecallStatus[]
+    notIn?: $Enums.RecallStatus[]
+    not?: NestedEnumRecallStatusFilter<$PrismaModel> | $Enums.RecallStatus
+  }
+
+  export type NestedEnumRecallTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RecallType | EnumRecallTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RecallType[]
+    notIn?: $Enums.RecallType[]
+    not?: NestedEnumRecallTypeWithAggregatesFilter<$PrismaModel> | $Enums.RecallType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRecallTypeFilter<$PrismaModel>
+    _max?: NestedEnumRecallTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumRecallStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RecallStatus | EnumRecallStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RecallStatus[]
+    notIn?: $Enums.RecallStatus[]
+    not?: NestedEnumRecallStatusWithAggregatesFilter<$PrismaModel> | $Enums.RecallStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRecallStatusFilter<$PrismaModel>
+    _max?: NestedEnumRecallStatusFilter<$PrismaModel>
+  }
+
   export type AppointmentCreateWithoutDentistInput = {
     id?: string
     title: string
@@ -26233,6 +31283,12 @@ export namespace Prisma {
     endTime: Date | string
     status?: $Enums.AppointmentStatus
     notes?: string | null
+    clinicalNotes?: string | null
+    isRecurring?: boolean
+    recurrencePattern?: string | null
+    recurrenceInterval?: number | null
+    recurrenceEndDate?: Date | string | null
+    seriesId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     patient: PatientCreateNestedOneWithoutAppointmentsInput
@@ -26248,6 +31304,12 @@ export namespace Prisma {
     endTime: Date | string
     status?: $Enums.AppointmentStatus
     notes?: string | null
+    clinicalNotes?: string | null
+    isRecurring?: boolean
+    recurrencePattern?: string | null
+    recurrenceInterval?: number | null
+    recurrenceEndDate?: Date | string | null
+    seriesId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     treatments?: TreatmentUncheckedCreateNestedManyWithoutAppointmentInput
@@ -26404,6 +31466,12 @@ export namespace Prisma {
     endTime?: DateTimeFilter<"Appointment"> | Date | string
     status?: EnumAppointmentStatusFilter<"Appointment"> | $Enums.AppointmentStatus
     notes?: StringNullableFilter<"Appointment"> | string | null
+    clinicalNotes?: StringNullableFilter<"Appointment"> | string | null
+    isRecurring?: BoolFilter<"Appointment"> | boolean
+    recurrencePattern?: StringNullableFilter<"Appointment"> | string | null
+    recurrenceInterval?: IntNullableFilter<"Appointment"> | number | null
+    recurrenceEndDate?: DateTimeNullableFilter<"Appointment"> | Date | string | null
+    seriesId?: StringNullableFilter<"Appointment"> | string | null
     createdAt?: DateTimeFilter<"Appointment"> | Date | string
     updatedAt?: DateTimeFilter<"Appointment"> | Date | string
   }
@@ -26592,6 +31660,12 @@ export namespace Prisma {
     endTime: Date | string
     status?: $Enums.AppointmentStatus
     notes?: string | null
+    clinicalNotes?: string | null
+    isRecurring?: boolean
+    recurrencePattern?: string | null
+    recurrenceInterval?: number | null
+    recurrenceEndDate?: Date | string | null
+    seriesId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     dentist: UserCreateNestedOneWithoutAppointmentsInput
@@ -26607,6 +31681,12 @@ export namespace Prisma {
     endTime: Date | string
     status?: $Enums.AppointmentStatus
     notes?: string | null
+    clinicalNotes?: string | null
+    isRecurring?: boolean
+    recurrencePattern?: string | null
+    recurrenceInterval?: number | null
+    recurrenceEndDate?: Date | string | null
+    seriesId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     treatments?: TreatmentUncheckedCreateNestedManyWithoutAppointmentInput
@@ -26740,6 +31820,41 @@ export namespace Prisma {
 
   export type PatientImageCreateManyPatientInputEnvelope = {
     data: PatientImageCreateManyPatientInput | PatientImageCreateManyPatientInput[]
+  }
+
+  export type RecallScheduleCreateWithoutPatientInput = {
+    id?: string
+    recallType: $Enums.RecallType
+    intervalMonths: number
+    lastVisitDate?: Date | string | null
+    nextDueDate: Date | string
+    status?: $Enums.RecallStatus
+    notes?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RecallScheduleUncheckedCreateWithoutPatientInput = {
+    id?: string
+    recallType: $Enums.RecallType
+    intervalMonths: number
+    lastVisitDate?: Date | string | null
+    nextDueDate: Date | string
+    status?: $Enums.RecallStatus
+    notes?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RecallScheduleCreateOrConnectWithoutPatientInput = {
+    where: RecallScheduleWhereUniqueInput
+    create: XOR<RecallScheduleCreateWithoutPatientInput, RecallScheduleUncheckedCreateWithoutPatientInput>
+  }
+
+  export type RecallScheduleCreateManyPatientInputEnvelope = {
+    data: RecallScheduleCreateManyPatientInput | RecallScheduleCreateManyPatientInput[]
   }
 
   export type MedicalHistoryUpsertWithoutPatientInput = {
@@ -26897,6 +32012,39 @@ export namespace Prisma {
     data: XOR<PatientImageUpdateManyMutationInput, PatientImageUncheckedUpdateManyWithoutPatientInput>
   }
 
+  export type RecallScheduleUpsertWithWhereUniqueWithoutPatientInput = {
+    where: RecallScheduleWhereUniqueInput
+    update: XOR<RecallScheduleUpdateWithoutPatientInput, RecallScheduleUncheckedUpdateWithoutPatientInput>
+    create: XOR<RecallScheduleCreateWithoutPatientInput, RecallScheduleUncheckedCreateWithoutPatientInput>
+  }
+
+  export type RecallScheduleUpdateWithWhereUniqueWithoutPatientInput = {
+    where: RecallScheduleWhereUniqueInput
+    data: XOR<RecallScheduleUpdateWithoutPatientInput, RecallScheduleUncheckedUpdateWithoutPatientInput>
+  }
+
+  export type RecallScheduleUpdateManyWithWhereWithoutPatientInput = {
+    where: RecallScheduleScalarWhereInput
+    data: XOR<RecallScheduleUpdateManyMutationInput, RecallScheduleUncheckedUpdateManyWithoutPatientInput>
+  }
+
+  export type RecallScheduleScalarWhereInput = {
+    AND?: RecallScheduleScalarWhereInput | RecallScheduleScalarWhereInput[]
+    OR?: RecallScheduleScalarWhereInput[]
+    NOT?: RecallScheduleScalarWhereInput | RecallScheduleScalarWhereInput[]
+    id?: StringFilter<"RecallSchedule"> | string
+    patientId?: StringFilter<"RecallSchedule"> | string
+    recallType?: EnumRecallTypeFilter<"RecallSchedule"> | $Enums.RecallType
+    intervalMonths?: IntFilter<"RecallSchedule"> | number
+    lastVisitDate?: DateTimeNullableFilter<"RecallSchedule"> | Date | string | null
+    nextDueDate?: DateTimeFilter<"RecallSchedule"> | Date | string
+    status?: EnumRecallStatusFilter<"RecallSchedule"> | $Enums.RecallStatus
+    notes?: StringNullableFilter<"RecallSchedule"> | string | null
+    isActive?: BoolFilter<"RecallSchedule"> | boolean
+    createdAt?: DateTimeFilter<"RecallSchedule"> | Date | string
+    updatedAt?: DateTimeFilter<"RecallSchedule"> | Date | string
+  }
+
   export type PatientCreateWithoutMedicalHistoryInput = {
     id?: string
     firstName: string
@@ -26919,6 +32067,7 @@ export namespace Prisma {
     treatments?: TreatmentCreateNestedManyWithoutPatientInput
     invoices?: InvoiceCreateNestedManyWithoutPatientInput
     images?: PatientImageCreateNestedManyWithoutPatientInput
+    recalls?: RecallScheduleCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutMedicalHistoryInput = {
@@ -26943,6 +32092,7 @@ export namespace Prisma {
     treatments?: TreatmentUncheckedCreateNestedManyWithoutPatientInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutPatientInput
     images?: PatientImageUncheckedCreateNestedManyWithoutPatientInput
+    recalls?: RecallScheduleUncheckedCreateNestedManyWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutMedicalHistoryInput = {
@@ -26983,6 +32133,7 @@ export namespace Prisma {
     treatments?: TreatmentUpdateManyWithoutPatientNestedInput
     invoices?: InvoiceUpdateManyWithoutPatientNestedInput
     images?: PatientImageUpdateManyWithoutPatientNestedInput
+    recalls?: RecallScheduleUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutMedicalHistoryInput = {
@@ -27007,6 +32158,7 @@ export namespace Prisma {
     treatments?: TreatmentUncheckedUpdateManyWithoutPatientNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutPatientNestedInput
     images?: PatientImageUncheckedUpdateManyWithoutPatientNestedInput
+    recalls?: RecallScheduleUncheckedUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientCreateWithoutTeethInput = {
@@ -27031,6 +32183,7 @@ export namespace Prisma {
     treatments?: TreatmentCreateNestedManyWithoutPatientInput
     invoices?: InvoiceCreateNestedManyWithoutPatientInput
     images?: PatientImageCreateNestedManyWithoutPatientInput
+    recalls?: RecallScheduleCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutTeethInput = {
@@ -27055,6 +32208,7 @@ export namespace Prisma {
     treatments?: TreatmentUncheckedCreateNestedManyWithoutPatientInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutPatientInput
     images?: PatientImageUncheckedCreateNestedManyWithoutPatientInput
+    recalls?: RecallScheduleUncheckedCreateNestedManyWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutTeethInput = {
@@ -27182,6 +32336,7 @@ export namespace Prisma {
     treatments?: TreatmentUpdateManyWithoutPatientNestedInput
     invoices?: InvoiceUpdateManyWithoutPatientNestedInput
     images?: PatientImageUpdateManyWithoutPatientNestedInput
+    recalls?: RecallScheduleUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutTeethInput = {
@@ -27206,6 +32361,7 @@ export namespace Prisma {
     treatments?: TreatmentUncheckedUpdateManyWithoutPatientNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutPatientNestedInput
     images?: PatientImageUncheckedUpdateManyWithoutPatientNestedInput
+    recalls?: RecallScheduleUncheckedUpdateManyWithoutPatientNestedInput
   }
 
   export type ToothConditionHistoryUpsertWithWhereUniqueWithoutToothInput = {
@@ -27454,6 +32610,7 @@ export namespace Prisma {
     treatments?: TreatmentCreateNestedManyWithoutPatientInput
     invoices?: InvoiceCreateNestedManyWithoutPatientInput
     images?: PatientImageCreateNestedManyWithoutPatientInput
+    recalls?: RecallScheduleCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutAppointmentsInput = {
@@ -27478,6 +32635,7 @@ export namespace Prisma {
     treatments?: TreatmentUncheckedCreateNestedManyWithoutPatientInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutPatientInput
     images?: PatientImageUncheckedCreateNestedManyWithoutPatientInput
+    recalls?: RecallScheduleUncheckedCreateNestedManyWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutAppointmentsInput = {
@@ -27598,6 +32756,7 @@ export namespace Prisma {
     treatments?: TreatmentUpdateManyWithoutPatientNestedInput
     invoices?: InvoiceUpdateManyWithoutPatientNestedInput
     images?: PatientImageUpdateManyWithoutPatientNestedInput
+    recalls?: RecallScheduleUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutAppointmentsInput = {
@@ -27622,6 +32781,7 @@ export namespace Prisma {
     treatments?: TreatmentUncheckedUpdateManyWithoutPatientNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutPatientNestedInput
     images?: PatientImageUncheckedUpdateManyWithoutPatientNestedInput
+    recalls?: RecallScheduleUncheckedUpdateManyWithoutPatientNestedInput
   }
 
   export type UserUpsertWithoutAppointmentsInput = {
@@ -27705,6 +32865,7 @@ export namespace Prisma {
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     invoices?: InvoiceCreateNestedManyWithoutPatientInput
     images?: PatientImageCreateNestedManyWithoutPatientInput
+    recalls?: RecallScheduleCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutTreatmentsInput = {
@@ -27729,6 +32890,7 @@ export namespace Prisma {
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutPatientInput
     images?: PatientImageUncheckedCreateNestedManyWithoutPatientInput
+    recalls?: RecallScheduleUncheckedCreateNestedManyWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutTreatmentsInput = {
@@ -27781,6 +32943,12 @@ export namespace Prisma {
     endTime: Date | string
     status?: $Enums.AppointmentStatus
     notes?: string | null
+    clinicalNotes?: string | null
+    isRecurring?: boolean
+    recurrencePattern?: string | null
+    recurrenceInterval?: number | null
+    recurrenceEndDate?: Date | string | null
+    seriesId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     patient: PatientCreateNestedOneWithoutAppointmentsInput
@@ -27797,6 +32965,12 @@ export namespace Prisma {
     endTime: Date | string
     status?: $Enums.AppointmentStatus
     notes?: string | null
+    clinicalNotes?: string | null
+    isRecurring?: boolean
+    recurrencePattern?: string | null
+    recurrenceInterval?: number | null
+    recurrenceEndDate?: Date | string | null
+    seriesId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -27868,6 +33042,7 @@ export namespace Prisma {
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     invoices?: InvoiceUpdateManyWithoutPatientNestedInput
     images?: PatientImageUpdateManyWithoutPatientNestedInput
+    recalls?: RecallScheduleUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutTreatmentsInput = {
@@ -27892,6 +33067,7 @@ export namespace Prisma {
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutPatientNestedInput
     images?: PatientImageUncheckedUpdateManyWithoutPatientNestedInput
+    recalls?: RecallScheduleUncheckedUpdateManyWithoutPatientNestedInput
   }
 
   export type UserUpsertWithoutTreatmentsInput = {
@@ -27956,6 +33132,12 @@ export namespace Prisma {
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    isRecurring?: BoolFieldUpdateOperationsInput | boolean
+    recurrencePattern?: NullableStringFieldUpdateOperationsInput | string | null
+    recurrenceInterval?: NullableIntFieldUpdateOperationsInput | number | null
+    recurrenceEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     patient?: PatientUpdateOneRequiredWithoutAppointmentsNestedInput
@@ -27972,6 +33154,12 @@ export namespace Prisma {
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    isRecurring?: BoolFieldUpdateOperationsInput | boolean
+    recurrencePattern?: NullableStringFieldUpdateOperationsInput | string | null
+    recurrenceInterval?: NullableIntFieldUpdateOperationsInput | number | null
+    recurrenceEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -28028,6 +33216,7 @@ export namespace Prisma {
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     treatments?: TreatmentCreateNestedManyWithoutPatientInput
     images?: PatientImageCreateNestedManyWithoutPatientInput
+    recalls?: RecallScheduleCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutInvoicesInput = {
@@ -28052,6 +33241,7 @@ export namespace Prisma {
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     treatments?: TreatmentUncheckedCreateNestedManyWithoutPatientInput
     images?: PatientImageUncheckedCreateNestedManyWithoutPatientInput
+    recalls?: RecallScheduleUncheckedCreateNestedManyWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutInvoicesInput = {
@@ -28150,6 +33340,7 @@ export namespace Prisma {
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     treatments?: TreatmentUpdateManyWithoutPatientNestedInput
     images?: PatientImageUpdateManyWithoutPatientNestedInput
+    recalls?: RecallScheduleUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutInvoicesInput = {
@@ -28174,6 +33365,7 @@ export namespace Prisma {
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     treatments?: TreatmentUncheckedUpdateManyWithoutPatientNestedInput
     images?: PatientImageUncheckedUpdateManyWithoutPatientNestedInput
+    recalls?: RecallScheduleUncheckedUpdateManyWithoutPatientNestedInput
   }
 
   export type InvoiceItemUpsertWithWhereUniqueWithoutInvoiceInput = {
@@ -28568,6 +33760,7 @@ export namespace Prisma {
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
     treatments?: TreatmentCreateNestedManyWithoutPatientInput
     invoices?: InvoiceCreateNestedManyWithoutPatientInput
+    recalls?: RecallScheduleCreateNestedManyWithoutPatientInput
   }
 
   export type PatientUncheckedCreateWithoutImagesInput = {
@@ -28592,6 +33785,7 @@ export namespace Prisma {
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
     treatments?: TreatmentUncheckedCreateNestedManyWithoutPatientInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutPatientInput
+    recalls?: RecallScheduleUncheckedCreateNestedManyWithoutPatientInput
   }
 
   export type PatientCreateOrConnectWithoutImagesInput = {
@@ -28704,6 +33898,7 @@ export namespace Prisma {
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
     treatments?: TreatmentUpdateManyWithoutPatientNestedInput
     invoices?: InvoiceUpdateManyWithoutPatientNestedInput
+    recalls?: RecallScheduleUpdateManyWithoutPatientNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutImagesInput = {
@@ -28728,6 +33923,7 @@ export namespace Prisma {
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
     treatments?: TreatmentUncheckedUpdateManyWithoutPatientNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutPatientNestedInput
+    recalls?: RecallScheduleUncheckedUpdateManyWithoutPatientNestedInput
   }
 
   export type ToothUpsertWithoutImagesInput = {
@@ -28841,6 +34037,27 @@ export namespace Prisma {
     data: StockTransactionCreateManySupplyInput | StockTransactionCreateManySupplyInput[]
   }
 
+  export type ProcedureSupplyCreateWithoutSupplyInput = {
+    id?: string
+    quantityUsed?: number
+    procedure: ProcedureCatalogCreateNestedOneWithoutProcedureSuppliesInput
+  }
+
+  export type ProcedureSupplyUncheckedCreateWithoutSupplyInput = {
+    id?: string
+    procedureCatalogId: string
+    quantityUsed?: number
+  }
+
+  export type ProcedureSupplyCreateOrConnectWithoutSupplyInput = {
+    where: ProcedureSupplyWhereUniqueInput
+    create: XOR<ProcedureSupplyCreateWithoutSupplyInput, ProcedureSupplyUncheckedCreateWithoutSupplyInput>
+  }
+
+  export type ProcedureSupplyCreateManySupplyInputEnvelope = {
+    data: ProcedureSupplyCreateManySupplyInput | ProcedureSupplyCreateManySupplyInput[]
+  }
+
   export type StockTransactionUpsertWithWhereUniqueWithoutSupplyInput = {
     where: StockTransactionWhereUniqueInput
     update: XOR<StockTransactionUpdateWithoutSupplyInput, StockTransactionUncheckedUpdateWithoutSupplyInput>
@@ -28870,6 +34087,32 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"StockTransaction"> | Date | string
   }
 
+  export type ProcedureSupplyUpsertWithWhereUniqueWithoutSupplyInput = {
+    where: ProcedureSupplyWhereUniqueInput
+    update: XOR<ProcedureSupplyUpdateWithoutSupplyInput, ProcedureSupplyUncheckedUpdateWithoutSupplyInput>
+    create: XOR<ProcedureSupplyCreateWithoutSupplyInput, ProcedureSupplyUncheckedCreateWithoutSupplyInput>
+  }
+
+  export type ProcedureSupplyUpdateWithWhereUniqueWithoutSupplyInput = {
+    where: ProcedureSupplyWhereUniqueInput
+    data: XOR<ProcedureSupplyUpdateWithoutSupplyInput, ProcedureSupplyUncheckedUpdateWithoutSupplyInput>
+  }
+
+  export type ProcedureSupplyUpdateManyWithWhereWithoutSupplyInput = {
+    where: ProcedureSupplyScalarWhereInput
+    data: XOR<ProcedureSupplyUpdateManyMutationInput, ProcedureSupplyUncheckedUpdateManyWithoutSupplyInput>
+  }
+
+  export type ProcedureSupplyScalarWhereInput = {
+    AND?: ProcedureSupplyScalarWhereInput | ProcedureSupplyScalarWhereInput[]
+    OR?: ProcedureSupplyScalarWhereInput[]
+    NOT?: ProcedureSupplyScalarWhereInput | ProcedureSupplyScalarWhereInput[]
+    id?: StringFilter<"ProcedureSupply"> | string
+    procedureCatalogId?: StringFilter<"ProcedureSupply"> | string
+    supplyId?: StringFilter<"ProcedureSupply"> | string
+    quantityUsed?: FloatFilter<"ProcedureSupply"> | number
+  }
+
   export type SupplyCreateWithoutTransactionsInput = {
     id?: string
     name: string
@@ -28886,6 +34129,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    procedureSupplies?: ProcedureSupplyCreateNestedManyWithoutSupplyInput
   }
 
   export type SupplyUncheckedCreateWithoutTransactionsInput = {
@@ -28904,6 +34148,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    procedureSupplies?: ProcedureSupplyUncheckedCreateNestedManyWithoutSupplyInput
   }
 
   export type SupplyCreateOrConnectWithoutTransactionsInput = {
@@ -28938,6 +34183,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    procedureSupplies?: ProcedureSupplyUpdateManyWithoutSupplyNestedInput
   }
 
   export type SupplyUncheckedUpdateWithoutTransactionsInput = {
@@ -28956,6 +34202,320 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    procedureSupplies?: ProcedureSupplyUncheckedUpdateManyWithoutSupplyNestedInput
+  }
+
+  export type ProcedureSupplyCreateWithoutProcedureInput = {
+    id?: string
+    quantityUsed?: number
+    supply: SupplyCreateNestedOneWithoutProcedureSuppliesInput
+  }
+
+  export type ProcedureSupplyUncheckedCreateWithoutProcedureInput = {
+    id?: string
+    supplyId: string
+    quantityUsed?: number
+  }
+
+  export type ProcedureSupplyCreateOrConnectWithoutProcedureInput = {
+    where: ProcedureSupplyWhereUniqueInput
+    create: XOR<ProcedureSupplyCreateWithoutProcedureInput, ProcedureSupplyUncheckedCreateWithoutProcedureInput>
+  }
+
+  export type ProcedureSupplyCreateManyProcedureInputEnvelope = {
+    data: ProcedureSupplyCreateManyProcedureInput | ProcedureSupplyCreateManyProcedureInput[]
+  }
+
+  export type ProcedureSupplyUpsertWithWhereUniqueWithoutProcedureInput = {
+    where: ProcedureSupplyWhereUniqueInput
+    update: XOR<ProcedureSupplyUpdateWithoutProcedureInput, ProcedureSupplyUncheckedUpdateWithoutProcedureInput>
+    create: XOR<ProcedureSupplyCreateWithoutProcedureInput, ProcedureSupplyUncheckedCreateWithoutProcedureInput>
+  }
+
+  export type ProcedureSupplyUpdateWithWhereUniqueWithoutProcedureInput = {
+    where: ProcedureSupplyWhereUniqueInput
+    data: XOR<ProcedureSupplyUpdateWithoutProcedureInput, ProcedureSupplyUncheckedUpdateWithoutProcedureInput>
+  }
+
+  export type ProcedureSupplyUpdateManyWithWhereWithoutProcedureInput = {
+    where: ProcedureSupplyScalarWhereInput
+    data: XOR<ProcedureSupplyUpdateManyMutationInput, ProcedureSupplyUncheckedUpdateManyWithoutProcedureInput>
+  }
+
+  export type PatientCreateWithoutRecallsInput = {
+    id?: string
+    firstName: string
+    lastName: string
+    email?: string | null
+    phone: string
+    dateOfBirth: Date | string
+    gender?: string | null
+    address?: string | null
+    emergencyContact?: string | null
+    emergencyPhone?: string | null
+    insuranceProvider?: string | null
+    insuranceNumber?: string | null
+    notes?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    medicalHistory?: MedicalHistoryCreateNestedOneWithoutPatientInput
+    teeth?: ToothCreateNestedManyWithoutPatientInput
+    appointments?: AppointmentCreateNestedManyWithoutPatientInput
+    treatments?: TreatmentCreateNestedManyWithoutPatientInput
+    invoices?: InvoiceCreateNestedManyWithoutPatientInput
+    images?: PatientImageCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientUncheckedCreateWithoutRecallsInput = {
+    id?: string
+    firstName: string
+    lastName: string
+    email?: string | null
+    phone: string
+    dateOfBirth: Date | string
+    gender?: string | null
+    address?: string | null
+    emergencyContact?: string | null
+    emergencyPhone?: string | null
+    insuranceProvider?: string | null
+    insuranceNumber?: string | null
+    notes?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    medicalHistory?: MedicalHistoryUncheckedCreateNestedOneWithoutPatientInput
+    teeth?: ToothUncheckedCreateNestedManyWithoutPatientInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
+    treatments?: TreatmentUncheckedCreateNestedManyWithoutPatientInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutPatientInput
+    images?: PatientImageUncheckedCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientCreateOrConnectWithoutRecallsInput = {
+    where: PatientWhereUniqueInput
+    create: XOR<PatientCreateWithoutRecallsInput, PatientUncheckedCreateWithoutRecallsInput>
+  }
+
+  export type PatientUpsertWithoutRecallsInput = {
+    update: XOR<PatientUpdateWithoutRecallsInput, PatientUncheckedUpdateWithoutRecallsInput>
+    create: XOR<PatientCreateWithoutRecallsInput, PatientUncheckedCreateWithoutRecallsInput>
+    where?: PatientWhereInput
+  }
+
+  export type PatientUpdateToOneWithWhereWithoutRecallsInput = {
+    where?: PatientWhereInput
+    data: XOR<PatientUpdateWithoutRecallsInput, PatientUncheckedUpdateWithoutRecallsInput>
+  }
+
+  export type PatientUpdateWithoutRecallsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    medicalHistory?: MedicalHistoryUpdateOneWithoutPatientNestedInput
+    teeth?: ToothUpdateManyWithoutPatientNestedInput
+    appointments?: AppointmentUpdateManyWithoutPatientNestedInput
+    treatments?: TreatmentUpdateManyWithoutPatientNestedInput
+    invoices?: InvoiceUpdateManyWithoutPatientNestedInput
+    images?: PatientImageUpdateManyWithoutPatientNestedInput
+  }
+
+  export type PatientUncheckedUpdateWithoutRecallsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    medicalHistory?: MedicalHistoryUncheckedUpdateOneWithoutPatientNestedInput
+    teeth?: ToothUncheckedUpdateManyWithoutPatientNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
+    treatments?: TreatmentUncheckedUpdateManyWithoutPatientNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutPatientNestedInput
+    images?: PatientImageUncheckedUpdateManyWithoutPatientNestedInput
+  }
+
+  export type ProcedureCatalogCreateWithoutProcedureSuppliesInput = {
+    id?: string
+    name: string
+    code?: string | null
+    description?: string | null
+    defaultCost: number
+    category?: $Enums.ProcedureCategory
+    estimatedDuration?: number | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProcedureCatalogUncheckedCreateWithoutProcedureSuppliesInput = {
+    id?: string
+    name: string
+    code?: string | null
+    description?: string | null
+    defaultCost: number
+    category?: $Enums.ProcedureCategory
+    estimatedDuration?: number | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProcedureCatalogCreateOrConnectWithoutProcedureSuppliesInput = {
+    where: ProcedureCatalogWhereUniqueInput
+    create: XOR<ProcedureCatalogCreateWithoutProcedureSuppliesInput, ProcedureCatalogUncheckedCreateWithoutProcedureSuppliesInput>
+  }
+
+  export type SupplyCreateWithoutProcedureSuppliesInput = {
+    id?: string
+    name: string
+    category?: $Enums.SupplyCategory
+    sku?: string | null
+    description?: string | null
+    unit?: string
+    currentStock?: number
+    minimumStock?: number
+    costPerUnit?: number
+    supplier?: string | null
+    location?: string | null
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transactions?: StockTransactionCreateNestedManyWithoutSupplyInput
+  }
+
+  export type SupplyUncheckedCreateWithoutProcedureSuppliesInput = {
+    id?: string
+    name: string
+    category?: $Enums.SupplyCategory
+    sku?: string | null
+    description?: string | null
+    unit?: string
+    currentStock?: number
+    minimumStock?: number
+    costPerUnit?: number
+    supplier?: string | null
+    location?: string | null
+    expiryDate?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transactions?: StockTransactionUncheckedCreateNestedManyWithoutSupplyInput
+  }
+
+  export type SupplyCreateOrConnectWithoutProcedureSuppliesInput = {
+    where: SupplyWhereUniqueInput
+    create: XOR<SupplyCreateWithoutProcedureSuppliesInput, SupplyUncheckedCreateWithoutProcedureSuppliesInput>
+  }
+
+  export type ProcedureCatalogUpsertWithoutProcedureSuppliesInput = {
+    update: XOR<ProcedureCatalogUpdateWithoutProcedureSuppliesInput, ProcedureCatalogUncheckedUpdateWithoutProcedureSuppliesInput>
+    create: XOR<ProcedureCatalogCreateWithoutProcedureSuppliesInput, ProcedureCatalogUncheckedCreateWithoutProcedureSuppliesInput>
+    where?: ProcedureCatalogWhereInput
+  }
+
+  export type ProcedureCatalogUpdateToOneWithWhereWithoutProcedureSuppliesInput = {
+    where?: ProcedureCatalogWhereInput
+    data: XOR<ProcedureCatalogUpdateWithoutProcedureSuppliesInput, ProcedureCatalogUncheckedUpdateWithoutProcedureSuppliesInput>
+  }
+
+  export type ProcedureCatalogUpdateWithoutProcedureSuppliesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCost?: FloatFieldUpdateOperationsInput | number
+    category?: EnumProcedureCategoryFieldUpdateOperationsInput | $Enums.ProcedureCategory
+    estimatedDuration?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProcedureCatalogUncheckedUpdateWithoutProcedureSuppliesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultCost?: FloatFieldUpdateOperationsInput | number
+    category?: EnumProcedureCategoryFieldUpdateOperationsInput | $Enums.ProcedureCategory
+    estimatedDuration?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupplyUpsertWithoutProcedureSuppliesInput = {
+    update: XOR<SupplyUpdateWithoutProcedureSuppliesInput, SupplyUncheckedUpdateWithoutProcedureSuppliesInput>
+    create: XOR<SupplyCreateWithoutProcedureSuppliesInput, SupplyUncheckedCreateWithoutProcedureSuppliesInput>
+    where?: SupplyWhereInput
+  }
+
+  export type SupplyUpdateToOneWithWhereWithoutProcedureSuppliesInput = {
+    where?: SupplyWhereInput
+    data: XOR<SupplyUpdateWithoutProcedureSuppliesInput, SupplyUncheckedUpdateWithoutProcedureSuppliesInput>
+  }
+
+  export type SupplyUpdateWithoutProcedureSuppliesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumSupplyCategoryFieldUpdateOperationsInput | $Enums.SupplyCategory
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    unit?: StringFieldUpdateOperationsInput | string
+    currentStock?: IntFieldUpdateOperationsInput | number
+    minimumStock?: IntFieldUpdateOperationsInput | number
+    costPerUnit?: FloatFieldUpdateOperationsInput | number
+    supplier?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactions?: StockTransactionUpdateManyWithoutSupplyNestedInput
+  }
+
+  export type SupplyUncheckedUpdateWithoutProcedureSuppliesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumSupplyCategoryFieldUpdateOperationsInput | $Enums.SupplyCategory
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    unit?: StringFieldUpdateOperationsInput | string
+    currentStock?: IntFieldUpdateOperationsInput | number
+    minimumStock?: IntFieldUpdateOperationsInput | number
+    costPerUnit?: FloatFieldUpdateOperationsInput | number
+    supplier?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactions?: StockTransactionUncheckedUpdateManyWithoutSupplyNestedInput
   }
 
   export type AppointmentCreateManyDentistInput = {
@@ -28967,6 +34527,12 @@ export namespace Prisma {
     endTime: Date | string
     status?: $Enums.AppointmentStatus
     notes?: string | null
+    clinicalNotes?: string | null
+    isRecurring?: boolean
+    recurrencePattern?: string | null
+    recurrenceInterval?: number | null
+    recurrenceEndDate?: Date | string | null
+    seriesId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -29021,6 +34587,12 @@ export namespace Prisma {
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    isRecurring?: BoolFieldUpdateOperationsInput | boolean
+    recurrencePattern?: NullableStringFieldUpdateOperationsInput | string | null
+    recurrenceInterval?: NullableIntFieldUpdateOperationsInput | number | null
+    recurrenceEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     patient?: PatientUpdateOneRequiredWithoutAppointmentsNestedInput
@@ -29036,6 +34608,12 @@ export namespace Prisma {
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    isRecurring?: BoolFieldUpdateOperationsInput | boolean
+    recurrencePattern?: NullableStringFieldUpdateOperationsInput | string | null
+    recurrenceInterval?: NullableIntFieldUpdateOperationsInput | number | null
+    recurrenceEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     treatments?: TreatmentUncheckedUpdateManyWithoutAppointmentNestedInput
@@ -29050,6 +34628,12 @@ export namespace Prisma {
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    isRecurring?: BoolFieldUpdateOperationsInput | boolean
+    recurrencePattern?: NullableStringFieldUpdateOperationsInput | string | null
+    recurrenceInterval?: NullableIntFieldUpdateOperationsInput | number | null
+    recurrenceEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -29203,6 +34787,12 @@ export namespace Prisma {
     endTime: Date | string
     status?: $Enums.AppointmentStatus
     notes?: string | null
+    clinicalNotes?: string | null
+    isRecurring?: boolean
+    recurrencePattern?: string | null
+    recurrenceInterval?: number | null
+    recurrenceEndDate?: Date | string | null
+    seriesId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -29247,6 +34837,19 @@ export namespace Prisma {
     category?: string
     description?: string | null
     uploadedBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RecallScheduleCreateManyPatientInput = {
+    id?: string
+    recallType: $Enums.RecallType
+    intervalMonths: number
+    lastVisitDate?: Date | string | null
+    nextDueDate: Date | string
+    status?: $Enums.RecallStatus
+    notes?: string | null
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -29301,6 +34904,12 @@ export namespace Prisma {
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    isRecurring?: BoolFieldUpdateOperationsInput | boolean
+    recurrencePattern?: NullableStringFieldUpdateOperationsInput | string | null
+    recurrenceInterval?: NullableIntFieldUpdateOperationsInput | number | null
+    recurrenceEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dentist?: UserUpdateOneRequiredWithoutAppointmentsNestedInput
@@ -29316,6 +34925,12 @@ export namespace Prisma {
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    isRecurring?: BoolFieldUpdateOperationsInput | boolean
+    recurrencePattern?: NullableStringFieldUpdateOperationsInput | string | null
+    recurrenceInterval?: NullableIntFieldUpdateOperationsInput | number | null
+    recurrenceEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     treatments?: TreatmentUncheckedUpdateManyWithoutAppointmentNestedInput
@@ -29330,6 +34945,12 @@ export namespace Prisma {
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    clinicalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    isRecurring?: BoolFieldUpdateOperationsInput | boolean
+    recurrencePattern?: NullableStringFieldUpdateOperationsInput | string | null
+    recurrenceInterval?: NullableIntFieldUpdateOperationsInput | number | null
+    recurrenceEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -29468,6 +35089,45 @@ export namespace Prisma {
     category?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     uploadedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecallScheduleUpdateWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recallType?: EnumRecallTypeFieldUpdateOperationsInput | $Enums.RecallType
+    intervalMonths?: IntFieldUpdateOperationsInput | number
+    lastVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextDueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumRecallStatusFieldUpdateOperationsInput | $Enums.RecallStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecallScheduleUncheckedUpdateWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recallType?: EnumRecallTypeFieldUpdateOperationsInput | $Enums.RecallType
+    intervalMonths?: IntFieldUpdateOperationsInput | number
+    lastVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextDueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumRecallStatusFieldUpdateOperationsInput | $Enums.RecallStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecallScheduleUncheckedUpdateManyWithoutPatientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recallType?: EnumRecallTypeFieldUpdateOperationsInput | $Enums.RecallType
+    intervalMonths?: IntFieldUpdateOperationsInput | number
+    lastVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nextDueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumRecallStatusFieldUpdateOperationsInput | $Enums.RecallStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -29787,6 +35447,12 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type ProcedureSupplyCreateManySupplyInput = {
+    id?: string
+    procedureCatalogId: string
+    quantityUsed?: number
+  }
+
   export type StockTransactionUpdateWithoutSupplyInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
@@ -29812,6 +35478,48 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProcedureSupplyUpdateWithoutSupplyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: FloatFieldUpdateOperationsInput | number
+    procedure?: ProcedureCatalogUpdateOneRequiredWithoutProcedureSuppliesNestedInput
+  }
+
+  export type ProcedureSupplyUncheckedUpdateWithoutSupplyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    procedureCatalogId?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type ProcedureSupplyUncheckedUpdateManyWithoutSupplyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    procedureCatalogId?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type ProcedureSupplyCreateManyProcedureInput = {
+    id?: string
+    supplyId: string
+    quantityUsed?: number
+  }
+
+  export type ProcedureSupplyUpdateWithoutProcedureInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: FloatFieldUpdateOperationsInput | number
+    supply?: SupplyUpdateOneRequiredWithoutProcedureSuppliesNestedInput
+  }
+
+  export type ProcedureSupplyUncheckedUpdateWithoutProcedureInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplyId?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type ProcedureSupplyUncheckedUpdateManyWithoutProcedureInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    supplyId?: StringFieldUpdateOperationsInput | string
+    quantityUsed?: FloatFieldUpdateOperationsInput | number
   }
 
 

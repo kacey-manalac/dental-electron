@@ -92,6 +92,93 @@ export async function getDashboardStats() {
   };
 }
 
+export async function getDashboardAlerts() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const [overdueInvoices, lowStockSupplies, todaysAppointments, overdueRecalls] = await Promise.all([
+    // Overdue invoices
+    prisma.invoice.findMany({
+      where: {
+        status: { in: ['PENDING', 'PARTIALLY_PAID'] },
+        dueDate: { lt: today },
+      },
+      take: 10,
+      orderBy: { dueDate: 'asc' },
+      include: {
+        patient: { select: { id: true, firstName: true, lastName: true } },
+        payments: { select: { amount: true } },
+      },
+    }),
+    // Low stock supplies
+    prisma.supply.findMany({
+      where: { isActive: true },
+      select: { id: true, name: true, currentStock: true, minimumStock: true, unit: true },
+    }),
+    // Today's appointments
+    prisma.appointment.findMany({
+      where: {
+        startTime: { gte: today, lt: tomorrow },
+        status: { in: ['SCHEDULED', 'CONFIRMED'] },
+      },
+      take: 10,
+      orderBy: { startTime: 'asc' },
+      include: {
+        patient: { select: { id: true, firstName: true, lastName: true } },
+        dentist: { select: { id: true, firstName: true, lastName: true } },
+      },
+    }),
+    // Overdue recalls
+    prisma.recallSchedule.findMany({
+      where: {
+        isActive: true,
+        status: { not: 'COMPLETED' },
+        nextDueDate: { lt: today },
+      },
+      take: 10,
+      orderBy: { nextDueDate: 'asc' },
+      include: {
+        patient: { select: { id: true, firstName: true, lastName: true, phone: true } },
+      },
+    }),
+  ]);
+
+  const filteredLowStock = lowStockSupplies.filter(s => s.currentStock <= s.minimumStock).slice(0, 10);
+
+  const overdueInvoicesWithBalance = overdueInvoices.map(inv => {
+    const paid = inv.payments.reduce((sum, p) => sum + Number(p.amount), 0);
+    return {
+      id: inv.id,
+      invoiceNumber: (inv as any).invoiceNumber,
+      total: Number(inv.total),
+      balance: Number(inv.total) - paid,
+      dueDate: inv.dueDate,
+      patient: inv.patient,
+    };
+  });
+
+  return {
+    overdueInvoices: {
+      count: overdueInvoicesWithBalance.length,
+      items: overdueInvoicesWithBalance,
+    },
+    lowStock: {
+      count: filteredLowStock.length,
+      items: filteredLowStock,
+    },
+    todaysAppointments: {
+      count: todaysAppointments.length,
+      items: todaysAppointments,
+    },
+    overdueRecalls: {
+      count: overdueRecalls.length,
+      items: overdueRecalls,
+    },
+  };
+}
+
 export async function getTreatmentAnalytics(filters: { startDate?: string; endDate?: string }) {
   const dateFilter: any = {};
   if (filters.startDate) {

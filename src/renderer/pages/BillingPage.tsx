@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { PlusIcon, MagnifyingGlassIcon, DocumentArrowDownIcon, DocumentCheckIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, MagnifyingGlassIcon, DocumentArrowDownIcon, DocumentCheckIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import { exportInvoices } from '../services/exports';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
 import * as billingService from '../services/billing';
 import { downloadInvoicePDF, downloadReceiptPDF } from '../services/reports';
 import { usePatients } from '../hooks/usePatients';
+import { getActiveProcedures } from '../services/procedures';
 import { InvoiceStatus, PaymentMethod } from '../types';
 import Button from '../components/common/Button';
 import Card from '../components/common/Card';
@@ -58,6 +60,11 @@ export default function BillingPage() {
     queryKey: ['invoice', selectedInvoiceId],
     queryFn: () => billingService.getInvoice(selectedInvoiceId!),
     enabled: !!selectedInvoiceId,
+  });
+
+  const { data: activeProcedures } = useQuery({
+    queryKey: ['procedures', 'active'],
+    queryFn: getActiveProcedures,
   });
 
   const createInvoice = useMutation({
@@ -165,10 +172,22 @@ export default function BillingPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Billing</h1>
-        <Button onClick={() => setShowCreateModal(true)}>
-          <PlusIcon className="h-5 w-5 mr-2" />
-          Create Invoice
-        </Button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={async () => {
+              const result = await exportInvoices();
+              if (result.filePath) toast.success('Exported successfully');
+            }}
+            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          >
+            <ArrowDownTrayIcon className="w-4 h-4" />
+            Export
+          </button>
+          <Button onClick={() => setShowCreateModal(true)}>
+            <PlusIcon className="h-5 w-5 mr-2" />
+            Create Invoice
+          </Button>
+        </div>
       </div>
 
       {/* Search */}
@@ -361,40 +380,60 @@ export default function BillingPage() {
             <label className="label">Items</label>
             <div className="space-y-2">
               {invoiceItems.map((item, index) => (
-                <div key={index} className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Description"
-                    value={item.description}
-                    onChange={(e) => updateItem(index, 'description', e.target.value)}
-                    className="input flex-1"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Qty"
-                    value={item.quantity}
-                    onChange={(e) => updateItem(index, 'quantity', parseInt(e.target.value) || 1)}
-                    className="input w-20"
-                    min="1"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Price"
-                    value={item.unitPrice || ''}
-                    onChange={(e) => updateItem(index, 'unitPrice', parseFloat(e.target.value) || 0)}
-                    className="input w-24"
-                    step="0.01"
-                    min="0"
-                  />
-                  {invoiceItems.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeItem(index)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      Remove
-                    </button>
-                  )}
+                <div key={index} className="space-y-1">
+                  <select
+                    value=""
+                    onChange={(e) => {
+                      const proc = activeProcedures?.find(p => p.id === e.target.value);
+                      if (proc) {
+                        updateItem(index, 'description', proc.name + (proc.code ? ` (${proc.code})` : ''));
+                        updateItem(index, 'unitPrice', proc.defaultCost);
+                      }
+                    }}
+                    className="input w-full text-xs"
+                  >
+                    <option value="">Select from catalog...</option>
+                    {activeProcedures?.map((proc) => (
+                      <option key={proc.id} value={proc.id}>
+                        {proc.name} {proc.code ? `(${proc.code})` : ''} - ${proc.defaultCost.toFixed(2)}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Description"
+                      value={item.description}
+                      onChange={(e) => updateItem(index, 'description', e.target.value)}
+                      className="input flex-1"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Qty"
+                      value={item.quantity}
+                      onChange={(e) => updateItem(index, 'quantity', parseInt(e.target.value) || 1)}
+                      className="input w-20"
+                      min="1"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Price"
+                      value={item.unitPrice || ''}
+                      onChange={(e) => updateItem(index, 'unitPrice', parseFloat(e.target.value) || 0)}
+                      className="input w-24"
+                      step="0.01"
+                      min="0"
+                    />
+                    {invoiceItems.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeItem(index)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>

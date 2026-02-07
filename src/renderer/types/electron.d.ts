@@ -27,6 +27,15 @@ import type {
   StockTransaction,
   SupplyCategory,
   SupplyDashboardStats,
+  ProcedureCatalog,
+  ProcedureCategory,
+  ProcedureSupplyLink,
+  RecallSchedule,
+  RecallType,
+  RecallStatus,
+  PatientBalance,
+  DashboardAlerts,
+  GlobalSearchResults,
 } from './index';
 
 interface IpcResult<T = unknown> {
@@ -96,6 +105,23 @@ interface SupplyFilters {
   isActive?: boolean;
 }
 
+interface ProcedureFilters {
+  page?: number;
+  limit?: number;
+  search?: string;
+  category?: ProcedureCategory;
+  isActive?: boolean;
+}
+
+interface RecallFilters {
+  page?: number;
+  limit?: number;
+  search?: string;
+  patientId?: string;
+  status?: RecallStatus;
+  recallType?: RecallType;
+}
+
 // --- Create/Update data types ---
 
 interface CreatePatientData {
@@ -122,6 +148,11 @@ interface CreateAppointmentData {
   endTime: string;
   status?: AppointmentStatus;
   notes?: string;
+  clinicalNotes?: string;
+  isRecurring?: boolean;
+  recurrencePattern?: string;
+  recurrenceInterval?: number;
+  recurrenceEndDate?: string;
 }
 
 interface CreateTreatmentData {
@@ -236,6 +267,24 @@ interface AdjustStockData {
   reference?: string;
 }
 
+interface CreateProcedureData {
+  name: string;
+  code?: string;
+  description?: string;
+  defaultCost: number;
+  category?: ProcedureCategory;
+  estimatedDuration?: number;
+}
+
+interface CreateRecallData {
+  patientId: string;
+  recallType: RecallType;
+  intervalMonths: number;
+  lastVisitDate?: string;
+  nextDueDate?: string;
+  notes?: string;
+}
+
 interface ClinicSettingsData {
   name: string;
   address: string;
@@ -245,6 +294,10 @@ interface ClinicSettingsData {
 }
 
 interface ReportResult {
+  filePath: string | null;
+}
+
+interface ExportResult {
   filePath: string | null;
 }
 
@@ -277,6 +330,7 @@ interface ElectronAPI {
     create: (data: CreateAppointmentData) => Promise<IpcResult<Appointment>>;
     update: (id: string, data: Partial<CreateAppointmentData>) => Promise<IpcResult<Appointment>>;
     delete: (id: string) => Promise<IpcResult<void>>;
+    deleteSeries: (seriesId: string) => Promise<IpcResult<{ deleted: number }>>;
   };
   treatments: {
     list: (filters: TreatmentFilters) => Promise<IpcResult<PaginatedResponse<Treatment>>>;
@@ -292,6 +346,7 @@ interface ElectronAPI {
     updateInvoice: (id: string, data: UpdateInvoiceData) => Promise<IpcResult<Invoice>>;
     getPayments: (filters: PaymentFilters) => Promise<IpcResult<PaginatedResponse<Payment>>>;
     createPayment: (data: CreatePaymentData) => Promise<IpcResult<Payment>>;
+    patientBalance: (patientId: string) => Promise<IpcResult<PatientBalance>>;
   };
   dentalChart: {
     get: (patientId: string) => Promise<IpcResult<DentalChartData>>;
@@ -309,6 +364,7 @@ interface ElectronAPI {
     invoice: (invoiceId: string) => Promise<IpcResult<ReportResult>>;
     treatmentSummary: (patientId: string, options: { startDate?: string; endDate?: string }) => Promise<IpcResult<ReportResult>>;
     receipt: (invoiceId: string) => Promise<IpcResult<ReportResult>>;
+    accountStatement: (patientId: string) => Promise<IpcResult<ReportResult>>;
   };
   analytics: {
     dashboard: () => Promise<IpcResult<DashboardStats>>;
@@ -316,6 +372,7 @@ interface ElectronAPI {
     revenue: (filters: { months?: number }) => Promise<IpcResult<RevenueAnalytics>>;
     patients: (filters: { months?: number }) => Promise<IpcResult<PatientAnalytics>>;
     conditions: () => Promise<IpcResult<ConditionAnalytics>>;
+    alerts: () => Promise<IpcResult<DashboardAlerts>>;
   };
   admin: {
     backup: () => Promise<IpcResult<void>>;
@@ -340,6 +397,34 @@ interface ElectronAPI {
     update: (data: Partial<ClinicSettingsData>) => Promise<IpcResult<ClinicSettingsData>>;
     updateLogo: (filePath: string) => Promise<IpcResult<ClinicSettingsData>>;
     removeLogo: () => Promise<IpcResult<ClinicSettingsData>>;
+  };
+  procedures: {
+    list: (filters: ProcedureFilters) => Promise<IpcResult<PaginatedResponse<ProcedureCatalog>>>;
+    get: (id: string) => Promise<IpcResult<ProcedureCatalog>>;
+    create: (data: CreateProcedureData) => Promise<IpcResult<ProcedureCatalog>>;
+    update: (id: string, data: Partial<CreateProcedureData>) => Promise<IpcResult<ProcedureCatalog>>;
+    delete: (id: string) => Promise<IpcResult<{ success: boolean }>>;
+    active: () => Promise<IpcResult<ProcedureCatalog[]>>;
+    getSupplies: (procedureCatalogId: string) => Promise<IpcResult<ProcedureSupplyLink[]>>;
+    addSupply: (data: { procedureCatalogId: string; supplyId: string; quantityUsed: number }) => Promise<IpcResult<ProcedureSupplyLink>>;
+    removeSupply: (id: string) => Promise<IpcResult<{ success: boolean }>>;
+  };
+  recalls: {
+    list: (filters: RecallFilters) => Promise<IpcResult<PaginatedResponse<RecallSchedule>>>;
+    create: (data: CreateRecallData) => Promise<IpcResult<RecallSchedule>>;
+    update: (id: string, data: Partial<CreateRecallData>) => Promise<IpcResult<RecallSchedule>>;
+    delete: (id: string) => Promise<IpcResult<{ success: boolean }>>;
+    due: () => Promise<IpcResult<RecallSchedule[]>>;
+  };
+  exports: {
+    patients: () => Promise<IpcResult<ExportResult>>;
+    appointments: () => Promise<IpcResult<ExportResult>>;
+    treatments: () => Promise<IpcResult<ExportResult>>;
+    invoices: () => Promise<IpcResult<ExportResult>>;
+    supplies: () => Promise<IpcResult<ExportResult>>;
+  };
+  search: {
+    global: (query: string) => Promise<IpcResult<GlobalSearchResults>>;
   };
   users: {
     getDentists: () => Promise<IpcResult<DentistInfo[]>>;

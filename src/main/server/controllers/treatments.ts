@@ -137,7 +137,49 @@ export async function updateTreatment(id: string, data: unknown) {
     },
   });
 
+  // Auto-deduct supplies when treatment is completed (Feature 10)
+  if (parsed.status === 'COMPLETED' && existing.status !== 'COMPLETED' && existing.procedureCode) {
+    await deductSuppliesForProcedure(existing.procedureCode);
+  }
+
   return treatment;
+}
+
+async function deductSuppliesForProcedure(procedureCode: string) {
+  const catalogEntry = await prisma.procedureCatalog.findFirst({
+    where: { code: procedureCode, isActive: true },
+    include: {
+      procedureSupplies: {
+        include: { supply: true },
+      },
+    },
+  });
+
+  if (!catalogEntry || catalogEntry.procedureSupplies.length === 0) return;
+
+  for (const ps of catalogEntry.procedureSupplies) {
+    const qty = Math.ceil(ps.quantityUsed);
+    if (ps.supply.currentStock < qty) {
+      console.warn(`Insufficient stock for ${ps.supply.name}: have ${ps.supply.currentStock}, need ${qty}`);
+      continue;
+    }
+
+    await prisma.$transaction([
+      prisma.stockTransaction.create({
+        data: {
+          supplyId: ps.supplyId,
+          type: 'OUT',
+          quantity: qty,
+          notes: `Auto-deducted for procedure: ${catalogEntry.name}`,
+          reference: `procedure:${catalogEntry.id}`,
+        },
+      }),
+      prisma.supply.update({
+        where: { id: ps.supplyId },
+        data: { currentStock: { decrement: qty } },
+      }),
+    ]);
+  }
 }
 
 export async function deleteTreatment(id: string) {

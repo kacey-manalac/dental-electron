@@ -10,22 +10,31 @@ import {
   DocumentArrowDownIcon,
   ClipboardDocumentListIcon,
   ClockIcon,
+  CurrencyDollarIcon,
+  CalendarDaysIcon,
+  TrashIcon,
+  PlusIcon,
 } from '@heroicons/react/24/outline';
 import { usePatient, useUpdatePatient, useUpdateMedicalHistory } from '../hooks/usePatients';
 import { usePatientImages } from '../hooks/useImages';
 import { useQuery } from '@tanstack/react-query';
 import * as appointmentService from '../services/appointments';
-import { AppointmentStatus } from '../types';
+import { AppointmentStatus, RecallSchedule, RecallType, RecallStatus } from '../types';
+import { getPatientBalance } from '../services/billing';
+import { useRecalls, useCreateRecall, useUpdateRecall, useDeleteRecall } from '../hooks/useRecalls';
+import { toast } from 'react-hot-toast';
 import Button from '../components/common/Button';
 import Card from '../components/common/Card';
 import Badge from '../components/common/Badge';
 import Modal from '../components/common/Modal';
+import Input from '../components/common/Input';
+import Select from '../components/common/Select';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import PatientForm from '../components/patients/PatientForm';
 import DentalChart from '../components/dental-chart/DentalChart';
 import ImageUpload from '../components/images/ImageUpload';
 import ImageGallery from '../components/images/ImageGallery';
-import { downloadDentalRecordPDF, downloadTreatmentSummaryPDF } from '../services/reports';
+import { downloadDentalRecordPDF, downloadTreatmentSummaryPDF, downloadAccountStatementPDF } from '../services/reports';
 
 export default function PatientDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -36,6 +45,9 @@ export default function PatientDetailPage() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isDownloadingSummary, setIsDownloadingSummary] = useState(false);
+  const [isDownloadingStatement, setIsDownloadingStatement] = useState(false);
+  const [showRecallModal, setShowRecallModal] = useState(false);
+  const [editingRecall, setEditingRecall] = useState<RecallSchedule | null>(null);
 
   const { data: patient, isLoading, error } = usePatient(id ?? '');
   const updatePatient = useUpdatePatient();
@@ -55,6 +67,17 @@ export default function PatientDetailPage() {
     }),
     enabled: !!id,
   });
+
+  const { data: patientBalance } = useQuery({
+    queryKey: ['patientBalance', id],
+    queryFn: () => getPatientBalance(id!),
+    enabled: !!id,
+  });
+
+  const { data: recallsData } = useRecalls({ patientId: id, limit: 50 });
+  const createRecall = useCreateRecall();
+  const updateRecall = useUpdateRecall();
+  const deleteRecall = useDeleteRecall();
 
   const STATUS_COLORS: Record<AppointmentStatus, 'blue' | 'green' | 'yellow' | 'red' | 'gray' | 'purple'> = {
     SCHEDULED: 'blue',
@@ -138,6 +161,51 @@ export default function PatientDetailPage() {
     }
   };
 
+  const handleDownloadAccountStatement = async () => {
+    setIsDownloadingStatement(true);
+    try {
+      await downloadAccountStatementPDF(patient.id);
+    } catch (error) {
+      console.error('Failed to download account statement:', error);
+    } finally {
+      setIsDownloadingStatement(false);
+    }
+  };
+
+  const handleCreateRecall = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    await createRecall.mutateAsync({
+      patientId: patient.id,
+      recallType: formData.get('recallType') as RecallType,
+      intervalMonths: parseInt(formData.get('intervalMonths') as string),
+      lastVisitDate: formData.get('lastVisitDate') as string || undefined,
+      notes: formData.get('notes') as string || undefined,
+    });
+    setShowRecallModal(false);
+  };
+
+  const handleUpdateRecall = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!editingRecall) return;
+    const formData = new FormData(e.currentTarget);
+    await updateRecall.mutateAsync({
+      id: editingRecall.id,
+      data: {
+        recallType: formData.get('recallType') as RecallType,
+        intervalMonths: parseInt(formData.get('intervalMonths') as string),
+        lastVisitDate: formData.get('lastVisitDate') as string || undefined,
+        notes: formData.get('notes') as string || undefined,
+      },
+    });
+    setEditingRecall(null);
+  };
+
+  const handleDeleteRecall = async (recallId: string) => {
+    if (!confirm('Delete this recall schedule?')) return;
+    await deleteRecall.mutateAsync(recallId);
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -159,6 +227,10 @@ export default function PatientDetailPage() {
           </div>
         </div>
         <div className="flex space-x-2">
+          <Button variant="secondary" onClick={handleDownloadAccountStatement} loading={isDownloadingStatement}>
+            <CurrencyDollarIcon className="h-4 w-4 mr-2" />
+            Account Statement
+          </Button>
           <Button variant="secondary" onClick={handleDownloadTreatmentSummary} loading={isDownloadingSummary}>
             <ClipboardDocumentListIcon className="h-4 w-4 mr-2" />
             Treatment Summary
@@ -291,6 +363,103 @@ export default function PatientDetailPage() {
               <p className="text-gray-500 dark:text-gray-400 text-center py-4">
                 No upcoming appointments
               </p>
+            )}
+          </Card>
+
+          {/* Financial Summary */}
+          <Card title="Financial Summary">
+            {patientBalance ? (
+              <div className="space-y-4">
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Invoiced</p>
+                    <p className="text-lg font-bold text-blue-600 dark:text-blue-400">${patientBalance.totalInvoiced.toFixed(2)}</p>
+                  </div>
+                  <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Paid</p>
+                    <p className="text-lg font-bold text-green-600 dark:text-green-400">${patientBalance.totalPaid.toFixed(2)}</p>
+                  </div>
+                  <div className="text-center p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Balance</p>
+                    <p className="text-lg font-bold text-red-600 dark:text-red-400">${patientBalance.balance.toFixed(2)}</p>
+                  </div>
+                </div>
+                {patientBalance.unpaidInvoices.length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Unpaid Invoices</h4>
+                    <div className="space-y-2">
+                      {patientBalance.unpaidInvoices.map((inv) => (
+                        <div key={inv.id} className="flex items-center justify-between text-sm">
+                          <div>
+                            <span className="font-medium text-gray-900 dark:text-white">{inv.invoiceNumber}</span>
+                            {inv.dueDate && (
+                              <span className="ml-2 text-xs text-gray-500">
+                                Due {format(new Date(inv.dueDate), 'MMM d')}
+                              </span>
+                            )}
+                          </div>
+                          <span className="font-medium text-red-600 dark:text-red-400">${inv.balance.toFixed(2)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <p className="text-gray-500 dark:text-gray-400 text-center py-4">No billing data</p>
+            )}
+          </Card>
+
+          {/* Recall Schedule */}
+          <Card
+            title="Recall Schedule"
+            className="lg:col-span-2"
+            action={
+              <Button size="sm" onClick={() => setShowRecallModal(true)}>
+                <PlusIcon className="h-4 w-4 mr-1" />
+                Add
+              </Button>
+            }
+          >
+            {recallsData?.data && recallsData.data.length > 0 ? (
+              <div className="divide-y divide-gray-100 dark:divide-gray-700/30">
+                {recallsData.data.map((recall) => {
+                  const statusColors: Record<RecallStatus, 'blue' | 'yellow' | 'red' | 'green'> = {
+                    UPCOMING: 'blue',
+                    DUE: 'yellow',
+                    OVERDUE: 'red',
+                    COMPLETED: 'green',
+                  };
+                  return (
+                    <div key={recall.id} className="flex items-center justify-between py-3">
+                      <div className="flex items-center gap-3">
+                        <CalendarDaysIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-medium text-gray-900 dark:text-white">
+                              {recall.recallType}
+                            </span>
+                            <Badge variant={statusColors[recall.status]}>{recall.status}</Badge>
+                          </div>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            Every {recall.intervalMonths} months &middot; Next: {format(new Date(recall.nextDueDate), 'MMM d, yyyy')}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Button variant="ghost" size="sm" onClick={() => setEditingRecall(recall)}>
+                          <PencilIcon className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => handleDeleteRecall(recall.id)}>
+                          <TrashIcon className="h-4 w-4 text-red-500" />
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="text-gray-500 dark:text-gray-400 text-center py-4">No recall schedules</p>
             )}
           </Card>
         </div>
@@ -563,6 +732,75 @@ export default function PatientDetailPage() {
           patientId={patient.id}
           onSuccess={() => setShowUploadModal(false)}
         />
+      </Modal>
+
+      {/* Create Recall Modal */}
+      <Modal
+        isOpen={showRecallModal}
+        onClose={() => setShowRecallModal(false)}
+        title="Add Recall Schedule"
+        size="md"
+      >
+        <form onSubmit={handleCreateRecall} className="space-y-4">
+          <Select
+            label="Recall Type"
+            name="recallType"
+            required
+            options={[
+              { value: 'CLEANING', label: 'Cleaning' },
+              { value: 'CHECKUP', label: 'Checkup' },
+              { value: 'FOLLOWUP', label: 'Follow-up' },
+              { value: 'XRAY', label: 'X-Ray' },
+              { value: 'OTHER', label: 'Other' },
+            ]}
+          />
+          <Input label="Interval (months)" name="intervalMonths" type="number" min="1" max="24" required defaultValue="6" />
+          <Input label="Last Visit Date" name="lastVisitDate" type="date" />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notes</label>
+            <textarea name="notes" rows={2} className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100" />
+          </div>
+          <div className="flex justify-end space-x-3 pt-4">
+            <Button type="button" variant="secondary" onClick={() => setShowRecallModal(false)}>Cancel</Button>
+            <Button type="submit" loading={createRecall.isPending}>Add Recall</Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Edit Recall Modal */}
+      <Modal
+        isOpen={!!editingRecall}
+        onClose={() => setEditingRecall(null)}
+        title="Edit Recall Schedule"
+        size="md"
+      >
+        {editingRecall && (
+          <form onSubmit={handleUpdateRecall} className="space-y-4">
+            <Select
+              label="Recall Type"
+              name="recallType"
+              required
+              defaultValue={editingRecall.recallType}
+              options={[
+                { value: 'CLEANING', label: 'Cleaning' },
+                { value: 'CHECKUP', label: 'Checkup' },
+                { value: 'FOLLOWUP', label: 'Follow-up' },
+                { value: 'XRAY', label: 'X-Ray' },
+                { value: 'OTHER', label: 'Other' },
+              ]}
+            />
+            <Input label="Interval (months)" name="intervalMonths" type="number" min="1" max="24" required defaultValue={editingRecall.intervalMonths} />
+            <Input label="Last Visit Date" name="lastVisitDate" type="date" defaultValue={editingRecall.lastVisitDate ? format(new Date(editingRecall.lastVisitDate), 'yyyy-MM-dd') : ''} />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notes</label>
+              <textarea name="notes" rows={2} defaultValue={editingRecall.notes || ''} className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100" />
+            </div>
+            <div className="flex justify-end space-x-3 pt-4">
+              <Button type="button" variant="secondary" onClick={() => setEditingRecall(null)}>Cancel</Button>
+              <Button type="submit" loading={updateRecall.isPending}>Save Changes</Button>
+            </div>
+          </form>
+        )}
       </Modal>
     </div>
   );

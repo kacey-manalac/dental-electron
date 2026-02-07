@@ -6,12 +6,12 @@ import {
   UserGroupIcon,
   CalendarIcon,
   ClipboardDocumentListIcon,
+  CurrencyDollarIcon,
 } from '@heroicons/react/24/outline';
 import { useQuery } from '@tanstack/react-query';
 import { useDebounce } from '../../hooks/useDebounce';
-import { getTreatments } from '../../services/treatments';
+import { globalSearch } from '../../services/search';
 import { format } from 'date-fns';
-import { unwrap } from '../../services/api';
 
 interface SearchPaletteProps {
   isOpen: boolean;
@@ -28,21 +28,9 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
     if (!isOpen) setQuery('');
   }, [isOpen]);
 
-  const { data: patients } = useQuery({
-    queryKey: ['search-patients', debouncedQuery],
-    queryFn: async () => unwrap(await window.electronAPI.patients.list({ search: debouncedQuery, limit: 5 })),
-    enabled: isOpen && debouncedQuery.length >= 2,
-  });
-
-  const { data: appointments } = useQuery({
-    queryKey: ['search-appointments', debouncedQuery],
-    queryFn: async () => unwrap(await window.electronAPI.appointments.list({ search: debouncedQuery, limit: 5 })),
-    enabled: isOpen && debouncedQuery.length >= 2,
-  });
-
-  const { data: treatments } = useQuery({
-    queryKey: ['search-treatments', debouncedQuery],
-    queryFn: () => getTreatments({ search: debouncedQuery, limit: 5 }),
+  const { data: results } = useQuery({
+    queryKey: ['globalSearch', debouncedQuery],
+    queryFn: () => globalSearch(debouncedQuery),
     enabled: isOpen && debouncedQuery.length >= 2,
   });
 
@@ -52,9 +40,10 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
   }, [navigate, onClose]);
 
   const hasResults =
-    (patients?.data?.length || 0) > 0 ||
-    (appointments?.data?.length || 0) > 0 ||
-    (treatments?.data?.length || 0) > 0;
+    (results?.patients?.length || 0) > 0 ||
+    (results?.appointments?.length || 0) > 0 ||
+    (results?.treatments?.length || 0) > 0 ||
+    (results?.invoices?.length || 0) > 0;
 
   const showEmpty = debouncedQuery.length >= 2 && !hasResults;
 
@@ -89,7 +78,7 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
                 <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
                 <input
                   type="text"
-                  placeholder="Search patients, appointments, treatments..."
+                  placeholder="Search patients, appointments, invoices..."
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   className="flex-1 border-0 bg-transparent py-3.5 px-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-0"
@@ -110,17 +99,17 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
 
                 {showEmpty && (
                   <div className="py-8 text-center text-sm text-gray-400">
-                    No results for "{debouncedQuery}"
+                    No results for &quot;{debouncedQuery}&quot;
                   </div>
                 )}
 
                 {/* Patients */}
-                {patients?.data && patients.data.length > 0 && (
+                {results?.patients && results.patients.length > 0 && (
                   <div>
                     <div className="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 dark:bg-surface-900/50">
                       Patients
                     </div>
-                    {patients.data.map((p: any) => (
+                    {results.patients.map((p: any) => (
                       <button
                         key={p.id}
                         onClick={() => goTo(`/patients/${p.id}`)}
@@ -139,12 +128,12 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
                 )}
 
                 {/* Appointments */}
-                {appointments?.data && appointments.data.length > 0 && (
+                {results?.appointments && results.appointments.length > 0 && (
                   <div>
                     <div className="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 dark:bg-surface-900/50">
                       Appointments
                     </div>
-                    {appointments.data.map((a: any) => (
+                    {results.appointments.map((a: any) => (
                       <button
                         key={a.id}
                         onClick={() => goTo(a.patient?.id ? `/patients/${a.patient.id}` : '/appointments')}
@@ -165,12 +154,12 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
                 )}
 
                 {/* Treatments */}
-                {treatments?.data && treatments.data.length > 0 && (
+                {results?.treatments && results.treatments.length > 0 && (
                   <div>
                     <div className="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 dark:bg-surface-900/50">
                       Treatments
                     </div>
-                    {treatments.data.map((t: any) => (
+                    {results.treatments.map((t: any) => (
                       <button
                         key={t.id}
                         onClick={() => goTo(`/treatments?search=${encodeURIComponent(debouncedQuery)}`)}
@@ -183,6 +172,32 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
                           </p>
                           <p className="text-xs text-gray-500 truncate">
                             {t.patient?.firstName} {t.patient?.lastName} &middot; ${Number(t.cost).toFixed(2)}
+                          </p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Invoices */}
+                {results?.invoices && results.invoices.length > 0 && (
+                  <div>
+                    <div className="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 dark:bg-surface-900/50">
+                      Invoices
+                    </div>
+                    {results.invoices.map((inv: any) => (
+                      <button
+                        key={inv.id}
+                        onClick={() => goTo('/billing')}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-surface-700/50 transition-colors text-left"
+                      >
+                        <CurrencyDollarIcon className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                            {inv.invoiceNumber}
+                          </p>
+                          <p className="text-xs text-gray-500 truncate">
+                            {inv.patient?.firstName} {inv.patient?.lastName} &middot; ${Number(inv.total).toFixed(2)} &middot; {inv.status}
                           </p>
                         </div>
                       </button>

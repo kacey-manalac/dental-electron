@@ -207,6 +207,12 @@ exports.Prisma.AppointmentScalarFieldEnum = {
   endTime: 'endTime',
   status: 'status',
   notes: 'notes',
+  clinicalNotes: 'clinicalNotes',
+  isRecurring: 'isRecurring',
+  recurrencePattern: 'recurrencePattern',
+  recurrenceInterval: 'recurrenceInterval',
+  recurrenceEndDate: 'recurrenceEndDate',
+  seriesId: 'seriesId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -321,6 +327,40 @@ exports.Prisma.StockTransactionScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ProcedureCatalogScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  code: 'code',
+  description: 'description',
+  defaultCost: 'defaultCost',
+  category: 'category',
+  estimatedDuration: 'estimatedDuration',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RecallScheduleScalarFieldEnum = {
+  id: 'id',
+  patientId: 'patientId',
+  recallType: 'recallType',
+  intervalMonths: 'intervalMonths',
+  lastVisitDate: 'lastVisitDate',
+  nextDueDate: 'nextDueDate',
+  status: 'status',
+  notes: 'notes',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProcedureSupplyScalarFieldEnum = {
+  id: 'id',
+  procedureCatalogId: 'procedureCatalogId',
+  supplyId: 'supplyId',
+  quantityUsed: 'quantityUsed'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -414,6 +454,33 @@ exports.SupplyCategory = exports.$Enums.SupplyCategory = {
   OTHER: 'OTHER'
 };
 
+exports.ProcedureCategory = exports.$Enums.ProcedureCategory = {
+  PREVENTIVE: 'PREVENTIVE',
+  RESTORATIVE: 'RESTORATIVE',
+  ENDODONTIC: 'ENDODONTIC',
+  PROSTHODONTIC: 'PROSTHODONTIC',
+  ORTHODONTIC: 'ORTHODONTIC',
+  SURGICAL: 'SURGICAL',
+  DIAGNOSTIC: 'DIAGNOSTIC',
+  COSMETIC: 'COSMETIC',
+  OTHER: 'OTHER'
+};
+
+exports.RecallType = exports.$Enums.RecallType = {
+  CLEANING: 'CLEANING',
+  CHECKUP: 'CHECKUP',
+  FOLLOWUP: 'FOLLOWUP',
+  XRAY: 'XRAY',
+  OTHER: 'OTHER'
+};
+
+exports.RecallStatus = exports.$Enums.RecallStatus = {
+  UPCOMING: 'UPCOMING',
+  DUE: 'DUE',
+  OVERDUE: 'OVERDUE',
+  COMPLETED: 'COMPLETED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Patient: 'Patient',
@@ -429,7 +496,10 @@ exports.Prisma.ModelName = {
   AuditLog: 'AuditLog',
   PatientImage: 'PatientImage',
   Supply: 'Supply',
-  StockTransaction: 'StockTransaction'
+  StockTransaction: 'StockTransaction',
+  ProcedureCatalog: 'ProcedureCatalog',
+  RecallSchedule: 'RecallSchedule',
+  ProcedureSupply: 'ProcedureSupply'
 };
 
 /**

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isSameMonth, addMonths, subMonths } from 'date-fns';
-import { PlusIcon, ChevronLeftIcon, ChevronRightIcon, ClockIcon, CalendarDaysIcon, TrashIcon, BellAlertIcon, EnvelopeIcon, ClipboardDocumentIcon, CheckIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, ChevronLeftIcon, ChevronRightIcon, ClockIcon, CalendarDaysIcon, TrashIcon, BellAlertIcon, EnvelopeIcon, ClipboardDocumentIcon, CheckIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import { exportAppointments } from '../services/exports';
+import { toast } from 'react-hot-toast';
 import { useAppointments, useCreateAppointment, useUpdateAppointment, useDeleteAppointment } from '../hooks/useAppointments';
 import { usePatients } from '../hooks/usePatients';
 import { Appointment, AppointmentStatus } from '../types';
@@ -11,7 +13,7 @@ import Badge from '../components/common/Badge';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import Input from '../components/common/Input';
 import Select from '../components/common/Select';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { unwrap } from '../services/api';
 
 const STATUS_COLORS: Record<AppointmentStatus, 'blue' | 'green' | 'yellow' | 'red' | 'gray' | 'purple'> = {
@@ -29,6 +31,8 @@ export default function AppointmentsPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isRecurring, setIsRecurring] = useState(false);
+  const queryClient = useQueryClient();
 
   // Fetch first dentist from DB to use as default
   const { data: dentists } = useQuery({
@@ -66,16 +70,26 @@ export default function AppointmentsPage() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
-    await createAppointment.mutateAsync({
+    const appointmentData: any = {
       patientId: formData.get('patientId') as string,
       dentistId: defaultDentistId,
       title: formData.get('title') as string,
       description: formData.get('description') as string,
       startTime: new Date(`${formData.get('date')}T${formData.get('startTime')}`).toISOString(),
       endTime: new Date(`${formData.get('date')}T${formData.get('endTime')}`).toISOString(),
-    });
+      clinicalNotes: formData.get('clinicalNotes') as string || undefined,
+    };
+
+    if (isRecurring) {
+      appointmentData.isRecurring = true;
+      appointmentData.recurrencePattern = formData.get('recurrencePattern') as string;
+      appointmentData.recurrenceEndDate = formData.get('recurrenceEndDate') as string;
+    }
+
+    await createAppointment.mutateAsync(appointmentData);
 
     setShowCreateModal(false);
+    setIsRecurring(false);
   };
 
   const handleUpdateStatus = async (appointmentId: string, status: AppointmentStatus) => {
@@ -101,6 +115,7 @@ export default function AppointmentsPage() {
         patientId: formData.get('patientId') as string,
         title: formData.get('title') as string,
         description: formData.get('description') as string || undefined,
+        clinicalNotes: formData.get('clinicalNotes') as string || undefined,
         startTime: new Date(`${dateStr}T${startTimeStr}`).toISOString(),
         endTime: new Date(`${dateStr}T${endTimeStr}`).toISOString(),
         status: formData.get('status') as AppointmentStatus,
@@ -116,6 +131,19 @@ export default function AppointmentsPage() {
     await deleteAppointment.mutateAsync(selectedAppointment.id);
     setSelectedAppointment(null);
     setShowDeleteConfirm(false);
+  };
+
+  const handleDeleteSeries = async () => {
+    if (!selectedAppointment?.seriesId) return;
+    if (!confirm('Delete all appointments in this series?')) return;
+    try {
+      await window.electronAPI.appointments.deleteSeries(selectedAppointment.seriesId);
+      toast.success('Series deleted');
+      queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      setSelectedAppointment(null);
+    } catch (err: any) {
+      toast.error(err.message);
+    }
   };
 
   const getReminderText = (apt: Appointment) => {
@@ -149,6 +177,7 @@ export default function AppointmentsPage() {
     setShowDeleteConfirm(false);
     setShowReminder(false);
     setCopied(false);
+    setIsRecurring(false);
   };
 
   const weekCount = Math.ceil((startDate.getDay() + days.length) / 7);
@@ -157,10 +186,22 @@ export default function AppointmentsPage() {
     <div className="flex flex-col h-[calc(100vh-7rem)]">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 flex-shrink-0 mb-4">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Appointments</h1>
-        <Button onClick={() => setShowCreateModal(true)}>
-          <PlusIcon className="h-5 w-5 mr-2" />
-          New Appointment
-        </Button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={async () => {
+              const result = await exportAppointments();
+              if (result.filePath) toast.success('Exported successfully');
+            }}
+            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          >
+            <ArrowDownTrayIcon className="w-4 h-4" />
+            Export
+          </button>
+          <Button onClick={() => setShowCreateModal(true)}>
+            <PlusIcon className="h-5 w-5 mr-2" />
+            New Appointment
+          </Button>
+        </div>
       </div>
 
       <div className="flex-1 flex gap-4 min-h-0">
@@ -198,9 +239,14 @@ export default function AppointmentsPage() {
                         <ClockIcon className="h-3.5 w-3.5" />
                         {format(new Date(apt.startTime), 'h:mm a')} - {format(new Date(apt.endTime), 'h:mm a')}
                       </div>
-                      <Badge variant={STATUS_COLORS[apt.status]}>
-                        {apt.status.replace('_', ' ')}
-                      </Badge>
+                      <div className="flex items-center gap-1">
+                        {apt.isRecurring && (
+                          <Badge variant="purple">Recurring</Badge>
+                        )}
+                        <Badge variant={STATUS_COLORS[apt.status]}>
+                          {apt.status.replace('_', ' ')}
+                        </Badge>
+                      </div>
                     </div>
                     <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                       {apt.title}
@@ -352,8 +398,34 @@ export default function AppointmentsPage() {
               className="input"
             />
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Clinical Notes</label>
+            <textarea name="clinicalNotes" rows={3} placeholder="Clinical observations, findings..." className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-surface-700 px-3 py-2 text-sm" />
+          </div>
+          <div className="space-y-3">
+            <label className="flex items-center gap-2">
+              <input type="checkbox" name="isRecurring" checked={isRecurring} onChange={(e) => setIsRecurring(e.target.checked)} className="rounded border-gray-300 dark:border-gray-600" />
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Recurring Appointment</span>
+            </label>
+            {isRecurring && (
+              <div className="space-y-3 pl-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Pattern</label>
+                  <select name="recurrencePattern" className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-surface-700 px-3 py-2 text-sm">
+                    <option value="WEEKLY">Weekly</option>
+                    <option value="BIWEEKLY">Biweekly</option>
+                    <option value="MONTHLY">Monthly</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">End Date</label>
+                  <input type="date" name="recurrenceEndDate" required className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-surface-700 px-3 py-2 text-sm" />
+                </div>
+              </div>
+            )}
+          </div>
           <div className="flex justify-end space-x-3 pt-4">
-            <Button type="button" variant="secondary" onClick={() => setShowCreateModal(false)}>
+            <Button type="button" variant="secondary" onClick={() => { setShowCreateModal(false); setIsRecurring(false); }}>
               Cancel
             </Button>
             <Button type="submit" loading={createAppointment.isPending}>
@@ -373,9 +445,14 @@ export default function AppointmentsPage() {
         {selectedAppointment && !isEditing && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                {selectedAppointment.title}
-              </h3>
+              <div className="flex items-center gap-2">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+                  {selectedAppointment.title}
+                </h3>
+                {selectedAppointment.isRecurring && (
+                  <Badge variant="purple">Recurring</Badge>
+                )}
+              </div>
               <Badge variant={STATUS_COLORS[selectedAppointment.status]}>
                 {selectedAppointment.status.replace('_', ' ')}
               </Badge>
@@ -404,6 +481,12 @@ export default function AppointmentsPage() {
                 <div>
                   <span className="text-gray-500">Description:</span>
                   <p className="mt-1 text-gray-900 dark:text-white">{selectedAppointment.description}</p>
+                </div>
+              )}
+              {selectedAppointment.clinicalNotes && (
+                <div>
+                  <span className="text-gray-500">Clinical Notes:</span>
+                  <p className="mt-1 text-gray-900 dark:text-white whitespace-pre-line">{selectedAppointment.clinicalNotes}</p>
                 </div>
               )}
             </div>
@@ -459,10 +542,18 @@ export default function AppointmentsPage() {
 
             <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
               {!showDeleteConfirm ? (
-                <Button variant="secondary" size="sm" onClick={() => setShowDeleteConfirm(true)} className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20">
-                  <TrashIcon className="h-4 w-4 mr-1" />
-                  Delete
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button variant="secondary" size="sm" onClick={() => setShowDeleteConfirm(true)} className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20">
+                    <TrashIcon className="h-4 w-4 mr-1" />
+                    Delete
+                  </Button>
+                  {selectedAppointment.isRecurring && selectedAppointment.seriesId && (
+                    <Button variant="secondary" size="sm" onClick={handleDeleteSeries} className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20">
+                      <TrashIcon className="h-4 w-4 mr-1" />
+                      Delete Series
+                    </Button>
+                  )}
+                </div>
               ) : (
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-red-600 dark:text-red-400">Delete?</span>
@@ -549,6 +640,10 @@ export default function AppointmentsPage() {
                 defaultValue={selectedAppointment.description || ''}
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
               />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Clinical Notes</label>
+              <textarea name="clinicalNotes" rows={3} defaultValue={selectedAppointment.clinicalNotes || ''} placeholder="Clinical observations, findings..." className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-surface-700 px-3 py-2 text-sm" />
             </div>
             <div className="flex justify-end space-x-3 pt-4">
               <Button type="button" variant="secondary" onClick={() => setIsEditing(false)}>

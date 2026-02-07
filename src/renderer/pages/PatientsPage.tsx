@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { PlusIcon, MagnifyingGlassIcon, ClockIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, MagnifyingGlassIcon, ClockIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import { exportPatients } from '../services/exports';
+import { toast } from 'react-hot-toast';
 import { usePatients, useCreatePatient } from '../hooks/usePatients';
 import { useQuery } from '@tanstack/react-query';
 import * as appointmentService from '../services/appointments';
@@ -56,10 +58,22 @@ export default function PatientsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Patients</h1>
-        <Button onClick={() => setShowCreateModal(true)}>
-          <PlusIcon className="h-5 w-5 mr-2" />
-          Add Patient
-        </Button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={async () => {
+              const result = await exportPatients();
+              if (result.filePath) toast.success('Exported successfully');
+            }}
+            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          >
+            <ArrowDownTrayIcon className="w-4 h-4" />
+            Export
+          </button>
+          <Button onClick={() => setShowCreateModal(true)}>
+            <PlusIcon className="h-5 w-5 mr-2" />
+            Add Patient
+          </Button>
+        </div>
       </div>
 
       {/* Search */}

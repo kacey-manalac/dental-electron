@@ -132,6 +132,12 @@ export interface Appointment {
   endTime: string;
   status: AppointmentStatus;
   notes?: string;
+  clinicalNotes?: string;
+  isRecurring?: boolean;
+  recurrencePattern?: string;
+  recurrenceInterval?: number;
+  recurrenceEndDate?: string;
+  seriesId?: string;
   createdAt: string;
   patient?: {
     id: string;
@@ -415,4 +421,122 @@ export interface SupplyDashboardStats {
   lowStockCount: number;
   totalValue: number;
   byCategory: { category: SupplyCategory; count: number }[];
+}
+
+// Procedure Catalog
+export type ProcedureCategory =
+  | 'PREVENTIVE' | 'RESTORATIVE' | 'ENDODONTIC' | 'PROSTHODONTIC'
+  | 'ORTHODONTIC' | 'SURGICAL' | 'DIAGNOSTIC' | 'COSMETIC' | 'OTHER';
+
+export interface ProcedureCatalog {
+  id: string;
+  name: string;
+  code?: string;
+  description?: string;
+  defaultCost: number;
+  category: ProcedureCategory;
+  estimatedDuration?: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  procedureSupplies?: ProcedureSupplyLink[];
+  _count?: { procedureSupplies: number };
+}
+
+export interface ProcedureSupplyLink {
+  id: string;
+  procedureCatalogId: string;
+  supplyId: string;
+  quantityUsed: number;
+  supply?: {
+    id: string;
+    name: string;
+    unit: string;
+    currentStock: number;
+    costPerUnit?: number;
+  };
+}
+
+// Recall System
+export type RecallType = 'CLEANING' | 'CHECKUP' | 'FOLLOWUP' | 'XRAY' | 'OTHER';
+export type RecallStatus = 'UPCOMING' | 'DUE' | 'OVERDUE' | 'COMPLETED';
+
+export interface RecallSchedule {
+  id: string;
+  patientId: string;
+  recallType: RecallType;
+  intervalMonths: number;
+  lastVisitDate?: string;
+  nextDueDate: string;
+  status: RecallStatus;
+  notes?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  patient?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    phone?: string;
+    email?: string;
+  };
+}
+
+// Patient Balance
+export interface PatientBalance {
+  totalInvoiced: number;
+  totalPaid: number;
+  balance: number;
+  unpaidInvoices: {
+    id: string;
+    invoiceNumber: string;
+    total: number;
+    paid: number;
+    balance: number;
+    status: string;
+    dueDate?: string;
+    createdAt: string;
+  }[];
+  invoiceCount: number;
+}
+
+// Dashboard Alerts
+export interface DashboardAlerts {
+  overdueInvoices: {
+    count: number;
+    items: {
+      id: string;
+      invoiceNumber: string;
+      total: number;
+      balance: number;
+      dueDate?: string;
+      patient: { id: string; firstName: string; lastName: string };
+    }[];
+  };
+  lowStock: {
+    count: number;
+    items: {
+      id: string;
+      name: string;
+      currentStock: number;
+      minimumStock: number;
+      unit: string;
+    }[];
+  };
+  todaysAppointments: {
+    count: number;
+    items: Appointment[];
+  };
+  overdueRecalls: {
+    count: number;
+    items: RecallSchedule[];
+  };
+}
+
+// Global Search
+export interface GlobalSearchResults {
+  patients: { id: string; firstName: string; lastName: string; phone: string; email?: string }[];
+  appointments: { id: string; title: string; startTime: string; status: string; patient: { id: string; firstName: string; lastName: string } }[];
+  treatments: { id: string; procedureName: string; cost: number; patient: { id: string; firstName: string; lastName: string } }[];
+  invoices: { id: string; invoiceNumber: string; total: number; status: string; patient: { id: string; firstName: string; lastName: string } }[];
 }

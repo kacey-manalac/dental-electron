@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { format } from 'date-fns';
-import { PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, MagnifyingGlassIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import { exportTreatments } from '../services/exports';
+import { getActiveProcedures } from '../services/procedures';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
 import * as treatmentService from '../services/treatments';
@@ -41,6 +43,7 @@ export default function TreatmentsPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedTreatment, setSelectedTreatment] = useState<Treatment | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedProcedureId, setSelectedProcedureId] = useState('');
 
   const queryClient = useQueryClient();
 
@@ -57,6 +60,11 @@ export default function TreatmentsPage() {
   });
 
   const { data: patientsData } = usePatients({ limit: 100 });
+
+  const { data: activeProcedures } = useQuery({
+    queryKey: ['procedures', 'active'],
+    queryFn: getActiveProcedures,
+  });
 
   const createTreatment = useMutation({
     mutationFn: treatmentService.createTreatment,
@@ -134,10 +142,22 @@ export default function TreatmentsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Treatments</h1>
-        <Button onClick={() => setShowCreateModal(true)}>
-          <PlusIcon className="h-5 w-5 mr-2" />
-          Add Treatment
-        </Button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={async () => {
+              const result = await exportTreatments();
+              if (result.filePath) toast.success('Exported successfully');
+            }}
+            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          >
+            <ArrowDownTrayIcon className="w-4 h-4" />
+            Export
+          </button>
+          <Button onClick={() => { setSelectedProcedureId(''); setShowCreateModal(true); }}>
+            <PlusIcon className="h-5 w-5 mr-2" />
+            Add Treatment
+          </Button>
+        </div>
       </div>
 
       {/* Search */}
@@ -277,6 +297,35 @@ export default function TreatmentsPage() {
               label: `${p.firstName} ${p.lastName}`,
             })) || []}
           />
+          <div>
+            <label className="label">From Procedure Catalog</label>
+            <select
+              value={selectedProcedureId}
+              onChange={(e) => {
+                const proc = activeProcedures?.find(p => p.id === e.target.value);
+                setSelectedProcedureId(e.target.value);
+                if (proc) {
+                  const form = e.target.closest('form');
+                  if (form) {
+                    const nameInput = form.querySelector('[name="procedureName"]') as HTMLInputElement;
+                    const codeInput = form.querySelector('[name="procedureCode"]') as HTMLInputElement;
+                    const costInput = form.querySelector('[name="cost"]') as HTMLInputElement;
+                    if (nameInput) nameInput.value = proc.name;
+                    if (codeInput) codeInput.value = proc.code || '';
+                    if (costInput) costInput.value = proc.defaultCost.toString();
+                  }
+                }
+              }}
+              className="input w-full"
+            >
+              <option value="">-- Select from catalog (optional) --</option>
+              {activeProcedures?.map((proc) => (
+                <option key={proc.id} value={proc.id}>
+                  {proc.name} {proc.code ? `(${proc.code})` : ''} - ${proc.defaultCost.toFixed(2)}
+                </option>
+              ))}
+            </select>
+          </div>
           <Input label="Procedure Name" name="procedureName" required placeholder="e.g., Root Canal Treatment" />
           <div className="grid grid-cols-2 gap-4">
             <Input label="Procedure Code" name="procedureCode" placeholder="e.g., D3310" />

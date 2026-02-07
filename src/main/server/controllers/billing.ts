@@ -216,6 +216,51 @@ export async function getPayments(filters: {
   return createPaginatedResponse(payments, total, page, limit);
 }
 
+export async function getPatientBalance(patientId: string) {
+  const invoices = await prisma.invoice.findMany({
+    where: {
+      patientId,
+      status: { notIn: ['DRAFT', 'CANCELLED'] },
+    },
+    include: {
+      payments: { select: { amount: true } },
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  let totalInvoiced = 0;
+  let totalPaid = 0;
+  const unpaidInvoices: any[] = [];
+
+  for (const inv of invoices) {
+    const invTotal = Number(inv.total);
+    const paid = inv.payments.reduce((sum, p) => sum + Number(p.amount), 0);
+    totalInvoiced += invTotal;
+    totalPaid += paid;
+
+    if (paid < invTotal) {
+      unpaidInvoices.push({
+        id: inv.id,
+        invoiceNumber: inv.invoiceNumber,
+        total: invTotal,
+        paid,
+        balance: invTotal - paid,
+        status: inv.status,
+        dueDate: inv.dueDate,
+        createdAt: inv.createdAt,
+      });
+    }
+  }
+
+  return {
+    totalInvoiced,
+    totalPaid,
+    balance: totalInvoiced - totalPaid,
+    unpaidInvoices,
+    invoiceCount: invoices.length,
+  };
+}
+
 export async function createPayment(data: unknown) {
   const parsed = paymentSchema.parse(data);
 
