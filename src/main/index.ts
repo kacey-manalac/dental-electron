@@ -4,6 +4,7 @@ import fs from 'fs';
 import { autoUpdater } from 'electron-updater';
 import { initDatabase } from './server/app';
 import { registerAllHandlers } from './ipc/handlers';
+import { prisma } from './server/utils/prisma';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -77,6 +78,10 @@ app.on('window-all-closed', () => {
   app.quit();
 });
 
+app.on('will-quit', async () => {
+  await prisma.$disconnect();
+});
+
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
@@ -134,10 +139,14 @@ function setupAutoUpdater() {
   });
 
   // Check for updates after app is ready
-  autoUpdater.checkForUpdatesAndNotify();
+  autoUpdater.checkForUpdatesAndNotify().catch((err) => {
+    console.error('Failed to check for updates:', err);
+  });
 
   // Check for updates every 4 hours
   setInterval(() => {
-    autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.checkForUpdatesAndNotify().catch((err) => {
+      console.error('Periodic update check failed:', err);
+    });
   }, 4 * 60 * 60 * 1000);
 }
